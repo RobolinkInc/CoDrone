@@ -1,0 +1,9 @@
+name=CoDrone
+version=1.1
+author=Robolink <info@robolink.com>
+maintainer=Justin Chang <JuChang@gmail.com>
+sentence=A Library for CoDrone users
+paragraph=More information can be found at http://community.robolink.com/
+category=Device Control
+url=http://Robolink.com/
+architectures=avr
