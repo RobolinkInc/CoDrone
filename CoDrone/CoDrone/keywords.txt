@@ -1,0 +1,82 @@
+#######################################
+# Syntax Coloring Map LatchClcd
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+CoDrone	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+
+begin								KEYWORD2
+print								KEYWORD2
+write								KEYWORD2
+
+Control							KEYWORD2
+LedColor						KEYWORD2
+LedEvent						KEYWORD2
+FlightEvent					KEYWORD2
+DriveEvent					KEYWORD2
+Receive							KEYWORD2
+AutoConnect					KEYWORD2
+PrintDroneAddress		KEYWORD2	
+LowBatteryCheck			KEYWORD2	
+DroneModeChange			KEYWORD2	
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+Flight						LITERAL1
+FlightNoGuard			LITERAL1
+FlightFPV					LITERAL1
+Drive							LITERAL1
+DriveFPV					LITERAL1
+
+ROLL							LITERAL1
+PITCH							LITERAL1
+YAW								LITERAL1
+THROTTLE					LITERAL1
+NearbyDrone			LITERAL1
+ConnectedDrone		LITERAL1
+AddressInputDrone	LITERAL1
+
+
+PAIRING						LITERAL1
+DiscoverStart			LITERAL1
+DiscoverStop			LITERAL1
+
+
+Stop							LITERAL1
+
+
+EVENT							LITERAL1
+STATE							LITERAL1
+SEND_INTERVAL			LITERAL1
+CONNECTION				LITERAL1
+ANALOG_OFFSET			LITERAL1
+		
+TakeOff						LITERAL1
+Landing						LITERAL1
+
+
+EyeNone						LITERAL1
+EyeHold						LITERAL1
+EyeMix						LITERAL1
+EyeFlicker				LITERAL1
+EyeFlickerDouble	LITERAL1
+EyeDimming				LITERAL1
+
+ArmNone						LITERAL1
+ArmHold						LITERAL1
+ArmMix						LITERAL1
+ArmFlicker				LITERAL1
+ArmFlickerDouble	LITERAL1
+ArmDimming				LITERAL1
+ArmFlow						LITERAL1
+ArmFlowReverse		LITERAL1
