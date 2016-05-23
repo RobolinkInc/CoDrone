@@ -57,71 +57,90 @@ typedef uint8_t u8;
 
 /***********************************************************************/
 
-#define ROLL					CoDrone.roll
-#define PITCH					CoDrone.pitch
-#define YAW						CoDrone.yaw
-#define THROTTLE				CoDrone.throttle
+#define	SEND_CHECK_TIME    		3
 
-#define STATE					CoDrone.state
-#define SEND_INTERVAL			CoDrone.SendInterval
-#define ANALOG_OFFSET			CoDrone.analogOffset
-#define BATTERY					CoDrone.battery
-#define RSSI					CoDrone.rssi
+/***********************************************************************/
 
-#define AttitudeROLL			CoDrone.attitudeRoll
-#define AttitudePITCH			CoDrone.attitudePitch
-#define AttitudeYAW				CoDrone.attitudeYaw
+#define ROLL								CoDrone.roll
+#define PITCH								CoDrone.pitch
+#define YAW									CoDrone.yaw
+#define THROTTLE						CoDrone.throttle
 
+#define STATE								CoDrone.state
+#define SEND_INTERVAL				CoDrone.SendInterval
+#define ANALOG_OFFSET				CoDrone.analogOffset
+#define BATTERY							CoDrone.battery
+#define RSSI								CoDrone.rssi
 
+#define AttitudeROLL				CoDrone.attitudeRoll
+#define AttitudePITCH				CoDrone.attitudePitch
+#define AttitudeYAW					CoDrone.attitudeYaw
 
 /***********************************************************************/
 
 #define DiscoverStop  			cType_LinkDiscoverStop
 #define DiscoverStart  			cType_LinkDiscoverStart
 
-#define PollingStop				cType_LinkRssiPollingStop
-#define PollingStart			cType_LinkRssiPollingStart
+#define PollingStop					cType_LinkRssiPollingStop
+#define PollingStart				cType_LinkRssiPollingStart
 
-#define	PAIRING					CoDrone.pairing
+#define	PAIRING							CoDrone.pairing
 
-#define LinkModeMute 			LinkBroadcast_Mute
+#define LinkModeMute 				LinkBroadcast_Mute
 #define LinkModeActive			LinkBroadcast_Active
 #define LinkModePassive 		LinkBroadcast_Passive
 
 #define	NearbyDrone    			1
 #define	ConnectedDrone  		2
-#define AddressInputDrone 		3
+#define AddressInputDrone 	3
 
 //eeprom address
-#define	EEP_AddressCheck   		10
-#define	EEP_AddressFirst  		11
+#define	EEP_AddressCheck   	10
+#define	EEP_AddressFirst  	11
 #define	EEP_AddressEnd  		15
 
 /////////////////////////////////////////////////////////////////////////
 
-#define Flight 					dMode_Flight
+#define FREE_PLAY					0
+#define TEAM_RED					1
+#define TEAM_BLUE					2
+#define TEAM_GREEN				3
+#define TEAM_YELLOW				4
+
+#define MAX_ENERGY				8
+/**********************	IR DATA****************************************/
+
+#define FREE_MISSILE			0xaa01
+#define RED_MISSILE				0xbb01
+#define BLUE_MISSILE			0xcc01
+#define GREEN_MISSILE			0xdd01
+#define YELLOW_MISSILE		0xee01
+
+/***********************************************************************/
+
+#define Flight 						dMode_Flight
 #define FlightNoGuard			dMode_FlightNoGuard,
-#define FlightFPV				dMode_FlightFPV
-#define Drive 				 	dMode_Drive
-#define DriveFPV				dMode_DriveFPV
+#define FlightFPV					dMode_FlightFPV
+#define Drive 				 		dMode_Drive
+#define DriveFPV					dMode_DriveFPV
 
-#define Absolute 				cSet_Absolute
-#define Relative		 		cSet_Relative
+#define Absolute 					cSet_Absolute
+#define Relative		 			cSet_Relative
 
-#define TakeOff 				fEvent_TakeOff
-#define FlipFront				fEvent_FlipFront
-#define FlipRear				fEvent_FlipRear
-#define FlipLeft				fEvent_flipLeft
-#define FlipRight				fEvent_FlipRight
-#define Stop					fEvent_Stop
-#define Landing					fEvent_Landing
-#define TurnOver				fEvent_TurnOver
-#define Shot					fEvent_Shot
+#define TakeOff 					fEvent_TakeOff
+#define FlipFront					fEvent_FlipFront
+#define FlipRear					fEvent_FlipRear
+#define FlipLeft					fEvent_flipLeft
+#define FlipRight					fEvent_FlipRight
+#define Stop							fEvent_Stop
+#define Landing						fEvent_Landing
+#define TurnOver					fEvent_TurnOver
+#define Shot							fEvent_Shot
 #define UnderAttack				fEvent_UnderAttack
-#define Square					fEvent_Square
+#define Square						fEvent_Square
 #define CircleLeft				fEvent_CircleLeft
 #define CircleRight				fEvent_CircleRight
-#define Rotate180				fEvent_Rotate180
+#define Rotate180					fEvent_Rotate180
 
 #define RollIncrease			trim_RollIncrease
 #define RollDecrease			trim_RollDecrease
@@ -131,7 +150,6 @@ typedef uint8_t u8;
 #define YawDecrease				trim_YawDecrease
 #define ThrottleIncrease	trim_ThrottleIncrease
 #define ThrottleDecrease	trim_ThrottleDecrease
-
 
 /***********************************************************************/
 /////////////////////////LINK MODULE/////////////////////////////////////
@@ -456,7 +474,7 @@ enum Request
 	Req_TrimAll, 								///< 전체 트림
 	Req_TrimFlight, 						///< 비행 트림
 	Req_TrimDrive, 							///< 주행 트림
-	
+		
 	// 센서
 	Req_ImuRawAndAngle = 0x50, 	///< IMU Raw + Angle
 	Req_Pressure, 							///< 압력 센서 데이터
@@ -580,7 +598,8 @@ public:
 	void Send_Connect(byte index);
 	void Send_Disconnect();		
 	void Send_Discover(byte action);
-		
+	void Send_Check(byte _data[], byte _length, byte _crc[]);
+
 /////////////////////////////////////////////////////////////////////////
 
 	void Send_Ping();
@@ -592,7 +611,14 @@ public:
 	void DroneModeChange(byte event);			
 	void FlightEvent(byte event);
 	void DriveEvent(byte event);
-		
+	
+/////////////////////////////////////////////////////////////////////////
+
+	void BattleShooting();
+	void BattleReceive();
+	void BattleBegin(byte teamSelect);	
+	void BattleDamageProcess();	
+	
 /////////////////////////////////////////////////////////////////////////
 		
 	void Request_DroneState();	
@@ -610,7 +636,7 @@ public:
 	void Request_Battery();	
 	void Request_Motor();	
 	void Request_Temperature();
-		
+	
 /////////////////////////////////////////////////////////////////////////
 
 	void Set_Trim(byte event);
@@ -618,7 +644,6 @@ public:
 	void Set_TrimAll(int _roll, int _pitch, int _yaw, int _throttle, int _wheel);
 	void Set_TrimFlight(int _roll, int _pitch, int _yaw, int _throttle);
 	void Set_TrimDrive(int _wheel);
-	
 
 /////////////////////////////////////////////////////////////////////////
 
@@ -629,7 +654,7 @@ public:
 	void LedEvent(byte sendMode, byte sendColor, byte sendInterval, byte sendRepeat);
 	void LedEvent(byte sendMode, byte sendColor[], byte sendInterval, byte sendRepeat);
 	void LedEvent(byte sendMode, byte r, byte g, byte b, byte sendInterval, byte sendRepeat);
-
+	
 /////////////////////////////////////////////////////////////////////////
 			
 	void LinkStateCheck();
@@ -694,8 +719,7 @@ public:
 	int receiveLikMode;
 	int receiveComplete;
 	int receiveCRC;
-		
-	
+			
 /////////////////////////////////////////////////////////////////////////
 
 	byte displayMode = 1;	//smar inventor : default 1
@@ -715,6 +739,11 @@ public:
 	byte sendCheckFlag = 0;
 	
 	byte receiveAttitudeSuccess = 0;
+	
+	int energy = 8;
+	
+	byte team = FREE_PLAY;
+	unsigned long weapon = FREE_MISSILE;
 	
 /////////////////////////////////////////////////////////////////////////
 	
@@ -746,14 +775,19 @@ public:
 	int attitudeRoll	= 0;
 	int attitudePitch	= 0;
 	int attitudeYaw	= 0;
-		
-		
+	
 /////////////////////////////////////////////////////////////////////////
 	
 	int linkState = 0;;
 	int rssi = 0;
 	byte battery = 0;
+		
+	byte irMassageDirection;
+  unsigned long	irMassageReceive;
+	
 	byte droneState[7];	
+	byte droneIrMassage[5];	
+	
 	byte droneAttitude[6];
 	byte droneGyroBias[6];
 	byte droneTrimAll[10];		
@@ -768,8 +802,8 @@ public:
 	byte droneTemperature[8];
 
 /////////////////////////////////////////////////////////////////////////
+
 		long PreviousMillis;
-		int state;
 		
 /////////////////////////////////////////////////////////////////////////
 private:

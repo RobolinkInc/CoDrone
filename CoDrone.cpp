@@ -172,7 +172,7 @@ void CoDroneClass::DroneModeChange(byte event)
 {
 		sendCheckFlag = 1;
 	  Send_Command(cType_ModeDrone, event);
-	  delay(100);
+	  delay(300);
 }
 
 void CoDroneClass::Send_DroneMode(byte event)
@@ -188,29 +188,30 @@ void CoDroneClass::Send_Coordinate(byte mode)
 }
 void CoDroneClass::Set_Trim(byte event)
 {
-	  Send_Command(cType_Trim, event);
+	sendCheckFlag = 1;
+	Send_Command(cType_Trim, event);
 }
 
 void CoDroneClass::Send_ClearGyroBiasAndTrim()
 {
-		sendCheckFlag = 1;
-	  Send_Command(cType_ClearGyroBiasAndTrim, 0);
+	sendCheckFlag = 1;
+	Send_Command(cType_ClearGyroBiasAndTrim, 0);
 }
 
 void CoDroneClass::FlightEvent(byte event)
 {
-		sendCheckFlag = 1;
-	  Send_Command(cType_FlightEvent, event);
+	sendCheckFlag = 1;
+	Send_Command(cType_FlightEvent, event);
 }
 
 void CoDroneClass::DriveEvent(byte event)
 {
-	  Send_Command(cType_DriveEvent, event);
+	Send_Command(cType_DriveEvent, event);
 }
 
 void CoDroneClass::Send_ResetHeading()
 {
-	  Send_Command(cType_ResetHeading, 0);
+	Send_Command(cType_ResetHeading, 0);
 }
 
 
@@ -219,6 +220,8 @@ void CoDroneClass::Send_ResetHeading()
 
 void CoDroneClass::Set_TrimAll(int _roll, int _pitch, int _yaw, int _throttle, int _wheel)
 {
+	sendCheckFlag = 1;
+	
 	byte _packet[12];
   byte _crc[2];
   
@@ -243,6 +246,7 @@ void CoDroneClass::Set_TrimAll(int _roll, int _pitch, int _yaw, int _throttle, i
 	
 	byte L_wheel 		= _wheel & 0xff;
 	byte H_wheel 		= (_wheel >> 8) & 0xff;
+	
  //data
   _packet[2] = L_roll;
   _packet[3] = H_roll;
@@ -256,24 +260,46 @@ void CoDroneClass::Set_TrimAll(int _roll, int _pitch, int _yaw, int _throttle, i
   _packet[8] = L_throttle;
   _packet[9] = H_throttle;
 
-  _packet[8] = L_throttle;
-  _packet[9] = H_throttle;
-
   _packet[10] = L_wheel;
   _packet[11] = H_wheel;
  
-
  unsigned short crcCal = CRC16_Make(_packet, _len+2);
   _crc[0] = (crcCal >> 8) & 0xff;
   _crc[1] = crcCal & 0xff;
   
-  Send_Processing(_packet,_len,_crc); 
+  Send_Processing(_packet,_len,_crc);
+  
+  Send_Check(_packet,_len,_crc);
+////////////////////////////////////////////
+/*
+	if(sendCheckFlag == 1)
+	{
+	  timeOutSendPreviousMillis = millis();
+		
+	 	while(sendCheckFlag != 3)
+	 	{
+	 		while(!TimeOutSendCheck(3))
+			{
+				Receive();
+				if(sendCheckFlag == 3) break;
+			}
+			if(sendCheckFlag == 3) break;
+			
+			Send_Processing(_packet,_len,_crc);
+	 	}
+	  sendCheckFlag = 0;
+	}
+	*/
+///////////////////////////////////////////
+  
 }
 
 
 
 void CoDroneClass::Set_TrimFlight(int _roll, int _pitch, int _yaw, int _throttle)
 {
+	sendCheckFlag = 1;
+	
 	byte _packet[10];
   byte _crc[2];
   
@@ -313,15 +339,13 @@ void CoDroneClass::Set_TrimFlight(int _roll, int _pitch, int _yaw, int _throttle
   _crc[0] = (crcCal >> 8) & 0xff;
   _crc[1] = crcCal & 0xff;
   
-  Send_Processing(_packet,_len,_crc); 
-		
+  Send_Processing(_packet,_len,_crc); 		
 }
-
-
-
 
 void CoDroneClass::Set_TrimDrive(int _wheel)
 {
+	sendCheckFlag = 1;
+	
 	byte _packet[4];
   byte _crc[2];
   
@@ -344,15 +368,58 @@ void CoDroneClass::Set_TrimDrive(int _wheel)
   _crc[1] = crcCal & 0xff;
   
   Send_Processing(_packet,_len,_crc); 
+        
+////////////////////////////////////////////
+	Send_Check(_packet,_len,_crc);
+
+/*
+	if(sendCheckFlag == 1)
+	{
+	  timeOutSendPreviousMillis = millis();
 		
+	 	while(sendCheckFlag != 3)
+	 	{
+	 		while(!TimeOutSendCheck(3))
+			{
+				Receive();
+				if(sendCheckFlag == 3) break;
+			}
+			if(sendCheckFlag == 3) break;
+			
+			Send_Processing(_packet,_len,_crc);
+	 	}
+	  sendCheckFlag = 0;
+	}
+	*/
+///////////////////////////////////////////
 }
 
 void CoDroneClass::Set_TrimReset()
-{	
+{
 	Set_TrimAll(0,0,0,0,0);	
 }
 
-
+/***************************************************************************/
+void CoDroneClass::Send_Check(byte _data[], byte _length, byte _crc[])
+{
+	if(sendCheckFlag == 1)
+	{
+	  timeOutSendPreviousMillis = millis();
+		
+	 	while(sendCheckFlag != 3)
+	 	{
+	 		while(!TimeOutSendCheck(SEND_CHECK_TIME))
+			{
+				Receive();
+				if(sendCheckFlag == 3) break;
+			}
+			if(sendCheckFlag == 3) break;
+			
+			Send_Processing(_data,_length,_crc);
+	 	}
+	  sendCheckFlag = 0;
+	}	
+}
 /***************************************************************************/
 ///////////////////////CONTROL///////////////////////////////////////////////
 /***************************************************************************/
@@ -398,6 +465,9 @@ void CoDroneClass::Control()
 	sendCheckFlag = 0;
 	////////////////////////////////////////////
 	
+	Send_Check(_packet,_len,_crc);
+	
+	/*
 	if(sendCheckFlag == 1)
 	{
 	  timeOutSendPreviousMillis = millis();
@@ -415,6 +485,7 @@ void CoDroneClass::Control()
 	 	}
 	  sendCheckFlag = 0;
 	}
+	*/
 ///////////////////////////////////////////	
 }
 
@@ -444,6 +515,8 @@ void CoDroneClass::Send_Command(int sendCommand, int sendOption)
         
 ////////////////////////////////////////////
 
+	Send_Check(_packet,_len,_crc);
+	/*
 	if(sendCheckFlag == 1)
 	{
 	  timeOutSendPreviousMillis = millis();
@@ -461,11 +534,223 @@ void CoDroneClass::Send_Command(int sendCommand, int sendOption)
 	 	}
 	  sendCheckFlag = 0;
 	}
-	
+	*/
 ///////////////////////////////////////////
   
 }
 /////////////////////////////////////////////////////
+
+void CoDroneClass::BattleBegin(byte teamSelect)
+{
+	team = teamSelect;
+	
+	if(team == TEAM_RED)
+	{		
+		weapon = RED_MISSILE;
+				
+	  CoDrone.LedColor(ArmHold,  Red, 7);
+	  delay(300);
+	  CoDrone.LedColor(EyeDimming, Red, 7);	  		    
+	}	
+	
+	else if	(team == TEAM_BLUE)
+	{		
+		weapon = BLUE_MISSILE;
+		
+	  CoDrone.LedColor(ArmHold,  Blue, 7);
+	  delay(300);
+	  CoDrone.LedColor(EyeDimming, Blue, 7);	  
+	}	
+	
+	else if	(team == TEAM_GREEN)
+	{			
+		weapon = GREEN_MISSILE;
+		
+	  CoDrone.LedColor(ArmHold,  Green, 7);
+	  delay(300);
+	  CoDrone.LedColor(EyeDimming, Green, 7);
+	}
+	
+	else if	(team == TEAM_YELLOW)
+	{		
+		weapon = YELLOW_MISSILE;
+		
+	  CoDrone.LedColor(ArmHold,  Yellow, 7);
+	  delay(300);
+	  CoDrone.LedColor(EyeDimming, Yellow, 7);
+	}
+	else if (team == FREE_PLAY)
+	{				
+		
+ 		CoDrone.LedColor(ArmHold,  White, 7);
+	  delay(300);
+	  CoDrone.LedColor(EyeDimming, White, 7);
+		
+		
+		weapon = FREE_MISSILE;				
+	}
+	
+	delay (300);
+}
+
+
+void CoDroneClass::BattleReceive()
+{
+	Receive();
+	
+	if(irMassageReceive > 0)
+	{		
+		if(team == TEAM_RED)
+		{
+			if(irMassageReceive == BLUE_MISSILE || irMassageReceive == GREEN_MISSILE || irMassageReceive == YELLOW_MISSILE || irMassageReceive == FREE_MISSILE)
+			{
+				BattleDamageProcess();		
+			}			
+		}				
+			
+		else if(team == TEAM_BLUE)
+		{
+			if(irMassageReceive == RED_MISSILE || irMassageReceive == GREEN_MISSILE || irMassageReceive == YELLOW_MISSILE || irMassageReceive == FREE_MISSILE)
+			{				
+				BattleDamageProcess();
+			}			
+		}					
+		
+		else if(team == TEAM_GREEN)
+		{
+			if(irMassageReceive == BLUE_MISSILE || irMassageReceive == RED_MISSILE || irMassageReceive == YELLOW_MISSILE || irMassageReceive == FREE_MISSILE)
+			{
+				BattleDamageProcess();				
+			}			
+		}		
+						
+		else if(team == TEAM_YELLOW)
+		{
+			if(irMassageReceive == BLUE_MISSILE || irMassageReceive == GREEN_MISSILE || irMassageReceive == RED_MISSILE || irMassageReceive == FREE_MISSILE)
+			{				
+				BattleDamageProcess();
+			}			
+		}		
+			
+		else if(team == FREE_PLAY)
+		{
+			if(irMassageReceive == RED_MISSILE || irMassageReceive == BLUE_MISSILE || irMassageReceive == GREEN_MISSILE || irMassageReceive == YELLOW_MISSILE || irMassageReceive == FREE_PLAY)
+			{				
+				BattleDamageProcess();
+			}			
+		}		
+		
+		irMassageReceive = 0;
+	}	
+}
+
+void CoDroneClass::BattleDamageProcess()
+{
+	if(displayMode == 1)
+	{		
+		energy--;
+		
+		if(energy > 0)
+		{
+			DDRC = 0xff;					
+			PORTC = (0xff >> (MAX_ENERGY - energy)) << ((MAX_ENERGY - energy) / 2);
+			 
+			CoDrone.Buzz(4000, 8);			
+		}
+		
+		else
+		{			
+			delay(300);
+			
+  		CoDrone.LedColor(ArmNone, Black, 7);
+			DDRC = 0xff;			
+			PORTC = 0x00;
+		  CoDrone.Buzz(3000, 4);
+		  delay(100);
+		  CoDrone.Buzz(2000, 4);
+		  delay(100);
+		  CoDrone.Buzz(3000, 4);
+		  delay(100);
+		  CoDrone.Buzz(2000, 4);
+		  delay(100);
+		  CoDrone.Buzz(3000, 4);
+		  delay(100);
+		  CoDrone.Buzz(2000, 4);
+		  delay(100);
+		  CoDrone.Buzz(3000, 4);
+		  delay(100);
+		  CoDrone.Buzz(2000, 4);		  		  
+		}
+		
+		delay(100);
+		DDRC = 0b01100110;
+		PORTC = 0b00100100;
+	}
+}
+
+
+
+void CoDroneClass::BattleShooting()
+{
+	sendCheckFlag = 1;
+		
+	byte _packet[12];		 
+  byte _crc[2];
+  
+  byte _cType = dType_LedEventCommandIr;
+  byte _len   = 10;
+  
+  //header
+  _packet[0] = _cType;
+  _packet[1] = _len;
+
+ //data
+ //led event base
+  _packet[2] = ArmDimming;
+  _packet[3] = Magenta;
+  _packet[4] = 7;
+  _packet[5] = 2;
+  
+  //command base
+  _packet[6] = cType_FlightEvent;
+  _packet[7] = fEvent_Shot;
+  
+  //irData u32 - 4byte
+  unsigned long data = weapon;
+  _packet[8] = data & 0xff;
+  _packet[9] = (data >> 8) & 0xff;
+  _packet[10] 	=	(data >> 16) & 0xff;
+  _packet[11] 	= (data >> 24) & 0xff;
+
+ unsigned short crcCal = CRC16_Make(_packet, _len+2);
+  _crc[0] = (crcCal >> 8) & 0xff;
+  _crc[1] = crcCal & 0xff;
+  
+  Send_Processing(_packet,_len,_crc);  
+  
+  Send_Check(_packet,_len,_crc);
+  /*				
+	if(sendCheckFlag == 1)
+	{
+	  timeOutSendPreviousMillis = millis();
+		
+	 	while(sendCheckFlag != 3)
+	 	{
+	 		while(!TimeOutSendCheck(3))
+			{
+				Receive();
+				if(sendCheckFlag == 3) break;
+			}
+			if(sendCheckFlag == 3) break;
+			
+			Send_Processing(_packet,_len,_crc);
+	 	}
+	  sendCheckFlag = 0;
+	}
+	*/
+}
+
+
 
 void CoDroneClass::LedColor(byte sendMode, byte sendColor, byte sendInterval)
 {	
@@ -645,6 +930,7 @@ void CoDroneClass::Request_DroneGyroBias()
 }
 void CoDroneClass::Request_TrimAll()
 {
+	sendCheckFlag = 1;
 	Send_Command(cType_Request, Req_TrimAll);    
 }
 void CoDroneClass::Request_TrimFlight()
@@ -684,6 +970,8 @@ void CoDroneClass::Request_Temperature()
 	Send_Command(cType_Request, Req_Temperature);    
 }
 
+
+
 void CoDroneClass::Send_Ping()
 {
    
@@ -704,6 +992,7 @@ void CoDroneClass::Send_Ping()
   Send_Processing(_packet,_len,_crc);  
     
 }
+
 /////////////////////////////////////////////////////////////
 
 
@@ -938,7 +1227,7 @@ void CoDroneClass::Send_ConnectNearbyDrone()
 
 void CoDroneClass::Send_Processing(byte _data[], byte _length, byte _crc[])
 {		
-  byte _packet[20];
+  byte _packet[30];
   
   //START CODE  
   _packet[0] = START1;
@@ -949,15 +1238,12 @@ void CoDroneClass::Send_Processing(byte _data[], byte _length, byte _crc[])
   {
    _packet[i+2] = _data[i];	   
   }
-  //CRC
-  
+  //CRC  
   _packet[_length + 4] =_crc[1];
   _packet[_length + 5] =_crc[0]; 
     
  	DRONE_SERIAL.write(_packet, _length + 6);
- 	
- 	
- 	 
+ 	 	 
   #if defined(FIND_HWSERIAL1)
 	if(debugMode == 1)
 	{
@@ -986,7 +1272,9 @@ void CoDroneClass::Receive()
     #if defined(FIND_HWSERIAL1)
 	  if(debugMode == 1)
 	  {
-	 //   DEBUG_SERIAL.print(input,HEX);	
+	 	//
+	  // DEBUG_SERIAL.print(input,HEX);	
+	  //
 	  }	
     #endif
     
@@ -1061,6 +1349,15 @@ void CoDroneClass::Receive()
                           
                 /***********************************************/     
                            
+                else if (receiveDtype == dType_IrMessage)		//IrMessage
+                {           	
+	                droneIrMassage[0] = dataBuff[2];
+	                droneIrMassage[1] = dataBuff[3];
+	                droneIrMassage[2] = dataBuff[4];
+	                droneIrMassage[3] = dataBuff[5];
+	                droneIrMassage[4] = dataBuff[6];	              
+              	}                          
+                         
                 else if (receiveDtype == dType_State)		//dron state
                 {           	
 	                droneState[0] = dataBuff[2];
@@ -1313,8 +1610,7 @@ void CoDroneClass::Receive()
 /***************************************************************************/
 
 void CoDroneClass::PrintDroneAddress()
-{
-	
+{	
   Send_LinkModeBroadcast(LinkBroadcast_Mute);    
   delay(100);
   
@@ -1389,6 +1685,7 @@ void CoDroneClass::DisplayAddress(byte count)
 }
 
 /**********************************************************/
+
 
 void CoDroneClass::LED_Start()
 {
@@ -1685,6 +1982,64 @@ void CoDroneClass::ReceiveEventCheck()
 			  receiveDtype = -1;	
 			}		
 		}
+		
+		/**************************************************************/
+		
+	   else if (receiveDtype == dType_IrMessage)		//IrMessage
+     {
+     	
+   	  irMassageDirection	= droneIrMassage[0];
+   	  
+   	  unsigned long _irMassge[4];
+   	  
+   	  _irMassge[0] = droneIrMassage[1];
+   	  _irMassge[1] = droneIrMassage[2];
+   	  _irMassge[2] = droneIrMassage[3];
+   	  _irMassge[3] = droneIrMassage[4];
+   	     	  
+   	  irMassageReceive	= ((_irMassge[3] << 24) | (_irMassge[2] << 16) | (_irMassge[1] << 8) | (_irMassge[0]  & 0xff));
+   	  
+  	  #if defined(FIND_HWSERIAL1)		
+  	  
+		  if(debugMode == 1)
+		  { 			  			  	
+				DEBUG_SERIAL.println("");                	                
+				DEBUG_SERIAL.println("- IrMassage");
+				DEBUG_SERIAL.print("[ ");
+				DEBUG_SERIAL.print(droneIrMassage[0],HEX);
+				DEBUG_SERIAL.print(", ");
+				DEBUG_SERIAL.print(droneIrMassage[1],HEX);
+				DEBUG_SERIAL.print(", ");
+				DEBUG_SERIAL.print(droneIrMassage[2],HEX);
+				DEBUG_SERIAL.print(", ");
+				DEBUG_SERIAL.print(droneIrMassage[3],HEX);
+				DEBUG_SERIAL.print(", ");
+				DEBUG_SERIAL.print(droneIrMassage[4],HEX);		
+				DEBUG_SERIAL.println(" ]");
+				
+				DEBUG_SERIAL.print("IrMassageDirection\t");					
+				DEBUG_SERIAL.print(irMassageDirection);
+				
+				if(irMassageDirection == 1)				DEBUG_SERIAL.println(" (Left)");
+				else if (irMassageDirection == 2)	DEBUG_SERIAL.println(" (Front)");
+				else if (irMassageDirection == 3)	DEBUG_SERIAL.println(" (Right)");
+				else if (irMassageDirection == 4)	DEBUG_SERIAL.println(" (Rear)");
+				else DEBUG_SERIAL.println("None");
+								
+				DEBUG_SERIAL.print("IrMassageReceive\t");	
+				DEBUG_SERIAL.println(irMassageReceive);
+																					
+			}	
+		  #endif	
+		  
+		  receiveEventState = -1;	  
+		  receiveComplete = -1;
+		  receiveLength = -1;
+		  receiveLinkState = -1;
+		  receiveDtype = -1;	
+      
+                  
+     }                          
 			/**************************************************************/
 		else if (receiveDtype == dType_Attitude)
 	  {  			
@@ -1697,9 +2052,7 @@ void CoDroneClass::ReceiveEventCheck()
 																					
 					  		          	
 	  	  #if defined(FIND_HWSERIAL1)				  
-	  	    	  														//	Serial.println(millis());
-	  	  																	//Serial.println(AttitudeYAW);
-	  	  		
+	  	    	  														  	  		
 			  if(debugMode == 1)
 			  { 			  	
 					DEBUG_SERIAL.println("");                	                
