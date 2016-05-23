@@ -28,6 +28,19 @@ PrintDroneAddress		KEYWORD2
 LowBatteryCheck			KEYWORD2	
 DroneModeChange			KEYWORD2	
 
+BattleBegin					KEYWORD2
+BattleReceive				KEYWORD2
+BattleShooting			KEYWORD2
+
+ButtonPreesHoldWait	KEYWORD2
+
+Set_Trim						KEYWORD2
+Set_TrimAll					KEYWORD2
+Set_TrimReset				KEYWORD2
+
+LED_Blink						KEYWORD2
+LED_Connect					KEYWORD2
+
 #######################################
 # Constants (LITERAL1)
 #######################################
@@ -51,9 +64,7 @@ PAIRING						LITERAL1
 DiscoverStart			LITERAL1
 DiscoverStop			LITERAL1
 
-
 Stop							LITERAL1
-
 
 EVENT							LITERAL1
 STATE							LITERAL1
@@ -80,3 +91,19 @@ ArmFlickerDouble	LITERAL1
 ArmDimming				LITERAL1
 ArmFlow						LITERAL1
 ArmFlowReverse		LITERAL1
+
+
+RollIncrease			LITERAL1
+RollDecrease			LITERAL1
+PitchIncrease			LITERAL1
+PitchDecrease			LITERAL1
+YawIncrease				LITERAL1
+YawDecrease				LITERAL1
+ThrottleIncrease	LITERAL1
+ThrottleDecrease	LITERAL1
+
+TEAM_RED					LITERAL1
+TEAM_BLUE					LITERAL1
+TEAM_GREEN				LITERAL1
+TEAM_YELLOW				LITERAL1
+FREE_PLAY					LITERAL1
