@@ -754,9 +754,9 @@ public:
 	int devRSSI1 = -1;
 	int devRSSI2 = -1;
 		
-	byte devName0[26];
-	byte devName1[26];
-	byte devName2[26];
+	byte devName0[20];
+	byte devName1[20];
+	byte devName2[20];
 		
 	byte devAddress0[6];
 	byte devAddress1[6];
