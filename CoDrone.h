@@ -570,6 +570,8 @@ class CoDroneClass
 {
 public:
 
+	CoDroneClass(void);
+
 /////////////////////////////////////////////////////////////////////////
 
 	void begin(long baud);
@@ -722,37 +724,37 @@ public:
 			
 /////////////////////////////////////////////////////////////////////////
 
-	byte displayMode = 1;	//smar inventor : default 1
-	byte debugMode = 0;		//smar inventor : default 0
+	byte displayMode;	//smar inventor : default 1
+	byte debugMode;		//smar inventor : default 0
 	
 	byte discoverFlag;
 	byte connectFlag;
 			
-	boolean pairing = 0;
+	boolean pairing;
 	
 	int SendInterval; //millis seconds		
 	int analogOffset;
-	byte displayLED = 0;
+	byte displayLED;
 
-	byte timeOutRetry = 0;
+	byte timeOutRetry;
 	
-	byte sendCheckFlag = 0;
+	byte sendCheckFlag;
 	
-	byte receiveAttitudeSuccess = 0;
+	byte receiveAttitudeSuccess;
 	
-	int energy = 8;
+	int energy;
 	
-	byte team = FREE_PLAY;
-	unsigned long weapon = FREE_MISSILE;
+	byte team;
+	unsigned long weapon;
 	
 /////////////////////////////////////////////////////////////////////////
 	
-	byte devCount = 0;
+	byte devCount;
 	byte devFind[3];
 	
-	int devRSSI0 = -1;
-	int devRSSI1 = -1;
-	int devRSSI2 = -1;
+	int devRSSI0;
+	int devRSSI1;
+	int devRSSI2;
 		
 	byte devName0[20];
 	byte devName1[20];
@@ -767,20 +769,20 @@ public:
 	
 /////////////////////////////////////////////////////////////////////////
 	
-	int roll = 0;
-	int pitch = 0;
-	int yaw = 0;
-	int throttle = 0;
+	int roll;
+	int pitch;
+	int yaw;
+	int throttle;
 		
-	int attitudeRoll	= 0;
-	int attitudePitch	= 0;
-	int attitudeYaw	= 0;
+	int attitudeRoll;
+	int attitudePitch;
+	int attitudeYaw;
 	
 /////////////////////////////////////////////////////////////////////////
 	
-	int linkState = 0;;
-	int rssi = 0;
-	byte battery = 0;
+	int linkState;
+	int rssi;
+	byte battery;
 		
 	byte irMassageDirection;
   unsigned long	irMassageReceive;
