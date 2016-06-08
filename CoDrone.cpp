@@ -4,6 +4,7 @@
   LastUpdate : 2016-04-20
 */
 
+
 #include "CoDrone.h"
 #include "Arduino.h"
 #include <EEPROM.h>
@@ -46,6 +47,52 @@ static const unsigned short crc16tab[256] = {
   0x6e17, 0x7e36, 0x4e55, 0x5e74, 0x2e93, 0x3eb2, 0x0ed1, 0x1ef0
 };
 
+
+CoDroneClass::CoDroneClass(void)
+{
+	displayMode = 1;	//smart inventor : default 1
+	debugMode = 0;		//smart inventor : default 0
+			
+	pairing = 0;
+	
+	displayLED = 0;
+
+	timeOutRetry = 0;
+	
+	sendCheckFlag = 0;
+	
+	receiveAttitudeSuccess = 0;
+	
+	energy = 8;
+	
+	team = FREE_PLAY;
+	weapon = FREE_MISSILE;
+	
+/////////////////////////////////////////////////////////////////////////
+	
+	devCount = 0;
+	
+	devRSSI0 = -1;
+	devRSSI1 = -1;
+	devRSSI2 = -1;
+	
+/////////////////////////////////////////////////////////////////////////
+	
+	roll = 0;
+	pitch = 0;
+	yaw = 0;
+	throttle = 0;
+		
+	attitudeRoll	= 0;
+	attitudePitch	= 0;
+	attitudeYaw	= 0;
+	
+/////////////////////////////////////////////////////////////////////////
+	
+	linkState = 0;;
+	rssi = 0;
+	battery = 0;
+}
 
 
 unsigned short CoDroneClass::CRC16_Make(unsigned char *buf, int len) //CRC16-CCITT Format
