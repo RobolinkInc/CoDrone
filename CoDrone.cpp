@@ -710,7 +710,7 @@ void CoDroneClass::BattleDamageProcess()
 			DDRC = 0xff;					
 			PORTC = (0xff >> (MAX_ENERGY - energy)) << ((MAX_ENERGY - energy) / 2);
 			 
-			//CoDrone.Buzz(4000, 8);			
+			CoDrone.Buzz(4000, 8);			
 		}
 		
 		else
@@ -720,10 +720,6 @@ void CoDroneClass::BattleDamageProcess()
   		CoDrone.LedColor(ArmNone, Black, 7);
 			DDRC = 0xff;			
 			PORTC = 0x00;
-/*		  CoDrone.Buzz(3000, 4);
-		  delay(100);
-		  CoDrone.Buzz(2000, 4);
-		  delay(100);
 		  CoDrone.Buzz(3000, 4);
 		  delay(100);
 		  CoDrone.Buzz(2000, 4);
@@ -734,7 +730,11 @@ void CoDroneClass::BattleDamageProcess()
 		  delay(100);
 		  CoDrone.Buzz(3000, 4);
 		  delay(100);
-		  CoDrone.Buzz(2000, 4);*/		  		  
+		  CoDrone.Buzz(2000, 4);
+		  delay(100);
+		  CoDrone.Buzz(3000, 4);
+		  delay(100);
+		  CoDrone.Buzz(2000, 4);		  		  
 		}
 		
 		delay(100);
