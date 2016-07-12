@@ -7,7 +7,7 @@
 
 #include "CoDrone.h"
 #include "Arduino.h"
-#include <EEPROM.h>
+#include <EEPROMs.h>
 
 /***************************************************************************/
 
@@ -138,11 +138,11 @@ void CoDroneClass::begin(long baud)
 	LED_Start();
 
 	// Connected Drone Address Read
-	if (EEPROM.read(EEP_AddressCheck) == 1)
+	if (EEPROMs.read(EEP_AddressCheck) == 1)
 	{  	
 		for (int i = 0; i <= 5; i++)
 		{
-			devAddressConnected[i] = EEPROM.read(EEP_AddressFirst+i);
+			devAddressConnected[i] = EEPROMs.read(EEP_AddressFirst+i);
 		}		
 	}		
   delay(500);
@@ -2987,11 +2987,11 @@ void CoDroneClass::ReceiveEventCheck()
 	      {
 					connectFlag = 0;         
 											
-					EEPROM.write(EEP_AddressCheck, 0x01);						
+					EEPROMs.write(EEP_AddressCheck, 0x01);						
 					for (int i = 0; i <= 5; i++)
 					{
 					//	devAddressConnected[i] = devAddressBuf[i];
-				    EEPROM.write(EEP_AddressFirst + i, devAddressBuf[i]);				
+				    EEPROMs.write(EEP_AddressFirst + i, devAddressBuf[i]);				
 				  }
 			  }			  
 			  LED_Connect();
