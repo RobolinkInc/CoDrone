@@ -1,5 +1,5 @@
 /*
-  EEPROM.cpp - EEPROM library
+  EEPROMs.cpp - EEPROMs library (renamed)
   Copyright (c) 2006 David A. Mellis.  All right reserved.
 
   This library is free software; you can redistribute it and/or
