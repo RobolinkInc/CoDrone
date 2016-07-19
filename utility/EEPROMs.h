@@ -17,19 +17,19 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef EEPROM_h
-#define EEPROM_h
+#ifndef EEPROMs_h
+#define EEPROMs_h
 
 #include <inttypes.h>
 
-class EEPROMClass
+class EEPROMsClass
 {
   public:
     uint8_t read(int);
     void write(int, uint8_t);
 };
 
-extern EEPROMClass EEPROMs;
+extern EEPROMsClass EEPROMs;
 
 #endif
 

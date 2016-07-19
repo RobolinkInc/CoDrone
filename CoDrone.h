@@ -625,6 +625,7 @@ public:
 	void BattleReceive();
 	void BattleBegin(byte teamSelect);	
 	void BattleDamageProcess();	
+	void displayHealth();
 	
 /////////////////////////////////////////////////////////////////////////
 		
@@ -824,6 +825,8 @@ private:
 	long PreviousBuzz;		
 
 	long timeOutSendPreviousMillis;
+
+	unsigned long HealthTime;
 
 //	SoftwareSerial DEBUG_SERIAL = SoftwareSerial(8,9);
 };
