@@ -135,6 +135,8 @@ void CoDroneClass::begin(long baud)
 	
 	analogOffset = 10;		// analog sensor offset
 
+	HealthTime = millis();
+
 	LED_Start();
 
 	// Connected Drone Address Read
@@ -696,7 +698,9 @@ void CoDroneClass::BattleReceive()
 		}		
 		
 		irMassageReceive = 0;
-	}	
+	}
+
+	displayHealth();
 }
 
 void CoDroneClass::BattleDamageProcess()
@@ -707,43 +711,70 @@ void CoDroneClass::BattleDamageProcess()
 		
 		if(energy > 0)
 		{
-			DDRC = 0xff;					
-			PORTC = (0xff >> (MAX_ENERGY - energy)) << ((MAX_ENERGY - energy) / 2);
+			// now done via displayHealth()
+		//	DDRC = 0xff;
+		//	PORTC = (0xff >> (MAX_ENERGY - energy)) << ((MAX_ENERGY - energy) / 2);
 			 
-			CoDrone.Buzz(4000, 8);			
+			CoDrone.Buzz(4000, 8);
 		}
-		
 		else
 		{			
 			delay(300);
 			
-  		CoDrone.LedColor(ArmNone, Black, 7);
-			DDRC = 0xff;			
+  			CoDrone.LedColor(ArmNone, Black, 7);
+			DDRC = 0xff;
 			PORTC = 0x00;
-		  CoDrone.Buzz(3000, 4);
-		  delay(100);
-		  CoDrone.Buzz(2000, 4);
-		  delay(100);
-		  CoDrone.Buzz(3000, 4);
-		  delay(100);
-		  CoDrone.Buzz(2000, 4);
-		  delay(100);
-		  CoDrone.Buzz(3000, 4);
-		  delay(100);
-		  CoDrone.Buzz(2000, 4);
-		  delay(100);
-		  CoDrone.Buzz(3000, 4);
-		  delay(100);
-		  CoDrone.Buzz(2000, 4);		  		  
+		  	CoDrone.Buzz(3000, 4);
+		  	delay(100);
+		  	CoDrone.Buzz(2000, 4);
+		  	delay(100);
+		  	CoDrone.Buzz(3000, 4);
+		  	delay(100);
+		  	CoDrone.Buzz(2000, 4);
+		  	delay(100);
+		  	CoDrone.Buzz(3000, 4);
+		  	delay(100);
+		  	CoDrone.Buzz(2000, 4);
+		  	delay(100);
+		  	CoDrone.Buzz(3000, 4);
+		  	delay(100);
+		  	CoDrone.Buzz(2000, 4);
 		}
 		
 		delay(100);
-		//DDRC = 0b01100110;
-		//PORTC = 0b00100100;
 	}
 }
 
+void CoDroneClass::displayHealth()
+{
+	if(energy > 0) // if we have health left
+	{
+		// cycles through the health displays with only 4 leds (12, 13, 16, 17)
+		// on even numbers it stays solid, with odd it flickers the light of the even number greater than it
+		// {off off off off,  off off off on,  off off on on,  off on on on,  on on on on}
+		byte health[5] = {0x00, 0x02, 0x06, 0x26, 0x66};
+		DDRC = 0x66; // 0110 0110
 
+		if(millis() - HealthTime < 25)
+		{
+			PORTC = health[energy/2]; // display health without care of even or odd
+		}
+		else if(millis() - HealthTime < 50)
+		{
+			PORTC = health[(energy / 2) + (energy % 2)];	// display odd as +1, and even as is (this gets the flicker)
+		}
+		else
+		{
+			HealthTime = millis(); // reset the cycle
+		}
+	}
+	else
+	{
+		// no health left
+		DDRC = 0x66;
+		PORTC = 0;
+	}
+}
 
 void CoDroneClass::BattleShooting()
 {
