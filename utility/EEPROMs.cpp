@@ -1,5 +1,5 @@
 /*
-  EEPROM.cpp - EEPROM library
+  EEPROMs.cpp - EEPROMs library (renamed)
   Copyright (c) 2006 David A. Mellis.  All right reserved.
 
   This library is free software; you can redistribute it and/or
@@ -23,7 +23,7 @@
 
 #include <avr/eeprom.h>
 #include "Arduino.h"
-#include "EEPROM.h"
+#include "EEPROMs.h"
 
 /******************************************************************************
  * Definitions
@@ -37,14 +37,14 @@
  * User API
  ******************************************************************************/
 
-uint8_t EEPROMClass::read(int address)
+uint8_t EEPROMsClass::read(int address)
 {
 	return eeprom_read_byte((unsigned char *) address);
 }
 
-void EEPROMClass::write(int address, uint8_t value)
+void EEPROMsClass::write(int address, uint8_t value)
 {
 	eeprom_write_byte((unsigned char *) address, value);
 }
 
-EEPROMClass EEPROM;
+EEPROMsClass EEPROMs;
