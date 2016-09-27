@@ -2,13 +2,13 @@
   Trim - Trim all
 - Use this code to trim your drone if you already know what trim values you want to use
 
-Set the integer values for roll, pitch, yaw, and throttle (-100 to 100) and they will
+Set the integer values for roll, pitch, yaw, and throttle (-500 to 500) and they will
 be added as trim to your drone when it connects.
 
 *******************************************************************/
 #include <CoDrone.h> // Include the CoDrone Library
 
-// range -100 ~ 100
+// range -500 ~ 500
 
 int roll      = 0;
 int pitch     = 0;

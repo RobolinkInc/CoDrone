@@ -778,6 +778,7 @@ void CoDroneClass::displayHealth()
 
 void CoDroneClass::BattleShooting()
 {
+	if(TimeCheck1(BATTLE_CHECK_TIME)){
 	sendCheckFlag = 1;
 		
 	byte _packet[12];		 
@@ -834,13 +835,14 @@ void CoDroneClass::BattleShooting()
 	  sendCheckFlag = 0;
 	}
 	*/
+	}
 }
 
 
 
 void CoDroneClass::LedColor(byte sendMode, byte sendColor, byte sendInterval)
 {	
-
+  if(TimeCheck2(LED_CHECK_TIME)){
   byte _packet[9];
   byte _crc[2];
   
@@ -860,12 +862,14 @@ void CoDroneClass::LedColor(byte sendMode, byte sendColor, byte sendInterval)
   _crc[0] = (crcCal >> 8) & 0xff;
   _crc[1] = crcCal & 0xff;
   
-  Send_Processing(_packet,_len,_crc);     
+  Send_Processing(_packet,_len,_crc);   
+  }  
 }
 
 
 void CoDroneClass::LedColor(byte sendMode, byte r, byte g, byte b, byte sendInterval)
 {	
+if(TimeCheck2(LED_CHECK_TIME)){
   byte _packet[9];
   byte _crc[2];
   
@@ -889,9 +893,11 @@ void CoDroneClass::LedColor(byte sendMode, byte r, byte g, byte b, byte sendInte
   
   Send_Processing(_packet,_len,_crc);     
 }
+}
 
 void CoDroneClass::LedColor(byte sendMode, byte sendColor[], byte sendInterval)
 {	
+if(TimeCheck2(LED_CHECK_TIME)){
   byte _packet[9];
   byte _crc[2];
   
@@ -915,10 +921,12 @@ void CoDroneClass::LedColor(byte sendMode, byte sendColor[], byte sendInterval)
   
   Send_Processing(_packet,_len,_crc);     
 }
+}
 
 
 void CoDroneClass::LedEvent(byte sendMode, byte sendColor, byte sendInterval, byte sendRepeat)
 {	
+if(TimeCheck2(LED_CHECK_TIME)){
   byte _packet[9];
   byte _crc[2];
   
@@ -941,9 +949,11 @@ void CoDroneClass::LedEvent(byte sendMode, byte sendColor, byte sendInterval, by
   
   Send_Processing(_packet,_len,_crc);     
 }
+}
 
 void CoDroneClass::LedEvent(byte sendMode, byte sendColor[], byte sendInterval, byte sendRepeat)
 {	
+if(TimeCheck2(LED_CHECK_TIME)){
   byte _packet[9];
   byte _crc[2];
   
@@ -967,11 +977,13 @@ void CoDroneClass::LedEvent(byte sendMode, byte sendColor[], byte sendInterval, 
   _crc[1] = crcCal & 0xff;
   
   Send_Processing(_packet,_len,_crc);     
+  }
 }
 
 
 void CoDroneClass::LedEvent(byte sendMode, byte r, byte g, byte b, byte sendInterval, byte sendRepeat)
 {	
+if(TimeCheck2(LED_CHECK_TIME)){
   byte _packet[9];
   byte _crc[2];
   
@@ -996,6 +1008,7 @@ void CoDroneClass::LedEvent(byte sendMode, byte r, byte g, byte b, byte sendInte
   _crc[1] = crcCal & 0xff;
   
   Send_Processing(_packet,_len,_crc);     
+	}
 }
 
 
@@ -3172,6 +3185,44 @@ boolean CoDroneClass::TimeCheck(word interval) //milliseconds
   return time;
 }
 
+boolean CoDroneClass::TimeCheck1(word interval) //milliseconds
+{
+	static unsigned long PrevMillis;
+  boolean time = false;
+  unsigned long currentMillis = millis();
+  if (currentMillis - PrevMillis > interval)
+  {
+    PrevMillis = currentMillis;
+    time = true;
+  }
+  return time;
+}
+
+boolean CoDroneClass::TimeCheck2(word interval) //milliseconds
+{
+	static unsigned long PrevMillis;
+  boolean time = false;
+  unsigned long currentMillis = millis();
+  if (currentMillis - PrevMillis > interval)
+  {
+    PrevMillis = currentMillis;
+    time = true;
+  }
+  return time;
+}
+
+boolean CoDroneClass::TimeCheck3(word interval) //milliseconds
+{
+	static unsigned long PrevMillis;
+  boolean time = false;
+  unsigned long currentMillis = millis();
+  if (currentMillis - PrevMillis > interval)
+  {
+    PrevMillis = currentMillis;
+    time = true;
+  }
+  return time;
+}
 
 boolean CoDroneClass::TimeOutSendCheck(word interval) //milliseconds
 {
