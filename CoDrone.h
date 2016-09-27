@@ -58,7 +58,8 @@ typedef uint8_t u8;
 #define MAX_PACKET_LENGTH 	100
 
 /***********************************************************************/
-
+#define BATTLE_CHECK_TIME  		300
+#define LED_CHECK_TIME 			60
 #define	SEND_CHECK_TIME    		10
 
 /***********************************************************************/
@@ -704,6 +705,9 @@ public:
 /////////////////////////////////////////////////////////////////////////
 
 	boolean TimeCheck(word interval); 						//milliseconds
+	boolean TimeCheck1(word interval); 						//milliseconds
+	boolean TimeCheck2(word interval); 						//milliseconds
+	boolean TimeCheck3(word interval); 						//milliseconds
 	boolean TimeOutSendCheck(word interval); //milliseconds		
 	boolean TimeCheckBuzz(word interval); 				//microseconds
 	
