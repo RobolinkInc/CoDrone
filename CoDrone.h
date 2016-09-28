@@ -110,7 +110,7 @@ typedef uint8_t u8;
 #define TEAM_GREEN				3
 #define TEAM_YELLOW				4
 
-#define MAX_ENERGY				8
+
 /**********************	IR DATA****************************************/
 
 #define FREE_MISSILE			0xaa01
@@ -626,6 +626,7 @@ public:
 	void BattleReceive();
 	void BattleBegin(byte teamSelect);	
 	void BattleDamageProcess();	
+	void BattleHitPoints(int points);
 	void displayHealth();
 	
 /////////////////////////////////////////////////////////////////////////
@@ -752,6 +753,8 @@ public:
 	byte receiveAttitudeSuccess;
 	
 	int energy;
+	int MAX_ENERGY = 8;
+	
 	byte team;
 	unsigned long weapon;
 	

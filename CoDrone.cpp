@@ -64,7 +64,7 @@ CoDroneClass::CoDroneClass(void)
 	
 	receiveAttitudeSuccess = 0;
 	
-	energy = 8;
+	energy = MAX_ENERGY;
 	
 	team = FREE_PLAY;
 	weapon = FREE_MISSILE;
@@ -703,6 +703,16 @@ void CoDroneClass::BattleReceive()
 	displayHealth();
 }
 
+void CoDroneClass::BattleHitPoints(int points)
+{
+	if(points<=8 && points > 0){
+	MAX_ENERGY = points;
+	}
+	else{
+		MAX_ENERGY = 8;
+	}
+	energy = points;
+}
 void CoDroneClass::BattleDamageProcess()
 {
 	if(displayMode == 1)
@@ -724,6 +734,7 @@ void CoDroneClass::BattleDamageProcess()
   			CoDrone.LedColor(ArmNone, Black, 7);
 			DDRC = 0xff;
 			PORTC = 0x00;
+			CoDrone.FlightEvent(Landing);
 		  	CoDrone.Buzz(3000, 4);
 		  	delay(100);
 		  	CoDrone.Buzz(2000, 4);
