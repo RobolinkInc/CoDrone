@@ -627,6 +627,8 @@ public:
 	void BattleBegin(byte teamSelect);	
 	void BattleDamageProcess();	
 	void BattleHitPoints(int points);
+	void CrashCustom(boolean custom);
+	boolean CrashedCheck();
 	void displayHealth();
 	
 /////////////////////////////////////////////////////////////////////////
@@ -754,6 +756,8 @@ public:
 	
 	int energy;
 	int MAX_ENERGY = 8;
+	boolean CustomCrash = 0;
+	boolean Crashed = 0;
 	
 	byte team;
 	unsigned long weapon;

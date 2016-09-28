@@ -600,6 +600,7 @@ void CoDroneClass::Send_Command(int sendCommand, int sendOption)
 void CoDroneClass::BattleBegin(byte teamSelect)
 {
 	team = teamSelect;
+	Crashed = 0;
 	
 	if(team == TEAM_RED)
 	{		
@@ -702,6 +703,15 @@ void CoDroneClass::BattleReceive()
 
 	displayHealth();
 }
+void CoDroneClass::CrashCustom(boolean custom)
+{
+	CustomCrash = custom;
+}
+
+boolean CoDroneClass::CrashedCheck()
+{
+	return Crashed;
+}
 
 void CoDroneClass::BattleHitPoints(int points)
 {
@@ -712,6 +722,7 @@ void CoDroneClass::BattleHitPoints(int points)
 		MAX_ENERGY = 8;
 	}
 	energy = points;
+	Crashed = 0;
 }
 void CoDroneClass::BattleDamageProcess()
 {
@@ -734,6 +745,14 @@ void CoDroneClass::BattleDamageProcess()
   			CoDrone.LedColor(ArmNone, Black, 7);
 			DDRC = 0xff;
 			PORTC = 0x00;
+			if(CustomCrash == 1){
+				CoDrone.Buzz(3000, 4);
+				CoDrone.Buzz(3000, 4);
+				CoDrone.Buzz(3000, 4);
+				Crashed = 1;
+			}
+			else{
+			delay(60);
 			CoDrone.FlightEvent(Landing);
 		  	CoDrone.Buzz(3000, 4);
 		  	delay(100);
@@ -750,6 +769,7 @@ void CoDroneClass::BattleDamageProcess()
 		  	CoDrone.Buzz(3000, 4);
 		  	delay(100);
 		  	CoDrone.Buzz(2000, 4);
+			}
 		}
 		
 		delay(100);
