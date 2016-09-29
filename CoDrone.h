@@ -58,8 +58,9 @@ typedef uint8_t u8;
 #define MAX_PACKET_LENGTH 	100
 
 /***********************************************************************/
-
-#define	SEND_CHECK_TIME    		3
+#define BATTLE_CHECK_TIME  		300
+#define LED_CHECK_TIME 			60
+#define	SEND_CHECK_TIME    		10
 
 /***********************************************************************/
 
@@ -109,7 +110,7 @@ typedef uint8_t u8;
 #define TEAM_GREEN				3
 #define TEAM_YELLOW				4
 
-#define MAX_ENERGY				8
+
 /**********************	IR DATA****************************************/
 
 #define FREE_MISSILE			0xaa01
@@ -625,6 +626,9 @@ public:
 	void BattleReceive();
 	void BattleBegin(byte teamSelect);	
 	void BattleDamageProcess();	
+	void BattleHitPoints(int points);
+	void CrashCustom(boolean custom);
+	boolean CrashedCheck();
 	void displayHealth();
 	
 /////////////////////////////////////////////////////////////////////////
@@ -704,6 +708,9 @@ public:
 /////////////////////////////////////////////////////////////////////////
 
 	boolean TimeCheck(word interval); 						//milliseconds
+	boolean TimeCheck1(word interval); 						//milliseconds
+	boolean TimeCheck2(word interval); 						//milliseconds
+	boolean TimeCheck3(word interval); 						//milliseconds
 	boolean TimeOutSendCheck(word interval); //milliseconds		
 	boolean TimeCheckBuzz(word interval); 				//microseconds
 	
@@ -748,6 +755,10 @@ public:
 	byte receiveAttitudeSuccess;
 	
 	int energy;
+	int MAX_ENERGY = 8;
+	boolean CustomCrash = 0;
+	boolean Crashed = 0;
+	
 	byte team;
 	unsigned long weapon;
 	

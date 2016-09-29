@@ -37,8 +37,7 @@ void loop()
 
   if (!bt1 && !bt4 && bt8)           // If the right IR sensor is triggered
   {
-    CoDrone.BattleShooting();        // Shoot
-    CoDrone.ButtonPreesHoldWait(18); // Delay.  So you can't just keep shooting.
+    CoDrone.BattleShooting();        // Shoot.  There is a 300 millisecond inteveral between shots.
   }
 
   if (!bt1 && bt4 && !bt8)            // If the center IR sensor is triggered
