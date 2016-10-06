@@ -68,6 +68,10 @@ typedef uint8_t u8;
 #define PITCH								CoDrone.pitch
 #define YAW									CoDrone.yaw
 #define THROTTLE						CoDrone.throttle
+#define PrevROLL								CoDrone.Prevroll
+#define PrevPITCH								CoDrone.Prevpitch
+#define PrevYAW									CoDrone.Prevyaw
+#define PrevTHROTTLE						CoDrone.Prevthrottle
 
 #define STATE								CoDrone.state
 #define SEND_INTERVAL				CoDrone.SendInterval
@@ -579,6 +583,10 @@ public:
 
 /////////////////////////////////////////////////////////////////////////
 
+	void Delay(int interval);
+
+/////////////////////////////////////////////////////////////////////////
+
 	void begin(long baud);
 	
 	void Receive(void);
@@ -788,6 +796,11 @@ public:
 	int pitch;
 	int yaw;
 	int throttle;
+	
+	int Prevroll;
+	int Prevpitch;
+	int Prevyaw;
+	int Prevthrottle;
 		
 	int attitudeRoll;
 	int attitudePitch;
