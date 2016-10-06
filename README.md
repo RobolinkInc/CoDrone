@@ -35,3 +35,15 @@ To circumvent this, a new CoDrone.Delay function was created.
    - Uses a while loop to imitate delay
    - New class variables Prevroll, Prevyaw, Prevpitch, Prevthrottle
    
+ + CoDrone.ControlTime(int interval);    //This function is still in progress, needs to be finished
+   - Will act as a combination between CoDrone.Control() and CoDrone.Delay().  
+   - The intention is to eliminate the 'middle man' and just have the desired delay
+   interval included in the Control() field.
+   - Ex. CoDrone.Control(3000) would be equal to CoDrone.Control() + delay(3000);
+   
+
+Performance Fixes:
+- The disconnect issue is still not completely solved.  I've noticed it happening often with Battle code. 
+I believe this is because of the BattleReceive() function that is called every loop.  There is no CheckTime()
+included in Receive(), which is called by BattleReceive().  I use TimeCheck3() to limit send intervals to 5ms,
+#define RECEIVE_CHECK_TIME
