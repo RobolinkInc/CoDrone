@@ -2190,9 +2190,9 @@ void CoDroneClass::ReceiveEventCheck()
 		else if (receiveDtype == dType_Attitude)
 	  {  			
 	  		  	
-				attitudeRoll		= ((droneAttitude[1] << 8) | (droneAttitude[0]  & 0xff));
-				attitudePitch	= ((droneAttitude[3] << 8) | (droneAttitude[2]  & 0xff));
-				attitudeYaw		= ((droneAttitude[5] << 8) | (droneAttitude[4]  & 0xff));
+				attitudeRoll	= droneAttitude[0]; //((droneAttitude[1] << 8) | (droneAttitude[0]  & 0xff));
+				attitudePitch	= droneAttitude[1]; //((droneAttitude[3] << 8) | (droneAttitude[2]  & 0xff));
+				attitudeYaw		= droneAttitude[2]; //((droneAttitude[5] << 8) | (droneAttitude[4]  & 0xff));
 				
 				receiveAttitudeSuccess = 1;
 																					
@@ -2209,12 +2209,12 @@ void CoDroneClass::ReceiveEventCheck()
 					DEBUG_SERIAL.print(droneAttitude[1],HEX);
 					DEBUG_SERIAL.print(", ");
 					DEBUG_SERIAL.print(droneAttitude[2],HEX);
-					DEBUG_SERIAL.print(", ");
+					/*DEBUG_SERIAL.print(", ");
 					DEBUG_SERIAL.print(droneAttitude[3],HEX);
 					DEBUG_SERIAL.print(", ");
 					DEBUG_SERIAL.print(droneAttitude[4],HEX);
 					DEBUG_SERIAL.print(", ");
-					DEBUG_SERIAL.print(droneAttitude[5],HEX);				
+					DEBUG_SERIAL.print(droneAttitude[5],HEX);*/				
 					DEBUG_SERIAL.println(" ]");
 					
 
