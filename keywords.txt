@@ -24,6 +24,12 @@ FlightEvent			KEYWORD2
 DriveEvent			KEYWORD2
 Receive				KEYWORD2
 AutoConnect			KEYWORD2
+Delay				KEYWORD2
+BattleHitPoints			KEYWORD2
+CrashedCheck 			KEYWORD2
+CrashCustom			KEYWORD2
+
+
 PrintDroneAddress	KEYWORD2	
 LowBatteryCheck		KEYWORD2	
 DroneModeChange		KEYWORD2	
