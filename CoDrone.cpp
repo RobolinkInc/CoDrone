@@ -514,6 +514,19 @@ void CoDroneClass::Control(int interval)
     }
 }
 
+void CoDroneClass::ControlTime(int interval)
+{
+	unsigned long StartTime = millis();
+	unsigned long IntervalTime = 0;
+	while(millis() - StartTime < interval){
+	    if (TimeCheck(interval))  //delay
+		{
+		Send_Control();
+		PreviousMillis = millis();
+		}
+	}
+}
+
 void CoDroneClass::Send_Control()
 {	
   byte _packet[10];
@@ -686,6 +699,7 @@ void CoDroneClass::BattleBegin(byte teamSelect)
 
 void CoDroneClass::BattleReceive()
 {
+	
 	Receive();
 	
 	if(irMassageReceive > 0)
@@ -1428,6 +1442,7 @@ void CoDroneClass::Send_Processing(byte _data[], byte _length, byte _crc[])
 
 void CoDroneClass::Receive()
 {	
+if (TimeCheck3(RECEIVE_CHECK_TIME)){
 	if (DRONE_SERIAL.available() > 0)
   {
     int input = DRONE_SERIAL.read();
@@ -1783,6 +1798,7 @@ void CoDroneClass::Receive()
     }
   }
   ReceiveEventCheck();
+}
 }
 /***************************************************************************/
 
