@@ -45,5 +45,5 @@ To circumvent this, a new CoDrone.Delay function was created.
 Performance Fixes:
 - The disconnect issue is still not completely solved.  I've noticed it happening often with Battle code. 
 I believe this is because of the BattleReceive() function that is called every loop.  There is no CheckTime()
-included in Receive(), which is called by BattleReceive().  I use TimeCheck3() to limit send intervals to 5ms,
+included in Receive(), which is called by BattleReceive().  I use TimeCheck3() to limit BattleReceive() intervals to 5ms,
 #define RECEIVE_CHECK_TIME
