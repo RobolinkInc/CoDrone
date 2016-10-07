@@ -47,3 +47,4 @@ Performance Fixes:
 I believe this is because of the BattleReceive() function that is called every loop.  There is no CheckTime()
 included in Receive(), which is called by BattleReceive().  I use TimeCheck3() to limit BattleReceive() intervals to 5ms,
 #define RECEIVE_CHECK_TIME
+- RECEIVE_CHECK_TIME = 10
