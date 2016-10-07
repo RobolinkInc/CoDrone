@@ -699,7 +699,7 @@ void CoDroneClass::BattleBegin(byte teamSelect)
 
 void CoDroneClass::BattleReceive()
 {
-	
+	if (TimeCheck3(RECEIVE_CHECK_TIME)){
 	Receive();
 	
 	if(irMassageReceive > 0)
@@ -748,6 +748,7 @@ void CoDroneClass::BattleReceive()
 	}
 
 	displayHealth();
+	}
 }
 void CoDroneClass::CrashCustom(boolean custom)
 {
@@ -1442,7 +1443,7 @@ void CoDroneClass::Send_Processing(byte _data[], byte _length, byte _crc[])
 
 void CoDroneClass::Receive()
 {	
-if (TimeCheck3(RECEIVE_CHECK_TIME)){
+
 	if (DRONE_SERIAL.available() > 0)
   {
     int input = DRONE_SERIAL.read();
@@ -1798,7 +1799,7 @@ if (TimeCheck3(RECEIVE_CHECK_TIME)){
     }
   }
   ReceiveEventCheck();
-}
+
 }
 /***************************************************************************/
 

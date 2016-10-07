@@ -61,7 +61,7 @@ typedef uint8_t u8;
 #define BATTLE_CHECK_TIME  		300
 #define LED_CHECK_TIME 			60
 #define	SEND_CHECK_TIME    		10
-#define RECEIVE_CHECK_TIME      5
+#define RECEIVE_CHECK_TIME      10
 
 /***********************************************************************/
 
