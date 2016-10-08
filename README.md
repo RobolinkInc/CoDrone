@@ -11,6 +11,7 @@
 //EEPROM.h
 //EEPROM.cpp
 //And various examples for each library
+//I like to eat cheese with sriracha yaya - Joon
 
 
 /*******************************************************************/
