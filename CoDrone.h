@@ -595,7 +595,6 @@ public:
 	void Send_Control();
 	void Control();
 	void Control(int interval);
-	void ControlTime(int interval);
 
 	void Send_Command(int sendCommand, int sendOption);	
 	void Send_Processing(byte _data[], byte _length, byte _crc[]);

@@ -502,27 +502,27 @@ void CoDroneClass::Delay(int interval)
 /***************************************************************************/
 void CoDroneClass::Control()
 {
-	Control(SEND_INTERVAL);
-}
-
-void CoDroneClass::Control(int interval)
-{
-    if (TimeCheck(interval))  //delay
+    if (TimeCheck(SEND_INTERVAL))  //delay
     {
       Send_Control();
       PreviousMillis = millis();
     }
 }
 
-void CoDroneClass::ControlTime(int interval)
+void CoDroneClass::Control(int interval)
 {
+	CoDrone.Control();
 	unsigned long StartTime = millis();
 	unsigned long IntervalTime = 0;
 	while(millis() - StartTime < interval){
-	    if (TimeCheck(interval))  //delay
-		{
-		Send_Control();
-		PreviousMillis = millis();
+		if(millis() - IntervalTime > 500){
+			roll = Prevroll;
+			pitch = Prevpitch;
+			yaw = Prevyaw;
+			throttle = Prevthrottle;
+			CoDrone.Control();
+			IntervalTime = millis();
+			
 		}
 	}
 }
