@@ -35,11 +35,19 @@ To circumvent this, a new CoDrone.Delay function was created.
    - Uses a while loop to imitate delay
    - New class variables Prevroll, Prevyaw, Prevpitch, Prevthrottle
    
- + CoDrone.ControlTime(int interval);    //This function is still in progress, needs to be finished
-   - Will act as a combination between CoDrone.Control() and CoDrone.Delay().  
-   - The intention is to eliminate the 'middle man' and just have the desired delay
-   interval included in the Control() field.
-   - Ex. CoDrone.Control(3000) would be equal to CoDrone.Control() + delay(3000);
+ + CoDrone.Control(int inverval); 
+   - CoDrone.Control() now encompasses a psude 'delay()' function. The new CoDrone.Control(int interval)
+    accepts a 'duration' input integer called 'interval'.  The user inputs how long they want their maneuver to
+    perform for here instead of using a delay.
+      Previous:
+      THROTTLE = 60;
+      CoDrone.Control();
+      delay(3000);
+      New:
+      THROTTLE = 60;
+      CoDrone.Control(3000);
+   -The new function resends the previous control command every 500 milliseconds for the duration of the interval.
+   -The default empty parameter CoDrone.Control() functions the same way the pervious empty parameter CoDrone.Control() functioned.
    
 
 Performance Fixes:
