@@ -69,11 +69,6 @@ typedef uint8_t u8;
 #define PITCH								CoDrone.pitch
 #define YAW									CoDrone.yaw
 #define THROTTLE						CoDrone.throttle
-#define PrevROLL								CoDrone.Prevroll
-#define PrevPITCH								CoDrone.Prevpitch
-#define PrevYAW									CoDrone.Prevyaw
-#define PrevTHROTTLE						CoDrone.Prevthrottle
-
 #define STATE								CoDrone.state
 #define SEND_INTERVAL				CoDrone.SendInterval
 #define ANALOG_OFFSET				CoDrone.analogOffset
@@ -798,10 +793,7 @@ public:
 	int yaw;
 	int throttle;
 	
-	int Prevroll;
-	int Prevpitch;
-	int Prevyaw;
-	int Prevthrottle;
+    int prevControl[4];
 		
 	int attitudeRoll;
 	int attitudePitch;

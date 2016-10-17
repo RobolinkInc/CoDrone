@@ -83,11 +83,6 @@ CoDroneClass::CoDroneClass(void)
 	pitch = 0;
 	yaw = 0;
 	throttle = 0;
-	
-	Prevroll = 0;
-	Prevpitch = 0;
-	Prevyaw = 0;
-	Prevthrottle = 0;
 		
 	attitudeRoll	= 0;
 	attitudePitch	= 0;
@@ -484,11 +479,11 @@ void CoDroneClass::Delay(int interval)
 	unsigned long IntervalTime = 0;
 	while(millis() - StartTime < interval){
 		if(millis() - IntervalTime > 500){
-			roll = Prevroll;
-			pitch = Prevpitch;
-			yaw = Prevyaw;
-			throttle = Prevthrottle;
-			CoDrone.Control();
+		 	roll 	=	prevControl[0];
+			pitch 	=	prevControl[1];
+			yaw 	=	prevControl[2];
+			throttle =	prevControl[3];
+			Control();
 			IntervalTime = millis();
 			
 		}
@@ -511,16 +506,16 @@ void CoDroneClass::Control()
 
 void CoDroneClass::Control(int interval)
 {
-	CoDrone.Control();
+	Control();
 	unsigned long StartTime = millis();
 	unsigned long IntervalTime = 0;
 	while(millis() - StartTime < interval){
 		if(millis() - IntervalTime > 500){
-			roll = Prevroll;
-			pitch = Prevpitch;
-			yaw = Prevyaw;
-			throttle = Prevthrottle;
-			CoDrone.Control();
+		 	roll 	=	prevControl[0];
+			pitch 	=	prevControl[1];
+			yaw 	=	prevControl[2];
+			throttle =	prevControl[3];
+			Control();
 			IntervalTime = millis();
 			
 		}
@@ -553,10 +548,11 @@ void CoDroneClass::Send_Control()
 
   //delay(50);
 
-    Prevroll = roll;
-	Prevpitch = pitch;
-	Prevyaw = yaw;
-	Prevthrottle = throttle;
+   
+	prevControl[0] = roll;
+	prevControl[1] = pitch;
+	prevControl[2] = yaw;
+	prevControl[3] = throttle;
   
 	roll = 0;
 	pitch = 0;
