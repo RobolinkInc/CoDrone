@@ -155,6 +155,7 @@ void CoDroneClass::begin(long baud)
   delay(500);  
 }
 
+
 /***************************************************************************/
 //////////////////////Command////////////////////////////////////////////
 /***************************************************************************/
@@ -473,22 +474,6 @@ void CoDroneClass::Send_Check(byte _data[], byte _length, byte _crc[])
 /***************************************************************************/
 ////////////////////////Delay////////////////////////////////////////////////
 /***************************************************************************/
-void CoDroneClass::Delay(int interval)
-{
-	unsigned long StartTime = millis();
-	unsigned long IntervalTime = 0;
-	while(millis() - StartTime < interval){
-		if(millis() - IntervalTime > 500){
-		 	roll 	=	prevControl[0];
-			pitch 	=	prevControl[1];
-			yaw 	=	prevControl[2];
-			throttle =	prevControl[3];
-			Control();
-			IntervalTime = millis();
-			
-		}
-	}
-}
 
 
 
@@ -497,29 +482,16 @@ void CoDroneClass::Delay(int interval)
 /***************************************************************************/
 void CoDroneClass::Control()
 {
-    if (TimeCheck(SEND_INTERVAL))  //delay
-    {
-      Send_Control();
-      PreviousMillis = millis();
-    }
+	Control(SEND_INTERVAL);
 }
 
 void CoDroneClass::Control(int interval)
 {
-	Control();
-	unsigned long StartTime = millis();
-	unsigned long IntervalTime = 0;
-	while(millis() - StartTime < interval){
-		if(millis() - IntervalTime > 500){
-		 	roll 	=	prevControl[0];
-			pitch 	=	prevControl[1];
-			yaw 	=	prevControl[2];
-			throttle =	prevControl[3];
-			Control();
-			IntervalTime = millis();
-			
-		}
-	}
+    if (TimeCheck(interval))  //delay
+    {
+      Send_Control();
+      PreviousMillis = millis();
+    }
 }
 
 void CoDroneClass::Send_Control()
@@ -1144,7 +1116,31 @@ void CoDroneClass::Request_Temperature()
 	Send_Command(cType_Request, Req_Temperature);    
 }
 
+void CoDroneClass::PrintGyro(){
+	Request_DroneAttitude();
+ 	
+	while (CoDrone.receiveAttitudeSuccess == 0){
+		Receive();
+	}
 
+	receiveAttitudeSuccess = 0;
+
+	Send_LinkModeBroadcast(LinkModeMute);    
+	delay(10);
+
+	DRONE_SERIAL.print("\r\n");
+	DRONE_SERIAL.print("gyro angle [0] = ");
+	DRONE_SERIAL.print(gyroAngle[0]);
+	DRONE_SERIAL.print("  gyro angle [1] = ");
+	DRONE_SERIAL.print(gyroAngle[1]);
+	DRONE_SERIAL.print("  gyro angle [2] = ");
+	DRONE_SERIAL.print(gyroAngle[2]);
+	DRONE_SERIAL.print("\r\n");
+	delay(10);
+	Send_LinkModeBroadcast(LinkBroadcast_Active);
+	delay(10);
+
+}
 
 void CoDroneClass::Send_Ping()
 {

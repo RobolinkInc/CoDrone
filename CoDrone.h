@@ -58,7 +58,7 @@ typedef uint8_t u8;
 #define MAX_PACKET_LENGTH 	100
 
 /***********************************************************************/
-#define BATTLE_CHECK_TIME  		300
+#define BATTLE_CHECK_TIME  		500
 #define LED_CHECK_TIME 			60
 #define	SEND_CHECK_TIME    		10
 #define RECEIVE_CHECK_TIME      10
@@ -652,6 +652,9 @@ public:
 	void Request_Battery();	
 	void Request_Motor();	
 	void Request_Temperature();
+
+/////////////////////////////////////////////////////////////////////////
+	void PrintGyro();
 	
 /////////////////////////////////////////////////////////////////////////
 
