@@ -63,6 +63,8 @@ CoDroneClass::CoDroneClass(void)
 	sendCheckFlag = 0;
 	
 	receiveAttitudeSuccess = 0;
+	receivePressureSuccess = 0;
+	receiveFlowSuccess = 0;
 	
 	energy = MAX_ENERGY;
 	
@@ -1092,10 +1094,12 @@ void CoDroneClass::Request_ImuRawAndAngle()
 }
 void CoDroneClass::Request_Pressure()
 {
+	sendCheckFlag = 1;
 	Send_Command(cType_Request, Req_Pressure);    
 }
 void CoDroneClass::Request_ImageFlow()
 {
+	sendCheckFlag = 1;
 	Send_Command(cType_Request, Req_ImageFlow);    
 }
 void CoDroneClass::Request_Button()
@@ -1134,7 +1138,55 @@ void CoDroneClass::PrintGyro(){
 	DRONE_SERIAL.print("  gyro angle [2] = ");
 	DRONE_SERIAL.print(gyroAngle[2]);
 	DRONE_SERIAL.print("\r\n");
+
+	while(!TimeOutSendCheck(10)) Send_LinkModeBroadcast(LinkBroadcast_Active);   
 	
+}
+
+void CoDroneClass::PrintPressure(){  //Not Working
+	Request_Pressure();
+ 	unsigned long StartCheck = millis();
+	while (CoDrone.receivePressureSuccess == 0){
+		Receive();
+		if(millis() - StartCheck > 200) break;
+	}
+	receivePressureSuccess = 0;
+
+	while(!TimeOutSendCheck(10)) Send_LinkModeBroadcast(LinkModeMute);    
+	
+	DRONE_SERIAL.print("\r\n");
+	DRONE_SERIAL.print("Pressure = ");
+	DRONE_SERIAL.print(dronePressure[0]);
+	DRONE_SERIAL.print(", ");
+	DRONE_SERIAL.print(dronePressure[1]);
+	DRONE_SERIAL.print(", ");
+	DRONE_SERIAL.print(dronePressure[2]);
+	DRONE_SERIAL.print(", ");
+	DRONE_SERIAL.print(dronePressure[3]);
+	DRONE_SERIAL.print("\r\n");
+
+	while(!TimeOutSendCheck(10)) Send_LinkModeBroadcast(LinkBroadcast_Active);   
+	
+}
+
+void CoDroneClass::PrintFlow(){  
+	Request_ImageFlow();
+ 	unsigned long StartCheck = millis();
+	while (CoDrone.receiveFlowSuccess == 0){
+		Receive();
+		if(millis() - StartCheck > 200) break;
+	}
+	receiveFlowSuccess = 0;
+
+	while(!TimeOutSendCheck(10)) Send_LinkModeBroadcast(LinkModeMute);    
+	
+	DRONE_SERIAL.print("\r\n");
+	DRONE_SERIAL.print("Flow X = ");
+	DRONE_SERIAL.print(imageFlowX);
+	DRONE_SERIAL.print(",  Flow Y =");
+	DRONE_SERIAL.print(imageFlowY);
+	DRONE_SERIAL.print("\r\n");
+
 	while(!TimeOutSendCheck(10)) Send_LinkModeBroadcast(LinkBroadcast_Active);   
 	
 }
@@ -2550,6 +2602,8 @@ void CoDroneClass::ReceiveEventCheck()
 		
 		else if(receiveDtype == dType_Pressure)
 		{
+			receivePressureSuccess = 1;
+
 			#if defined(FIND_HWSERIAL1)				  
 			  if(debugMode == 1)
 			  { 			  		
@@ -2577,6 +2631,7 @@ void CoDroneClass::ReceiveEventCheck()
 		
 		else if (receiveDtype ==  dType_ImageFlow)
  		{
+ 			receiveFlowSuccess = 1;
  	
  			#if defined(FIND_HWSERIAL1)				  
 			  if(debugMode == 1)

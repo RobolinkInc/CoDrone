@@ -79,6 +79,7 @@ typedef uint8_t u8;
 #define AttitudePITCH				CoDrone.attitudePitch
 #define AttitudeYAW					CoDrone.attitudeYaw
 
+
 /***********************************************************************/
 
 #define DiscoverStop  			cType_LinkDiscoverStop
@@ -655,7 +656,9 @@ public:
 
 /////////////////////////////////////////////////////////////////////////
 	void PrintGyro();
-	
+	void PrintPressure();
+	void PrintFlow();
+
 /////////////////////////////////////////////////////////////////////////
 
 	void Set_Trim(byte event);
@@ -760,6 +763,8 @@ public:
 	byte sendCheckFlag;
 	
 	byte receiveAttitudeSuccess;
+	byte receivePressureSuccess;
+	byte receiveFlowSuccess;
 	
 	int energy;
 	int MAX_ENERGY = 8;
