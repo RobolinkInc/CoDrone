@@ -452,21 +452,20 @@ void CoDroneClass::Set_TrimReset()
 
 /***************************************************************************/
 void CoDroneClass::Send_Check(byte _data[], byte _length, byte _crc[])
-{
+{	
 	if(sendCheckFlag == 1)
 	{
-	  timeOutSendPreviousMillis = millis();
-		
+	timeOutSendPreviousMillis = millis();
 	 	while(sendCheckFlag != 3)
-	 	{
+	 	{	  
 	 		while(!TimeOutSendCheck(SEND_CHECK_TIME))
 			{
 				Receive();
 				if(sendCheckFlag == 3) break;
 			}
 			if(sendCheckFlag == 3) break;
-			
 			Send_Processing(_data,_length,_crc);
+
 	 	}
 	  sendCheckFlag = 0;
 	}	
@@ -1118,16 +1117,15 @@ void CoDroneClass::Request_Temperature()
 
 void CoDroneClass::PrintGyro(){
 	Request_DroneAttitude();
- 	
+ 	unsigned long StartCheck = millis();
 	while (CoDrone.receiveAttitudeSuccess == 0){
 		Receive();
+		if(millis() - StartCheck > 200) break;
 	}
-
 	receiveAttitudeSuccess = 0;
 
-	Send_LinkModeBroadcast(LinkModeMute);    
-	delay(10);
-
+	while(!TimeOutSendCheck(10)) Send_LinkModeBroadcast(LinkModeMute);    
+	
 	DRONE_SERIAL.print("\r\n");
 	DRONE_SERIAL.print("gyro angle [0] = ");
 	DRONE_SERIAL.print(gyroAngle[0]);
@@ -1136,10 +1134,9 @@ void CoDroneClass::PrintGyro(){
 	DRONE_SERIAL.print("  gyro angle [2] = ");
 	DRONE_SERIAL.print(gyroAngle[2]);
 	DRONE_SERIAL.print("\r\n");
-	delay(10);
-	Send_LinkModeBroadcast(LinkBroadcast_Active);
-	delay(10);
-
+	
+	while(!TimeOutSendCheck(10)) Send_LinkModeBroadcast(LinkBroadcast_Active);   
+	
 }
 
 void CoDroneClass::Send_Ping()
@@ -1435,9 +1432,8 @@ void CoDroneClass::Send_Processing(byte _data[], byte _length, byte _crc[])
 
 void CoDroneClass::Receive()
 {	
-
 	if (DRONE_SERIAL.available() > 0)
-  {
+  {	
     int input = DRONE_SERIAL.read();
     
     #if defined(FIND_HWSERIAL1)
@@ -1474,6 +1470,7 @@ void CoDroneClass::Receive()
           if (cmdBuff[1] == START2)	checkHeader = 2;
           else
           {
+	                
             checkHeader = 0;
             cmdIndex = 0;
           }
@@ -2082,7 +2079,8 @@ void CoDroneClass::LinkStateCheck()	//ready or connected ?
 
 void CoDroneClass::ReceiveEventCheck()
 {
-
+	// digitalWrite(13,LOW);
+	// digitalWrite(16,HIGH);
 	/***************************************************************/
 		
 	if(receiveComplete > 0)
@@ -2235,8 +2233,7 @@ void CoDroneClass::ReceiveEventCheck()
 				attitudePitch	= droneAttitude[1]; //((droneAttitude[3] << 8) | (droneAttitude[2]  & 0xff));
 				attitudeYaw		= droneAttitude[2]; //((droneAttitude[5] << 8) | (droneAttitude[4]  & 0xff));
 				
-				receiveAttitudeSuccess = 1;
-																					
+				receiveAttitudeSuccess = 1;													
 					  		          	
 	  	  #if defined(FIND_HWSERIAL1)				  
 	  	    	  														  	  		
@@ -3247,65 +3244,66 @@ void CoDroneClass::ButtonPreesHoldWait(int button1, int button2)
 
 boolean CoDroneClass::TimeCheck(word interval) //milliseconds
 {
-  boolean time = false;
+  boolean checktime = false;
   unsigned long currentMillis = millis();
   if (currentMillis - PreviousMillis > interval)
   {
     PreviousMillis = currentMillis;
-    time = true;
+    checktime = true;
   }
-  return time;
+  return checktime;
 }
 
 boolean CoDroneClass::TimeCheck1(word interval) //milliseconds
 {
-	static unsigned long PrevMillis;
-  boolean time = false;
+	static unsigned long PrevMillis1;
+  boolean checktime1 = false;
   unsigned long currentMillis = millis();
-  if (currentMillis - PrevMillis > interval)
+  if (currentMillis - PrevMillis1 > interval)
   {
-    PrevMillis = currentMillis;
-    time = true;
+    PrevMillis1 = currentMillis;
+    checktime1 = true;
   }
-  return time;
+  return checktime1;
 }
 
 boolean CoDroneClass::TimeCheck2(word interval) //milliseconds
 {
-	static unsigned long PrevMillis;
-  boolean time = false;
+	static unsigned long PrevMillis2;
+  boolean checktime2 = false;
   unsigned long currentMillis = millis();
-  if (currentMillis - PrevMillis > interval)
+  if (currentMillis - PrevMillis2 > interval)
   {
-    PrevMillis = currentMillis;
-    time = true;
+    PrevMillis2 = currentMillis;
+    checktime2 = true;
   }
-  return time;
+  return checktime2;
 }
 
 boolean CoDroneClass::TimeCheck3(word interval) //milliseconds
 {
-	static unsigned long PrevMillis;
-  boolean time = false;
+	static unsigned long PrevMillis3;
+  boolean checktime3 = false;
   unsigned long currentMillis = millis();
-  if (currentMillis - PrevMillis > interval)
+  if (currentMillis - PrevMillis3 > interval)
   {
-    PrevMillis = currentMillis;
-    time = true;
+    PrevMillis3 = currentMillis;
+    checktime3 = true;
   }
-  return time;
+  return checktime3;
 }
 
 boolean CoDroneClass::TimeOutSendCheck(word interval) //milliseconds
 {
-  boolean time = false;
+
+  boolean timeout = false;
   unsigned long currentMillis = millis();
   if (currentMillis - timeOutSendPreviousMillis > interval)
   {
     timeOutSendPreviousMillis = currentMillis;
-    time = true;
+    timeout = true;
   }
-  return time;
+  return timeout;
 }
 
 /*********************************************************/
