@@ -19,7 +19,21 @@ PATCH NOTES
 1.4.4
 ---------------------------------------------------------------------
 Added Functions:
-- There is a known issue where the CoDrone will not run any command for longer 
+-PrintGyro();
+  Prints the values of gyroAngle[0], gyroAngle[1]; gyroAngle[2] to the serial monitor
+  Uses Send_LinkModeBroadcast to send serial prints between drone communications
+
+-PrintPressure();
+  currently non-functional.  No idea why.
+
+-PrintFlow();
+  Not working properly.  Returns two values, ImageFlowX and ImageFlowY.  These values only equal -1, 0 and 1. 
+  No idea why... 
+  Uses 32 bit signed integer.  
+
+**Resolved with Petrone firmware update**  
+No changes from follow committed:
+<!-- - There is a known issue where the CoDrone will not run any command for longer 
 than ~1 second. This is likely due to an internal timeout function on the CoDrone
 firmware. Because of this, using delay() for basic autonomous functions does not work. 
 Ideally, the following code would send the CoDrone flying upwards for 5 seconds:
@@ -48,7 +62,7 @@ To circumvent this, a new CoDrone.Delay function was created.
       CoDrone.Control(3000);
    -The new function resends the previous control command every 500 milliseconds for the duration of the interval.
    -The default empty parameter CoDrone.Control() functions the same way the pervious empty parameter CoDrone.Control() functioned.
-   
+    -->
 
 Performance Fixes:
 - The disconnect issue is still not completely solved.  I've noticed it happening often with Battle code. 
