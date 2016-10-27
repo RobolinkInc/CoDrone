@@ -58,9 +58,10 @@ typedef uint8_t u8;
 #define MAX_PACKET_LENGTH 	100
 
 /***********************************************************************/
-#define BATTLE_CHECK_TIME  		300
+#define BATTLE_CHECK_TIME  		500
 #define LED_CHECK_TIME 			60
 #define	SEND_CHECK_TIME    		10
+#define RECEIVE_CHECK_TIME      10
 
 /***********************************************************************/
 
@@ -68,7 +69,6 @@ typedef uint8_t u8;
 #define PITCH								CoDrone.pitch
 #define YAW									CoDrone.yaw
 #define THROTTLE						CoDrone.throttle
-
 #define STATE								CoDrone.state
 #define SEND_INTERVAL				CoDrone.SendInterval
 #define ANALOG_OFFSET				CoDrone.analogOffset
@@ -78,6 +78,7 @@ typedef uint8_t u8;
 #define AttitudeROLL				CoDrone.attitudeRoll
 #define AttitudePITCH				CoDrone.attitudePitch
 #define AttitudeYAW					CoDrone.attitudeYaw
+
 
 /***********************************************************************/
 
@@ -648,7 +649,12 @@ public:
 	void Request_Battery();	
 	void Request_Motor();	
 	void Request_Temperature();
-	
+
+/////////////////////////////////////////////////////////////////////////
+	void PrintGyro();
+	void PrintPressure();
+	void PrintFlow();
+
 /////////////////////////////////////////////////////////////////////////
 
 	void Set_Trim(byte event);
@@ -753,6 +759,8 @@ public:
 	byte sendCheckFlag;
 	
 	byte receiveAttitudeSuccess;
+	byte receivePressureSuccess;
+	byte receiveFlowSuccess;
 	
 	int energy;
 	int MAX_ENERGY = 8;
@@ -788,6 +796,8 @@ public:
 	int pitch;
 	int yaw;
 	int throttle;
+	
+    int prevControl[4];
 		
 	int attitudeRoll;
 	int attitudePitch;

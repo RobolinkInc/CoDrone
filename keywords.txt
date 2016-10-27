@@ -24,6 +24,30 @@ FlightEvent			KEYWORD2
 DriveEvent			KEYWORD2
 Receive				KEYWORD2
 AutoConnect			KEYWORD2
+BattleHitPoints			KEYWORD2
+CrashedCheck 			KEYWORD2
+CrashCustom			KEYWORD2
+AnalogScaleChange 	KEYWORD2
+Buzz				KEYWORD2
+
+Request_DroneState	KEYWORD2
+Request_DroneAttitude	KEYWORD2
+Request_DroneGyroBias	KEYWORD2
+Request_TrimAll 	KEYWORD2
+Request_TrimFlight	KEYWORD2
+Request_TrimDrive	KEYWORD2
+Request_ImuRawAndAngle	KEYWORD2
+Request_Pressure	KEYWORD2
+Request_ImageFlow	KEYWORD2
+Request_Button		KEYWORD2
+Request_Battery		KEYWORD2
+Request_Motor		KEYWORD2
+Request_Temprature	KEYWORD2
+
+Send_ResetHeading	KEYWORD2
+
+PrintGyro			KEYWORD2
+
 PrintDroneAddress	KEYWORD2	
 LowBatteryCheck		KEYWORD2	
 DroneModeChange		KEYWORD2	
@@ -44,6 +68,8 @@ LED_Connect			KEYWORD2
 #######################################
 # Constants (LITERAL1)
 #######################################
+
+gyroAngle			LITERAL1
 
 Flight				LITERAL1
 FlightNoGuard		LITERAL1
