@@ -46,7 +46,7 @@ Request_Temprature	KEYWORD2
 
 Send_ResetHeading	KEYWORD2
 
-PrintGyro			KEYWORD2
+PrintAttitude		KEYWORD2
 
 PrintDroneAddress	KEYWORD2	
 LowBatteryCheck		KEYWORD2	

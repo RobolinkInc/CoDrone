@@ -59,7 +59,7 @@ typedef uint8_t u8;
 
 /***********************************************************************/
 #define BATTLE_CHECK_TIME  		500
-#define LED_CHECK_TIME 			60
+#define LED_CHECK_TIME 			30
 #define	SEND_CHECK_TIME    		10
 #define RECEIVE_CHECK_TIME      10
 
@@ -651,7 +651,7 @@ public:
 	void Request_Temperature();
 
 /////////////////////////////////////////////////////////////////////////
-	void PrintGyro();
+	void PrintAttitude();
 	void PrintPressure();
 	void PrintFlow();
 
@@ -724,6 +724,7 @@ public:
 
 	void Buzz(long frequency, int tempo);
 	void BeepWarning(int count);
+	void Test_Send();
 
 /////////////////////////////////////////////////////////////////////////
 

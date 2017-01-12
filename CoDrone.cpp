@@ -399,7 +399,7 @@ void CoDroneClass::Set_TrimDrive(int _wheel)
 {
 	sendCheckFlag = 1;
 	
-	byte _packet[4];
+	//byte _packet[4];
   byte _crc[2];
   
   byte _cType = dType_TrimDrive;
@@ -558,6 +558,33 @@ void CoDroneClass::Send_Control()
 	}*/
 	
 ///////////////////////////////////////////	
+}
+
+void CoDroneClass::Test_Send(){
+	byte _packet[9];
+	byte _crc[2];
+	byte _len = 0x02;
+	_packet[0] = 0x11;
+	_packet[1] = 0x02;
+	_packet[2] = 0x22;
+	_packet[3] = 0x01;
+
+	unsigned short crcCal = CRC16_Make(_packet, _len+2);
+	_crc[0] = (crcCal >> 8) & 0xff;
+  	_crc[1] = crcCal & 0xff;
+  	
+  	_packet[0] = 0x0A;
+	_packet[1] = 0x55;
+	_packet[2] = 0x11;
+	_packet[3] = 0x02;
+	_packet[4] = 0x22;
+	_packet[5] = 0x01;
+	_packet[6] = _crc[1];
+	_packet[7] = _crc[0];
+	for (i = 0; i<=7; i++){
+		Serial.print(_packet[0],HEX);
+	}
+	DRONE_SERIAL.write(_packet, _len + 6);
 }
 
 ////////////////////////////////////////////////////////
@@ -1069,6 +1096,7 @@ void CoDroneClass::Request_DroneAttitude()
 {
 	sendCheckFlag = 1;
 	Send_Command(cType_Request, Req_Attitude);    
+	delay(20);
 }
 void CoDroneClass::Request_DroneGyroBias()
 {
@@ -1119,7 +1147,7 @@ void CoDroneClass::Request_Temperature()
 	Send_Command(cType_Request, Req_Temperature);    
 }
 
-void CoDroneClass::PrintGyro(){
+void CoDroneClass::PrintAttitude(){
 	Request_DroneAttitude();
  	unsigned long StartCheck = millis();
 	while (CoDrone.receiveAttitudeSuccess == 0){
@@ -1131,12 +1159,12 @@ void CoDroneClass::PrintGyro(){
 	while(!TimeOutSendCheck(10)) Send_LinkModeBroadcast(LinkModeMute);    
 	
 	DRONE_SERIAL.print("\r\n");
-	DRONE_SERIAL.print("gyro angle [0] = ");
-	DRONE_SERIAL.print(gyroAngle[0]);
-	DRONE_SERIAL.print("  gyro angle [1] = ");
-	DRONE_SERIAL.print(gyroAngle[1]);
-	DRONE_SERIAL.print("  gyro angle [2] = ");
-	DRONE_SERIAL.print(gyroAngle[2]);
+	DRONE_SERIAL.print("droneAttitude[0] = ");
+	DRONE_SERIAL.print(droneAttitude[0]);
+	DRONE_SERIAL.print("  droneAttitude[1] = ");
+	DRONE_SERIAL.print(droneAttitude[1]);
+	DRONE_SERIAL.print("  droneAttitude[2] = ");
+	DRONE_SERIAL.print(droneAttitude[2]);
 	DRONE_SERIAL.print("\r\n");
 
 	while(!TimeOutSendCheck(10)) Send_LinkModeBroadcast(LinkBroadcast_Active);   
@@ -1591,7 +1619,7 @@ void CoDroneClass::Receive()
               	}
                 else if (receiveDtype == dType_Attitude)		//dron Attitude
                 { 
-                	droneAttitude[0] = (dataBuff[5] << 8) | dataBuff[4];
+                	droneAttitude[0] = -1*((dataBuff[5] << 8) | dataBuff[4]);
 	                droneAttitude[1] = (dataBuff[3] << 8) | dataBuff[2];
 	                droneAttitude[2] = (dataBuff[7] << 8) | dataBuff[6];
 
