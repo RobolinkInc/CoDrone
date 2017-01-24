@@ -1,21 +1,16 @@
 /*****************************************************************
-  PrintDroneAddress()
-  This command will print out the address of the last connected drone
-  onto the screen. It will appear as:
-    0x##, 0x##, 0x##, 0x##, 0x##, 0x##
-  Where each # is either 0-9 or A-F
+  PrintDroneAddress // Connected Address Confirm
+  최근에 연결한 드론의 어드레스 주소를 시리얼 모니터로 출력
+    AutoConnect(droneAddress) 입력시에 사용합니다.
+*******************************************************************/
 
-  To see be sure that the drone is still plugged into the computer and
-  that the serial monitor (button is the upper right corner) is opened.
-  ******************************************************************/
-
-#include <CoDrone.h>  // The codrone library that holds all the background files for this
+#include <CoDrone.h> // 코드론을 사용하기 위한 헤더파일 
 
 void setup()
 {
-  CoDrone.begin(115200);    // sets up the connection to the drone using the bluetooth module at 115200bps (bits per second)
+  CoDrone.begin(115200);                // 드론 플러그의 통신 개시 (115200bps)
 
-  CoDrone.PrintDroneAddress();  // This prints the drones address onto the screen
+  CoDrone.PrintDroneAddress();          // 최근에 연결한 드론의 어드레스 주소를 시리얼 모니터로 출력합니다.
 }
 
 void loop()

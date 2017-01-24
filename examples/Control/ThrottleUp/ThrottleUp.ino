@@ -1,35 +1,27 @@
 /*****************************************************************
   - Throttle Up
-  This example shows how to control the throttle
-  Rise   :  1 to 100
-  Hover  :  0
-  Lower  : -1 to -100
-  (note your drone might not hover at exactly 0, but it is close)
+  쓰로틀 값을 입력해서 드론을 상하강 시킬 수 있습니다.
+  상승(양수)  :  1 ~  100
+  하강(음수)  : -1 ~ -100
 *******************************************************************/
-#include <CoDrone.h> // The codrone library that holds all the background files for this
+#include <CoDrone.h> // 코드론을 사용하기 위한 헤더파일 
 
 void setup()
 {
-  CoDrone.begin(115200); // sets up the connection to the drone using the bluetooth module at 115200bps (bits per second)
+  CoDrone.begin(115200);                // 드론 플러그의 통신 개시 (115200bps)
 
-  CoDrone.AutoConnect(NearbyDrone);  // finds and connects to a drone that is near by
-
-  CoDrone.DroneModeChange(Flight);  // Changes the drone so that it is now in flght mode
+  CoDrone.AutoConnect(NeardbyDrone);    // 가장 가까운 드론과 연결
   
-  // PAIRING is set to true in AutoConnect if they connect together
-  if (PAIRING == true)  // Check to see that we are paired before trying to fly               
+  CoDrone.DroneModeChange(Flight);       // 드론을 플라이트 모드로 설정합니다. (비행형)
+  
+  if (PAIRING == true)                   // 연결(페어링)이 성공한 경우에만 실행
   {
-    THROTTLE  = 100;                     // set THROTTLE to 100 (full),
-    // note that we do not need to call TakeOff since we are starting the throttle ourselves,
-    // but to do so the throttle must be high (recommend 75 or more)
-    
-    CoDrone.Control();                  // send the throttle values to the drone
+    THROTTLE  = 100;                     // THROTTLE 값 입력
+    CoDrone.Control();                  // 조종값 전송
 
-    delay(2000);                        // fly for 2 seconds (2000 milliseconds)
+    delay(2000);                         // 대기 시간 입력
 
-    CoDrone.FlightEvent(Stop);          // turn off the motors
-    // Landing could be used here, but if you do you need to set the throttle to a
-    // large negative value first (recommend -75 or more)
+    CoDrone.FlightEvent(Stop);          // 정지
   }
 }
 

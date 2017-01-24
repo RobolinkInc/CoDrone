@@ -7,9 +7,7 @@
 #ifndef CoDrone_h
 #define CoDrone_h
 #include "Arduino.h"
-//#include <SoftwareSerial.h>
 #include <avr/interrupt.h>
-
 
 /***********************************************************************/
 
@@ -22,7 +20,7 @@ typedef int32_t s32;
 typedef int16_t s16;
 typedef int8_t s8;
 typedef uint32_t u32;
-//typedef uint16_t u16;
+typedef uint16_t u16;
 typedef uint8_t u8;
 
 /***********************************************************************/
@@ -58,11 +56,6 @@ typedef uint8_t u8;
 #define MAX_PACKET_LENGTH 	100
 
 /***********************************************************************/
-#define BATTLE_CHECK_TIME  		300
-#define LED_CHECK_TIME 			60
-#define	SEND_CHECK_TIME    		10
-
-/***********************************************************************/
 
 #define ROLL								CoDrone.roll
 #define PITCH								CoDrone.pitch
@@ -75,9 +68,11 @@ typedef uint8_t u8;
 #define BATTERY							CoDrone.battery
 #define RSSI								CoDrone.rssi
 
-#define AttitudeROLL				CoDrone.attitudeRoll
-#define AttitudePITCH				CoDrone.attitudePitch
-#define AttitudeYAW					CoDrone.attitudeYaw
+#define AttitudeROLL					CoDrone.attitudeRoll
+#define AttitudePITCH					CoDrone.attitudePitch
+#define AttitudeYAW						CoDrone.attitudeYaw
+
+
 
 /***********************************************************************/
 
@@ -93,7 +88,7 @@ typedef uint8_t u8;
 #define LinkModeActive			LinkBroadcast_Active
 #define LinkModePassive 		LinkBroadcast_Passive
 
-#define	NearbyDrone    			1
+#define	NeardbyDrone    		1
 #define	ConnectedDrone  		2
 #define AddressInputDrone 	3
 
@@ -103,23 +98,6 @@ typedef uint8_t u8;
 #define	EEP_AddressEnd  		15
 
 /////////////////////////////////////////////////////////////////////////
-
-#define FREE_PLAY					0
-#define TEAM_RED					1
-#define TEAM_BLUE					2
-#define TEAM_GREEN				3
-#define TEAM_YELLOW				4
-
-
-/**********************	IR DATA****************************************/
-
-#define FREE_MISSILE			0xaa01
-#define RED_MISSILE				0xbb01
-#define BLUE_MISSILE			0xcc01
-#define GREEN_MISSILE			0xdd01
-#define YELLOW_MISSILE		0xee01
-
-/***********************************************************************/
 
 #define Flight 						dMode_Flight
 #define FlightNoGuard			dMode_FlightNoGuard,
@@ -154,86 +132,85 @@ typedef uint8_t u8;
 #define ThrottleIncrease	trim_ThrottleIncrease
 #define ThrottleDecrease	trim_ThrottleDecrease
 
-#define DataAvailable		(DRONE_SERIAL.available() > 0)
 
 /***********************************************************************/
 /////////////////////////LINK MODULE/////////////////////////////////////
 /***********************************************************************/
 enum ModeLink
 {
-	linkMode_None = 0,	 	 	///< Â¾Ã¸Ã€Â½
-	linkMode_Boot,	 	 	 		///< ÂºÃŽÃ†Ãƒ 	 	
-	linkMode_Ready,	 		 		///< Â´Ã«Â±Ã¢(Â¿Â¬Â°Ã¡ Ã€Ã¼)
-	linkMode_Connecting,	 	///< Ã€Ã¥Ã„Â¡ Â¿Â¬Â°Ã¡ ÃÃŸ
-	linkMode_Connected,	 	 	///< Ã€Ã¥Ã„Â¡ Â¿Â¬Â°Ã¡ Â¿ÃÂ·Ã¡
-	linkMode_Disconnecting,	///< Ã€Ã¥Ã„Â¡ Â¿Â¬Â°Ã¡ Ã‡Ã˜ÃÂ¦ ÃÃŸ
-	linkMode_ReadyToReset,	///< Â¸Â®Â¼Ã‚ Â´Ã«Â±Ã¢(1ÃƒÃŠ ÂµÃšÂ¿Â¡ Ã€Ã¥Ã„Â¡ Â¸Â®Â¼Ã‚)	
+	linkMode_None = 0,	 	 	///< ¾øÀ½
+	linkMode_Boot,	 	 	 		///< ºÎÆÃ 	 	
+	linkMode_Ready,	 		 		///< ´ë±â(¿¬°á Àü)
+	linkMode_Connecting,	 	///< ÀåÄ¡ ¿¬°á Áß
+	linkMode_Connected,	 	 	///< ÀåÄ¡ ¿¬°á ¿Ï·á
+	linkMode_Disconnecting,	///< ÀåÄ¡ ¿¬°á ÇØÁ¦ Áß
+	linkMode_ReadyToReset,	///< ¸®¼Â ´ë±â(1ÃÊ µÚ¿¡ ÀåÄ¡ ¸®¼Â)	
 	linkMode_EndOfType
 };
 
 enum ModeLinkBroadcast
 {
-	LinkBroadcast_None = 0, ///< Â¾Ã¸Ã€Â½
-	LinkBroadcast_Mute, 		///< LINK Â¸Ã°ÂµÃ¢ ÂµÂ¥Ã€ÃŒÃ…Ã Â¼Ã›Â½Ã… ÃÃŸÂ´Ãœ . Â¾Ã†ÂµÃŽÃ€ÃŒÂ³Ã« Ã†ÃŸÂ¿Ã¾Â¾Ã® Â´Ã™Â¿Ã®Â·ÃŽÂµÃ¥
-	LinkBroadcast_Active, 	///< Ã†Ã¤Ã†Â®Â·Ã Â¿Â¬Â°Ã¡ Â¸Ã°ÂµÃ¥ . Â¸Ã°ÂµÃ¥ Ã€Ã¼ÃˆÂ¯ Â¸ÃžÂ¼Â¼ÃÃ¶ Ã€Ã¼Â¼Ã›
-	LinkBroadcast_Passive, 	///< Ã†Ã¤Ã†Â®Â·Ã Â¿Â¬Â°Ã¡ Â¸Ã°ÂµÃ¥ . Â¸Ã°ÂµÃ¥ Ã€Ã¼ÃˆÂ¯ Â¸ÃžÂ¼Â¼ÃÃ¶ Ã€Ã¼Â¼Ã›Ã‡ÃÃÃ¶ Â¾ÃŠÃ€Â½
+	LinkBroadcast_None = 0, ///< ¾øÀ½
+	LinkBroadcast_Mute, 		///< LINK ¸ðµâ µ¥ÀÌÅÍ ¼Û½Å Áß´Ü . ¾ÆµÎÀÌ³ë Æß¿þ¾î ´Ù¿î·Îµå
+	LinkBroadcast_Active, 	///< ÆäÆ®·Ð ¿¬°á ¸ðµå . ¸ðµå ÀüÈ¯ ¸Þ¼¼Áö Àü¼Û
+	LinkBroadcast_Passive, 	///< ÆäÆ®·Ð ¿¬°á ¸ðµå . ¸ðµå ÀüÈ¯ ¸Þ¼¼Áö Àü¼ÛÇÏÁö ¾ÊÀ½
 	LinkBroadcast_EndOfType
 };
 
 enum EventLink
 	{
-		linkEvent_None = 0,									///< Â¾Ã¸Ã€Â½
+		linkEvent_None = 0,									///< ¾øÀ½
 		
-		linkEvent_SystemReset,							///< Â½ÃƒÂ½ÂºÃ…Ã› Â¸Â®Â¼Ã‚
+		linkEvent_SystemReset,							///< ½Ã½ºÅÛ ¸®¼Â
 		
-		linkEvent_Initialized,							///< Ã€Ã¥Ã„Â¡ ÃƒÃŠÂ±Ã¢ÃˆÂ­ Â¿ÃÂ·Ã¡
+		linkEvent_Initialized,							///< ÀåÄ¡ ÃÊ±âÈ­ ¿Ï·á
 		
-		linkEvent_Scanning,									///< Ã€Ã¥Ã„Â¡ Â°Ã‹Â»Ã¶ Â½ÃƒÃ€Ã›
-		linkEvent_ScanStop,									///< Ã€Ã¥Ã„Â¡ Â°Ã‹Â»Ã¶ ÃÃŸÂ´Ãœ
+		linkEvent_Scanning,									///< ÀåÄ¡ °Ë»ö ½ÃÀÛ
+		linkEvent_ScanStop,									///< ÀåÄ¡ °Ë»ö Áß´Ü
 
-		linkEvent_FoundDroneService,				///< ÂµÃ¥Â·Ã Â¼Â­ÂºÃ±Â½Âº Â°Ã‹Â»Ã¶ Â¿ÃÂ·Ã¡
+		linkEvent_FoundDroneService,				///< µå·Ð ¼­ºñ½º °Ë»ö ¿Ï·á
 
-		linkEvent_Connecting,								///< Ã€Ã¥Ã„Â¡ Â¿Â¬Â°Ã¡ Â½ÃƒÃ€Ã›		
-		linkEvent_Connected,								///< Ã€Ã¥Ã„Â¡ Â¿Â¬Â°Ã¡
+		linkEvent_Connecting,								///< ÀåÄ¡ ¿¬°á ½ÃÀÛ		
+		linkEvent_Connected,								///< ÀåÄ¡ ¿¬°á
 
-		linkEvent_ConnectionFaild,					///< Â¿Â¬Â°Ã¡ Â½Ã‡Ã†Ã
-		linkEvent_ConnectionFaildNoDevices,	///< Â¿Â¬Â°Ã¡ Â½Ã‡Ã†Ã - Ã€Ã¥Ã„Â¡Â°Â¡ Â¾Ã¸Ã€Â½
-		linkEvent_ConnectionFaildNotReady,	///< Â¿Â¬Â°Ã¡ Â½Ã‡Ã†Ã - Â´Ã«Â±Ã¢ Â»Ã³Ã…Ã‚Â°Â¡ Â¾Ã†Â´Ã”
+		linkEvent_ConnectionFaild,					///< ¿¬°á ½ÇÆÐ
+		linkEvent_ConnectionFaildNoDevices,	///< ¿¬°á ½ÇÆÐ - ÀåÄ¡°¡ ¾øÀ½
+		linkEvent_ConnectionFaildNotReady,	///< ¿¬°á ½ÇÆÐ - ´ë±â »óÅÂ°¡ ¾Æ´Ô
 
-		linkEvent_PairingStart,							///< Ã†Ã¤Â¾Ã®Â¸Âµ Â½ÃƒÃ€Ã›
-		linkEvent_PairingSuccess,						///< Ã†Ã¤Â¾Ã®Â¸Âµ Â¼ÂºÂ°Ã¸
-		linkEvent_PairingFaild,							///< Ã†Ã¤Â¾Ã®Â¸Âµ Â½Ã‡Ã†Ã
+		linkEvent_PairingStart,							///< Æä¾î¸µ ½ÃÀÛ
+		linkEvent_PairingSuccess,						///< Æä¾î¸µ ¼º°ø
+		linkEvent_PairingFaild,							///< Æä¾î¸µ ½ÇÆÐ
 
-		linkEvent_BondingSuccess,						///< Bonding Â¼ÂºÂ°Ã¸
+		linkEvent_BondingSuccess,						///< Bonding ¼º°ø
 
-		linkEvent_LookupAttribute,					///< Ã€Ã¥Ã„Â¡ Â¼Â­ÂºÃ±Â½Âº Â¹Ã— Â¼Ã“Â¼Âº Â°Ã‹Â»Ã¶(GATT Event Â½Ã‡Ã‡Ã )
+		linkEvent_LookupAttribute,					///< ÀåÄ¡ ¼­ºñ½º ¹× ¼Ó¼º °Ë»ö(GATT Event ½ÇÇà)
 
-		linkEvent_RssiPollingStart,					///< RSSI Ã‡Â®Â¸Âµ Â½ÃƒÃ€Ã›   // 10
-		linkEvent_RssiPollingStop,					///< RSSI Ã‡Â®Â¸Âµ ÃÃŸÃÃ¶
+		linkEvent_RssiPollingStart,					///< RSSI Ç®¸µ ½ÃÀÛ
+		linkEvent_RssiPollingStop,					///< RSSI Ç®¸µ ÁßÁö
 
-		linkEvent_DiscoverService,										///< Â¼Â­ÂºÃ±Â½Âº Â°Ã‹Â»Ã¶
-		linkEvent_DiscoverCharacteristic,							///< Â¼Ã“Â¼Âº Â°Ã‹Â»Ã¶
-		linkEvent_DiscoverCharacteristicDroneData,		///< Â¼Ã“Â¼Âº Â°Ã‹Â»Ã¶ÂµÃˆ     // 1
-		linkEvent_DiscoverCharacteristicDroneConfig,	///< Â¼Ã“Â¼Âº Â°Ã‹Â»Ã¶
-		linkEvent_DiscoverCharacteristicUnknown,			///< Â¼Ã“Â¼Âº Â°Ã‹Â»Ã¶
-		linkEvent_DiscoverCCCD,				///< CCCD Â°Ã‹Â»Ã¶
+		linkEvent_DiscoverService,										///< ¼­ºñ½º °Ë»ö
+		linkEvent_DiscoverCharacteristic,							///< ¼Ó¼º °Ë»ö
+		linkEvent_DiscoverCharacteristicDroneData,		///< ¼Ó¼º °Ë»ö
+		linkEvent_DiscoverCharacteristicDroneConfig,	///< ¼Ó¼º °Ë»ö
+		linkEvent_DiscoverCharacteristicUnknown,			///< ¼Ó¼º °Ë»ö
+		linkEvent_DiscoverCCCD,				///< CCCD °Ë»ö
 
-		linkEvent_ReadyToControl,			///< ÃÂ¦Â¾Ã® ÃÃ˜ÂºÃ± Â¿ÃÂ·Ã¡
+		linkEvent_ReadyToControl,			///< Á¦¾î ÁØºñ ¿Ï·á
 
-		linkEvent_Disconnecting,			///< Ã€Ã¥Ã„Â¡ Â¿Â¬Â°Ã¡ Ã‡Ã˜ÃÂ¦ Â½ÃƒÃ€Ã›		// 
-		linkEvent_Disconnected,				///< Ã€Ã¥Ã„Â¡ Â¿Â¬Â°Ã¡ Ã‡Ã˜ÃÂ¦ Â¿ÃÂ·Ã¡		// 1A
+		linkEvent_Disconnecting,			///< ÀåÄ¡ ¿¬°á ÇØÁ¦ ½ÃÀÛ
+		linkEvent_Disconnected,				///< ÀåÄ¡ ¿¬°á ÇØÁ¦ ¿Ï·á
 
-		linkEvent_GapLinkParamUpdate,	///< GAP_LINK_PARAM_UPDATE_EVENT  
+		linkEvent_GapLinkParamUpdate,	///< GAP_LINK_PARAM_UPDATE_EVENT
 
-		linkEvent_RspReadError,				///< RSP Ã€ÃÂ±Ã¢ Â¿Ã€Â·Ã¹
-		linkEvent_RspReadSuccess,			///< RSP Ã€ÃÂ±Ã¢ Â¼ÂºÂ°Ã¸
+		linkEvent_RspReadError,				///< RSP ÀÐ±â ¿À·ù
+		linkEvent_RspReadSuccess,			///< RSP ÀÐ±â ¼º°ø
 
-		linkEvent_RspWriteError,			///< RSP Â¾Â²Â±Ã¢ Â¿Ã€Â·Ã¹
-		linkEvent_RspWriteSuccess,		///< RSP Â¾Â²Â±Ã¢ Â¼ÂºÂ°Ã¸					// 1F
+		linkEvent_RspWriteError,			///< RSP ¾²±â ¿À·ù
+		linkEvent_RspWriteSuccess,		///< RSP ¾²±â ¼º°ø
 
-		linkEvent_SetNotify,					///< Notify ÂºÃ±ÃˆÂ°Â¼ÂºÃˆÂ­ 		// 20
+		linkEvent_SetNotify,					///< Notify È°¼ºÈ­
 
-		linkEvent_Write,							///< ÂµÂ¥Ã€ÃŒÃ…Ã Â¾Â²Â±Ã¢ Ã€ÃŒÂºÂ¥Ã†Â® // 21
+		linkEvent_Write,							///< µ¥ÀÌÅÍ ¾²±â ÀÌº¥Æ®
 
 		EndOfType
 	};
@@ -244,101 +221,101 @@ enum EventLink
 /***********************************************************************/
 enum DataType
 {
-	dType_None = 0, 					///< Â¾Ã¸Ã€Â½
+	dType_None = 0, 					///< ¾øÀ½
 	
-	// Â½ÃƒÂ½ÂºÃ…Ã› ÃÂ¤ÂºÂ¸
-	dType_Ping, 							///< Ã…Ã«Â½Ã… ÃˆÂ®Ã€ÃŽ(reserve)
-	dType_Ack, 								///< ÂµÂ¥Ã€ÃŒÃ…Ã Â¼Ã¶Â½Ã…Â¿Â¡ Â´Ã«Ã‡Ã‘ Ã€Ã€Â´Ã¤
-	dType_Error, 							///< Â¿Ã€Â·Ã¹(reserve, ÂºÃ±Ã†Â® Ã‡ÃƒÂ·Â¡Â±Ã—Â´Ã‚ ÃƒÃŸÃˆÃ„Â¿Â¡ ÃÃ¶ÃÂ¤)
-	dType_Request, 						///< ÃÃ¶ÃÂ¤Ã‡Ã‘ Ã…Â¸Ã€Ã”Ã€Ã‡ ÂµÂ¥Ã€ÃŒÃ…Ã Â¿Ã¤ÃƒÂ»
-	dType_DeviceName, 				///< Ã€Ã¥Ã„Â¡Ã€Ã‡ Ã€ÃŒÂ¸Â§ ÂºÂ¯Â°Ã¦
+	// ½Ã½ºÅÛ Á¤º¸
+	dType_Ping, 							///< Åë½Å È®ÀÎ(reserve)
+	dType_Ack, 								///< µ¥ÀÌÅÍ ¼ö½Å¿¡ ´ëÇÑ ÀÀ´ä
+	dType_Error, 							///< ¿À·ù(reserve, ºñÆ® ÇÃ·¡±×´Â ÃßÈÄ¿¡ ÁöÁ¤)
+	dType_Request, 						///< ÁöÁ¤ÇÑ Å¸ÀÔÀÇ µ¥ÀÌÅÍ ¿äÃ»
+	dType_DeviceName, 				///< ÀåÄ¡ÀÇ ÀÌ¸§ º¯°æ
 	
-	// ÃÂ¶ÃÂ¾, Â¸Ã­Â·Ã‰
-	dType_Control = 0x10, 		///< ÃÂ¶ÃÂ¾
-	dType_Command, 						///< Â¸Ã­Â·Ã‰
-	dType_Command2, 					///< Â´Ã™ÃÃŸ Â¸Ã­Â·Ã‰(2Â°Â¡ÃÃ¶ Â¼Â³ÃÂ¤Ã€Â» ÂµÂ¿Â½ÃƒÂ¿Â¡ ÂºÂ¯Â°Ã¦)
-	DType_Command3, 					///< Â´Ã™ÃÃŸ Â¸Ã­Â·Ã‰(3Â°Â¡ÃÃ¶ Â¼Â³ÃÂ¤Ã€Â» ÂµÂ¿Â½ÃƒÂ¿Â¡ ÂºÂ¯Â°Ã¦)
+	// Á¶Á¾, ¸í·É
+	dType_Control = 0x10, 		///< Á¶Á¾
+	dType_Command, 						///< ¸í·É
+	dType_Command2, 					///< ´ÙÁß ¸í·É(2°¡Áö ¼³Á¤À» µ¿½Ã¿¡ º¯°æ)
+	DType_Command3, 					///< ´ÙÁß ¸í·É(3°¡Áö ¼³Á¤À» µ¿½Ã¿¡ º¯°æ)
 	
 	// LED
-	dType_LedMode = 0x20, 		///< LED Â¸Ã°ÂµÃ¥ ÃÃ¶ÃÂ¤
-	dType_LedMode2, 					///< LED Â¸Ã°ÂµÃ¥ 2Â°Â³ ÃÃ¶ÃÂ¤
-	dType_LedModeCommand, 		///< LED Â¸Ã°ÂµÃ¥, Ã„Â¿Â¸Ã‡ÂµÃ¥
-	dType_LedModeCommandIr, 	///< LED Â¸Ã°ÂµÃ¥, Ã„Â¿Â¸Ã‡ÂµÃ¥, IR ÂµÂ¥Ã€ÃŒÃ…Ã Â¼Ã›Â½Ã…
-	dType_LedModeColor, 			///< LED Â¸Ã°ÂµÃ¥ 3Â»Ã¶ ÃÃ·ÃÂ¢ ÃÃ¶ÃÂ¤
-	dType_LedModeColor2, 			///< LED Â¸Ã°ÂµÃ¥ 3Â»Ã¶ ÃÃ·ÃÂ¢ ÃÃ¶ÃÂ¤ 2Â°Â³
-	dType_LedEvent, 					///< LED Ã€ÃŒÂºÂ¥Ã†Â®
-	dType_LedEvent2, 					///< LED Ã€ÃŒÂºÂ¥Ã†Â® 2Â°Â³,
-	dType_LedEventCommand, 		///< LED Ã€ÃŒÂºÂ¥Ã†Â®, Ã„Â¿Â¸Ã‡ÂµÃ¥
-	dType_LedEventCommandIr,	///< LED Ã€ÃŒÂºÂ¥Ã†Â®, Ã„Â¿Â¸Ã‡ÂµÃ¥, IR ÂµÂ¥Ã€ÃŒÃ…Ã Â¼Ã›Â½Ã…
-	dType_LedEventColor, 			///< LED Ã€ÃŒÂºÂ¥Ã†Â® 3Â»Ã¶ ÃÃ·ÃÂ¢ ÃÃ¶ÃÂ¤
-	dType_LedEventColor2, 		///< LED Ã€ÃŒÂºÂ¥Ã†Â® 3Â»Ã¶ ÃÃ·ÃÂ¢ ÃÃ¶ÃÂ¤ 2Â°Â³
+	dType_LedMode = 0x20, 		///< LED ¸ðµå ÁöÁ¤
+	dType_LedMode2, 					///< LED ¸ðµå 2°³ ÁöÁ¤
+	dType_LedModeCommand, 		///< LED ¸ðµå, Ä¿¸Çµå
+	dType_LedModeCommandIr, 	///< LED ¸ðµå, Ä¿¸Çµå, IR µ¥ÀÌÅÍ ¼Û½Å
+	dType_LedModeColor, 			///< LED ¸ðµå 3»ö Á÷Á¢ ÁöÁ¤
+	dType_LedModeColor2, 			///< LED ¸ðµå 3»ö Á÷Á¢ ÁöÁ¤ 2°³
+	dType_LedEvent, 					///< LED ÀÌº¥Æ®
+	dType_LedEvent2, 					///< LED ÀÌº¥Æ® 2°³,
+	dType_LedEventCommand, 		///< LED ÀÌº¥Æ®, Ä¿¸Çµå
+	dType_LedEventCommandIr,	///< LED ÀÌº¥Æ®, Ä¿¸Çµå, IR µ¥ÀÌÅÍ ¼Û½Å
+	dType_LedEventColor, 			///< LED ÀÌº¥Æ® 3»ö Á÷Á¢ ÁöÁ¤
+	dType_LedEventColor2, 		///< LED ÀÌº¥Æ® 3»ö Á÷Á¢ ÁöÁ¤ 2°³
 	
-	// Â»Ã³Ã…Ã‚
+	// »óÅÂ
 	dType_Address = 0x30, 		///< IEEE address
-	dType_State, 							///< ÂµÃ¥Â·ÃÃ€Ã‡ Â»Ã³Ã…Ã‚(ÂºÃ±Ã‡Ã  Â¸Ã°ÂµÃ¥, Â¹Ã¦Ã€Â§Â±Ã¢ÃÃ˜, Â¹Ã¨Ã…ÃÂ¸Â®Â·Â®)
-	dType_Attitude, 					///< ÂµÃ¥Â·ÃÃ€Ã‡ Ã€ÃšÂ¼Â¼(Vector)
-	dType_GyroBias,						///< Ã€ÃšÃ€ÃŒÂ·ÃŽ Â¹Ã™Ã€ÃŒÂ¾Ã®Â½Âº Â°Âª(Vector)
-	dType_TrimAll, 						///< Ã€Ã¼ÃƒÂ¼ Ã†Â®Â¸Â² (ÂºÃ±Ã‡Ã +ÃÃ–Ã‡Ã )Ã¼
-	dType_TrimFlight,					///< ÂºÃ±Ã‡Ã  Ã†Â®Â¸Â²
-	dType_TrimDrive, 					///< ÃÃ–Ã‡Ã  Ã†Â®Â¸Â²
+	dType_State, 							///< µå·ÐÀÇ »óÅÂ(ºñÇà ¸ðµå, ¹æÀ§±âÁØ, ¹èÅÍ¸®·®)
+	dType_Attitude, 					///< µå·ÐÀÇ ÀÚ¼¼(Vector)
+	dType_GyroBias,						///< ÀÚÀÌ·Î ¹ÙÀÌ¾î½º °ª(Vector)
+	dType_TrimAll, 						///< ÀüÃ¼ Æ®¸² (ºñÇà+ÁÖÇà)ü
+	dType_TrimFlight,					///< ºñÇà Æ®¸²
+	dType_TrimDrive, 					///< ÁÖÇà Æ®¸²
 			
-	// ÂµÂ¥Ã€ÃŒÃ…Ã Â¼Ã›Â¼Ã¶Â½Ã…	
-	dType_IrMessage = 0x40, 			///< IR ÂµÂ¥Ã€ÃŒÃ…Ã Â¼Ã›Â¼Ã¶Â½Ã…
+	// µ¥ÀÌÅÍ ¼Û¼ö½Å	
+	dType_IrMessage = 0x40, 			///< IR µ¥ÀÌÅÍ ¼Û¼ö½Å
 		
-	// Â¼Â¾Â¼Â­
+	// ¼¾¼­
 	dType_ImuRawAndAngle = 0x50, 	///< IMU Raw + Angle
-	dType_Pressure, 							///< Â¾ÃÂ·Ã‚ Â¼Â¾Â¼Â­ ÂµÂ¥Ã€ÃŒÃ…Ã
+	dType_Pressure, 							///< ¾Ð·Â ¼¾¼­ µ¥ÀÌÅÍ
 	dType_ImageFlow, 							///< ImageFlow
-	dType_Button, 								///< Â¹Ã¶Ã†Â° Ã€Ã”Â·Ã‚
-	dType_Batery, 								///< Â¹Ã¨Ã…ÃÂ¸Â®
-	dType_Motor, 									///< Â¸Ã°Ã…Ã ÃÂ¦Â¾Ã® Â¹Ã— Ã‡Ã¶Ã€Ã§ ÃÂ¦Â¾Ã® Â°Âª ÃˆÂ®Ã€ÃŽ
-	dType_Temperature, 						///< Â¿Ã‚ÂµÂµ
+	dType_Button, 								///< ¹öÆ° ÀÔ·Â
+	dType_Batery, 								///< ¹èÅÍ¸®
+	dType_Motor, 									///< ¸ðÅÍ Á¦¾î ¹× ÇöÀç Á¦¾î °ª È®ÀÎ
+	dType_Temperature, 						///< ¿Âµµ
 	
-	// Â¸ÂµÃ…Â© ÂºÂ¸ÂµÃ¥
-	dType_LinkState = 0xE0,				///< Â¸ÂµÃ…Â© Â¸Ã°ÂµÃ¢Ã€Ã‡ Â»Ã³Ã…Ã‚
-	dType_LinkEvent,							///< Â¸ÂµÃ…Â© Â¸Ã°ÂµÃ¢Ã€Ã‡ Ã€ÃŒÂºÂ¥Ã†Â®
-	dType_LinkEventAddress,				///< Â¸ÂµÃ…Â© Â¸Ã°ÂµÃ¢Ã€Ã‡ Ã€ÃŒÂºÂ¥Ã†Â® + ÃÃ–Â¼Ã’
-	dType_LinkRssi,								///< Â¸ÂµÃ…Â©Â¿Ã Â¿Â¬Â°Ã¡ÂµÃˆ Ã€Ã¥Ã„Â¡Ã€Ã‡ RSSIÂ°Âª
-	dType_LinkDiscoveredDevice,		///< Â°Ã‹Â»Ã¶ÂµÃˆ Ã€Ã¥Ã„Â¡
-	dType_LinkPasscode,          	///< Â¿Â¬Â°Ã¡Ã‡Ã’ Â´Ã«Â»Ã³ Ã€Ã¥Ã„Â¡Ã€Ã‡ Â¾ÃÃˆÂ£ ÃÃ¶ÃÂ¤
-	dType_StringMessage = 0xD0, 	///< Â¹Â®Ã€ÃšÂ¿Â­ Â¸ÃžÂ¼Â¼ÃÃ¶
+	// ¸µÅ© º¸µå
+	dType_LinkState = 0xE0,				///< ¸µÅ© ¸ðµâÀÇ »óÅÂ
+	dType_LinkEvent,							///< ¸µÅ© ¸ðµâÀÇ ÀÌº¥Æ®
+	dType_LinkEventAddress,				///< ¸µÅ© ¸ðµâÀÇ ÀÌº¥Æ® + ÁÖ¼Ò
+	dType_LinkRssi,								///< ¸µÅ©¿Í ¿¬°áµÈ ÀåÄ¡ÀÇ RSSI°ª
+	dType_LinkDiscoveredDevice,		///< °Ë»öµÈ ÀåÄ¡
+	dType_LinkPasscode,          	///< ¿¬°áÇÒ ´ë»ó ÀåÄ¡ÀÇ ¾ÏÈ£ ÁöÁ¤
+	dType_StringMessage = 0xD0, 	///< ¹®ÀÚ¿­ ¸Þ¼¼Áö
 	dType_EndOfType
 };
 
 /***********************************************************************/
 enum CommandType
 {
-	cType_None = 0, 								///< Ã€ÃŒÂºÂ¥Ã†Â® Â¾Ã¸Ã€Â½
+	cType_None = 0, 								///< ÀÌº¥Æ® ¾øÀ½
 	
-	// Â¼Â³ÃÂ¤	
-	cType_ModeDrone = 0x10, 				///< ÂµÃ¥Â·Ã ÂµÂ¿Ã€Ã› Â¸Ã°ÂµÃ¥ Ã€Ã¼ÃˆÂ¯
+	// ¼³Á¤	
+	cType_ModeDrone = 0x10, 				///< µå·Ð µ¿ÀÛ ¸ðµå ÀüÈ¯
 	
-	// ÃÂ¦Â¾Ã®
-	cType_Coordinate = 0x20, 				///< Â¹Ã¦Ã€Â§ Â±Ã¢ÃÃ˜ ÂºÂ¯Â°Ã¦
-	cType_Trim, 										///< Ã†Â®Â¸Â² ÂºÂ¯Â°Ã¦
-	cType_FlightEvent, 							///< ÂºÃ±Ã‡Ã  Ã€ÃŒÂºÂ¥Ã†Â® Â½Ã‡Ã‡Ã 
-	cType_DriveEvent, 							///< ÃÃ–Ã‡Ã  Ã€ÃŒÂºÂ¥Ã†Â® Â½Ã‡Ã‡Ã 
-	cType_Stop, 										///< ÃÂ¤ÃÃ¶
-	cType_ResetHeading = 0x50, 			///< Â¹Ã¦Ã‡Ã¢Ã€Â» Â¸Â®Â¼Ã‚(Â¾Ã›Â¼Ã–Â·Ã§Ã†Â® Â¸Ã°ÂµÃ¥ Ã€Ã Â¶Â§ Ã‡Ã¶Ã€Ã§ headingÃ€Â» 0ÂµÂµÂ·ÃŽ ÂºÂ¯Â°Ã¦)
-	cType_ClearGyroBiasAndTrim, 		///< Ã€ÃšÃ€ÃŒÂ·ÃŽ Â¹Ã™Ã€ÃŒÂ¾Ã®Â½ÂºÂ¿Ã Ã†Â®Â¸Â² Â¼Â³ÃÂ¤ ÃƒÃŠÂ±Ã¢ÃˆÂ­
+	// Á¦¾î
+	cType_Coordinate = 0x20, 				///< ¹æÀ§ ±âÁØ º¯°æ
+	cType_Trim, 										///< Æ®¸² º¯°æ
+	cType_FlightEvent, 							///< ºñÇà ÀÌº¥Æ® ½ÇÇà
+	cType_DriveEvent, 							///< ÁÖÇà ÀÌº¥Æ® ½ÇÇà
+	cType_Stop, 										///< Á¤Áö
+	cType_ResetHeading = 0x50, 			///< ¹æÇâÀ» ¸®¼Â(¾Û¼Ö·çÆ® ¸ðµå ÀÏ ¶§ ÇöÀç headingÀ» 0µµ·Î º¯°æ)
+	cType_ClearGyroBiasAndTrim, 		///< ÀÚÀÌ·Î ¹ÙÀÌ¾î½º¿Í Æ®¸² ¼³Á¤ ÃÊ±âÈ­
 	
-	// Ã…Ã«Â½Ã…
-	cType_PairingActivate = 0x80, 	///< Ã†Ã¤Â¾Ã®Â¸Âµ ÃˆÂ°Â¼ÂºÃˆÂ­
-	cType_PairingDeactivate, 				///< Ã†Ã¤Â¾Ã®Â¸Âµ ÂºÃ±ÃˆÂ°Â¼ÂºÃˆÂ­
-	cType_TerminateConnection, 			///< Â¿Â¬Â°Ã¡ ÃÂ¾Â·Ã¡
+	// Åë½Å
+	cType_PairingActivate = 0x80, 	///< Æä¾î¸µ È°¼ºÈ­
+	cType_PairingDeactivate, 				///< Æä¾î¸µ ºñÈ°¼ºÈ­
+	cType_TerminateConnection, 			///< ¿¬°á Á¾·á
 	
-	// Â¿Ã¤ÃƒÂ»
-	cType_Request = 0x90, 					///< ÃÃ¶ÃÂ¤Ã‡Ã‘ Ã…Â¸Ã€Ã”Ã€Ã‡ ÂµÂ¥Ã€ÃŒÃ…Ã Â¿Ã¤ÃƒÂ»
+	// ¿äÃ»
+	cType_Request = 0x90, 					///< ÁöÁ¤ÇÑ Å¸ÀÔÀÇ µ¥ÀÌÅÍ ¿äÃ»
 	
-	// Â¸ÂµÃ…Â© ÂºÂ¸ÂµÃ¥
-	cType_LinkModeBroadcast = 0xE0, ///< LINK Â¼Ã›Â¼Ã¶Â½Ã… Â¸Ã°ÂµÃ¥ Ã€Ã¼ÃˆÂ¯
-	cType_LinkSystemReset, 					///< Â½ÃƒÂ½ÂºÃ…Ã› Ã€Ã§Â½ÃƒÃ€Ã›
-	cType_LinkDiscoverStart, 				///< Ã€Ã¥Ã„Â¡ Â°Ã‹Â»Ã¶ Â½ÃƒÃ€Ã›
-	cType_LinkDiscoverStop, 				///< Ã€Ã¥Ã„Â¡ Â°Ã‹Â»Ã¶ ÃÃŸÂ´Ãœ
-	cType_LinkConnect, 							///< Â¿Â¬Â°Ã¡
-	cType_LinkDisconnect, 					///< Â¿Â¬Â°Ã¡ Ã‡Ã˜ÃÂ¦
-	cType_LinkRssiPollingStart, 		///< RSSI Â¼Ã¶ÃÃ½ Â½ÃƒÃ€Ã›
-	cType_LinkRssiPollingStop, 			///< RSSI Â¼Ã¶ÃÃ½ ÃÃŸÂ´Ãœ
+	// ¸µÅ© º¸µå
+	cType_LinkModeBroadcast = 0xE0, ///< LINK ¼Û¼ö½Å ¸ðµå ÀüÈ¯
+	cType_LinkSystemReset, 					///< ½Ã½ºÅÛ Àç½ÃÀÛ
+	cType_LinkDiscoverStart, 				///< ÀåÄ¡ °Ë»ö ½ÃÀÛ
+	cType_LinkDiscoverStop, 				///< ÀåÄ¡ °Ë»ö Áß´Ü
+	cType_LinkConnect, 							///< ¿¬°á
+	cType_LinkDisconnect, 					///< ¿¬°á ÇØÁ¦
+	cType_LinkRssiPollingStart, 		///< RSSI ¼öÁý ½ÃÀÛ
+	cType_LinkRssiPollingStop, 			///< RSSI ¼öÁý Áß´Ü
 
 	cType_EndOfType
 };
@@ -346,13 +323,13 @@ enum CommandType
 /***********************************************************************/
 enum ModeDrone
 {
-	dMode_None = 0, 			///< Â¾Ã¸Ã€Â½
-	dMode_Flight = 0x10, 	///< ÂºÃ±Ã‡Ã  Â¸Ã°ÂµÃ¥(Â°Â¡ÂµÃ¥ Ã†Ã·Ã‡Ã”)
-	dMode_FlightNoGuard, 	///< ÂºÃ±Ã‡Ã  Â¸Ã°ÂµÃ¥(Â°Â¡ÂµÃ¥ Â¾Ã¸Ã€Â½)
-	dMode_FlightFPV, 			///< ÂºÃ±Ã‡Ã  Â¸Ã°ÂµÃ¥(FPV)
-	dMode_Drive = 0x20, 	///< ÃÃ–Ã‡Ã  Â¸Ã°ÂµÃ¥
-	dMode_DriveFPV, 			///< ÃÃ–Ã‡Ã  Â¸Ã°ÂµÃ¥(FPV)
-	dMode_Test = 0x30, 		///< Ã…Ã—Â½ÂºÃ†Â® Â¸Ã°ÂµÃ¥
+	dMode_None = 0, 			///< ¾øÀ½
+	dMode_Flight = 0x10, 	///< ºñÇà ¸ðµå(°¡µå Æ÷ÇÔ)
+	dMode_FlightNoGuard, 	///< ºñÇà ¸ðµå(°¡µå ¾øÀ½)
+	dMode_FlightFPV, 			///< ºñÇà ¸ðµå(FPV)
+	dMode_Drive = 0x20, 	///< ÁÖÇà ¸ðµå
+	dMode_DriveFPV, 			///< ÁÖÇà ¸ðµå(FPV)
+	dMode_Test = 0x30, 		///< Å×½ºÆ® ¸ðµå
 	dMode_EndOfType
 };
 
@@ -360,13 +337,13 @@ enum ModeDrone
 enum ModeVehicle
 {
 	vMode_None = 0,
-	vMode_Boot, 					///< ÂºÃŽÃ†Ãƒ
-	vMode_Wait, 					///< Â¿Â¬Â°Ã¡ Â´Ã«Â±Ã¢ Â»Ã³Ã…Ã‚
-	vMode_Ready, 					///< Â´Ã«Â±Ã¢ Â»Ã³Ã…Ã‚
-	vMode_Running, 				///< Â¸ÃžÃ€ÃŽ Ã„ÃšÂµÃ¥ ÂµÂ¿Ã€Ã›
-	vMode_Update, 				///< Ã†ÃŸÂ¿Ã¾Â¾Ã® Â¾Ã·ÂµÂ¥Ã€ÃŒÃ†Â®
-	vMode_UpdateComplete,	///< Ã†ÃŸÂ¿Ã¾Â¾Ã® Â¾Ã·ÂµÂ¥Ã€ÃŒÃ†Â® Â¿ÃÂ·Ã¡
-	vMode_Error, 					///< Â¿Ã€Â·Ã¹
+	vMode_Boot, 					///< ºÎÆÃ
+	vMode_Wait, 					///< ¿¬°á ´ë±â »óÅÂ
+	vMode_Ready, 					///< ´ë±â »óÅÂ
+	vMode_Running, 				///< ¸ÞÀÎ ÄÚµå µ¿ÀÛ
+	vMode_Update, 				///< Æß¿þ¾î ¾÷µ¥ÀÌÆ®
+	vMode_UpdateComplete,	///< Æß¿þ¾î ¾÷µ¥ÀÌÆ® ¿Ï·á
+	vMode_Error, 					///< ¿À·ù
 	vMode_EndOfType
 };
 
@@ -374,15 +351,15 @@ enum ModeVehicle
 enum ModeFlight
 {
 	fMode_None = 0,
-	fMode_Ready, 					///< ÂºÃ±Ã‡Ã  ÃÃ˜ÂºÃ±
-	fMode_TakeOff, 				///< Ã€ÃŒÂ·Ãº (FlightÂ·ÃŽ Ã€ÃšÂµÂ¿Ã€Ã¼ÃˆÂ¯)
-	fMode_Flight, 				///< ÂºÃ±Ã‡Ã 
-	fMode_Flip, 					///< ÃˆÂ¸Ã€Ã¼
-	fMode_Stop, 					///< Â°Â­ÃÂ¦ ÃÂ¤ÃÃ¶
-	fMode_Landing, 				///< Ã‚Ã¸Â·Ãº
-	fMode_Reverse, 				///< ÂµÃšÃÃ½Â±Ã¢
-	fMode_Accident, 			///< Â»Ã§Â°Ã­ (ReadyÂ·ÃŽ Ã€ÃšÂµÂ¿Ã€Ã¼ÃˆÂ¯)
-	fMode_Error, 					///< Â¿Ã€Â·Ã¹
+	fMode_Ready, 					///< ºñÇà ÁØºñ
+	fMode_TakeOff, 				///< ÀÌ·ú (Flight·Î ÀÚµ¿ÀüÈ¯)
+	fMode_Flight, 				///< ºñÇà
+	fMode_Flip, 					///< È¸Àü
+	fMode_Stop, 					///< °­Á¦ Á¤Áö
+	fMode_Landing, 				///< Âø·ú
+	fMode_Reverse, 				///< µÚÁý±â
+	fMode_Accident, 			///< »ç°í (Ready·Î ÀÚµ¿ÀüÈ¯)
+	fMode_Error, 					///< ¿À·ù
 	fMode_EndOfType
 };
 
@@ -390,12 +367,12 @@ enum ModeFlight
 enum ModeDrive
 {
 	dvMode_None = 0,
-	dvMode_Ready, 				///< ÃÃ˜ÂºÃ±
-	dvMode_Start, 				///< ÃƒÃ¢Â¹ÃŸ
-	dvMode_Drive, 				///< ÃÃ–Ã‡Ã 
-	dvMode_Stop, 					///< Â°Â­ÃÂ¦ ÃÂ¤ÃÃ¶
-	dvMode_Accident, 			///< Â»Ã§Â°Ã­ (ReadyÂ·ÃŽ Ã€ÃšÂµÂ¿Ã€Ã¼ÃˆÂ¯)
-	dvMode_Error, 				///< Â¿Ã€Â·Ã¹
+	dvMode_Ready, 				///< ÁØºñ
+	dvMode_Start, 				///< Ãâ¹ß
+	dvMode_Drive, 				///< ÁÖÇà
+	dvMode_Stop, 					///< °­Á¦ Á¤Áö
+	dvMode_Accident, 			///< »ç°í (Ready·Î ÀÚµ¿ÀüÈ¯)
+	dvMode_Error, 				///< ¿À·ù
 	dvMode_EndOfType
 };
 
@@ -403,18 +380,18 @@ enum ModeDrive
 enum SensorOrientation
 {
 	senOri_None = 0,
-	senOri_Normal, 				///< ÃÂ¤Â»Ã³
-	senOri_ReverseStart, 	///< ÂµÃšÃÃ½ÃˆÃ·Â±Ã¢ Â½ÃƒÃ€Ã›
-	senOri_Reverse, 			///< ÂµÃšÃÃ½ÃˆÃ»
+	senOri_Normal, 				///< Á¤»ó
+	senOri_ReverseStart, 	///< µÚÁýÈ÷±â ½ÃÀÛ
+	senOri_Reverse, 			///< µÚÁýÈû
 	senOri_EndOfType
 };
 
 /***********************************************************************/
 enum Coordinate
 {
-	cSet_None = 0, 				///< Â¾Ã¸Ã€Â½
-	cSet_Absolute, 				///< Â°Ã­ÃÂ¤ ÃÃ‚Ã‡Â¥Â°Ã¨
-	cSet_Relative, 				///< Â»Ã³Â´Ã« ÃÃ‚Ã‡Â¥Â°Ã¨
+	cSet_None = 0, 				///< ¾øÀ½
+	cSet_Absolute, 				///< °íÁ¤ ÁÂÇ¥°è
+	cSet_Relative, 				///< »ó´ë ÁÂÇ¥°è
 	cSet_EndOfType
 };
 
@@ -422,15 +399,15 @@ enum Coordinate
 
 enum Trim
 {
-	trim_None = 0, 					///< Â¾Ã¸Ã€Â½
-	trim_RollIncrease, 			///< Roll ÃÃµÂ°Â¡
-	trim_RollDecrease, 			///< Roll Â°Â¨Â¼Ã’
-	trim_PitchIncrease, 		///< Pitch ÃÃµÂ°Â¡
-	trim_PitchDecrease, 		///< Pitch Â°Â¨Â¼Ã’
-	trim_YawIncrease, 			///< Yaw ÃÃµÂ°Â¡
-	trim_YawDecrease, 			///< Yaw Â°Â¨Â¼Ã’
-	trim_ThrottleIncrease, 	///< Throttle ÃÃµÂ°Â¡
-	trim_ThrottleDecrease, 	///< Throttle Â°Â¨Â¼Ã’
+	trim_None = 0, 					///< ¾øÀ½
+	trim_RollIncrease, 			///< Roll Áõ°¡
+	trim_RollDecrease, 			///< Roll °¨¼Ò
+	trim_PitchIncrease, 		///< Pitch Áõ°¡
+	trim_PitchDecrease, 		///< Pitch °¨¼Ò
+	trim_YawIncrease, 			///< Yaw Áõ°¡
+	trim_YawDecrease, 			///< Yaw °¨¼Ò
+	trim_ThrottleIncrease, 	///< Throttle Áõ°¡
+	trim_ThrottleDecrease, 	///< Throttle °¨¼Ò
 	trim_EndOfType
 };
 
@@ -438,56 +415,56 @@ enum Trim
 
 enum FlightEvent
 {
-	fEvent_None = 0, 			///< Â¾Ã¸Ã€Â½
-	fEvent_TakeOff, 			///< Ã€ÃŒÂ·Ãº
-	fEvent_FlipFront, 		///< ÃˆÂ¸Ã€Ã¼
-	fEvent_FlipRear, 			///< ÃˆÂ¸Ã€Ã¼
-	fEvent_flipLeft, 			///< ÃˆÂ¸Ã€Ã¼
-	fEvent_FlipRight, 		///< ÃˆÂ¸Ã€Ã¼
-	fEvent_Stop, 					///< ÃÂ¤ÃÃ¶
-	fEvent_Landing, 			///< Ã‚Ã¸Â·Ãº
-	fEvent_TurnOver, 			///< ÂµÃšÃÃ½Â±Ã¢
-	fEvent_Shot, 					///< Â¹ÃŒÂ»Ã§Ã€ÃÃ€Â» Â½Ã² Â¶Â§ Â¿Ã²ÃÃ·Ã€Ã“
-	fEvent_UnderAttack, 	///< Â¹ÃŒÂ»Ã§Ã€ÃÃ€Â» Â¸Ã‚Ã€Â» Â¶Â§ Â¿Ã²ÃÃ·Ã€Ã“
-	fEvent_Square, 				///< ÃÂ¤Â¹Ã¦Ã‡Ã¢ ÂµÂ¹Â±Ã¢
-	fEvent_CircleLeft, 		///< Â¿ÃžÃ‚ÃŠÃ€Â¸Â·ÃŽ ÃˆÂ¸Ã€Ã¼
-	fEvent_CircleRight, 	///< Â¿Ã€Â¸Â¥Ã‚ÃŠÃ€Â¸Â·ÃŽ ÃˆÂ¸Ã€Ã¼
-	fEvent_Rotate180,			///< 180ÂµÂµ ÃˆÂ¸Ã€Ã¼
+	fEvent_None = 0, 			///< ¾øÀ½
+	fEvent_TakeOff, 			///< ÀÌ·ú
+	fEvent_FlipFront, 		///< È¸Àü
+	fEvent_FlipRear, 			///< È¸Àü
+	fEvent_flipLeft, 			///< È¸Àü
+	fEvent_FlipRight, 		///< È¸Àü
+	fEvent_Stop, 					///< Á¤Áö
+	fEvent_Landing, 			///< Âø·ú
+	fEvent_TurnOver, 			///< µÚÁý±â
+	fEvent_Shot, 					///< ¹Ì»çÀÏÀ» ½ò ¶§ ¿òÁ÷ÀÓ
+	fEvent_UnderAttack, 	///< ¹Ì»çÀÏÀ» ¸ÂÀ» ¶§ ¿òÁ÷ÀÓ
+	fEvent_Square, 				///< Á¤¹æÇâ µ¹±â
+	fEvent_CircleLeft, 		///< ¿ÞÂÊÀ¸·Î È¸Àü
+	fEvent_CircleRight, 	///< ¿À¸¥ÂÊÀ¸·Î È¸Àü
+	fEvent_Rotate180,			///< 180µµ È¸Àü
 	fEvent_EndOfType
 };
 
 enum DriveEvent
 {
 	dEvent_None = 0,
-	dEvent_Ready, 				///< ÃÃ˜ÂºÃ±
-	dEvent_Start, 				///< ÃƒÃ¢Â¹ÃŸ
-	dEvent_Drive, 				///< ÃÃ–Ã‡Ã 
-	dEvent_Stop, 					///< Â°Â­ÃÂ¦ ÃÂ¤ÃÃ¶
-	dEvent_Accident, 			///< Â»Ã§Â°Ã­ (ReadyÂ·ÃŽ Ã€ÃšÂµÂ¿Ã€Ã¼ÃˆÂ¯)
-	dEvent_Error, 				///< Â¿Ã€Â·Ã¹
+	dEvent_Ready, 				///< ÁØºñ
+	dEvent_Start, 				///< Ãâ¹ß
+	dEvent_Drive, 				///< ÁÖÇà
+	dEvent_Stop, 					///< °­Á¦ Á¤Áö
+	dEvent_Accident, 			///< »ç°í (Ready·Î ÀÚµ¿ÀüÈ¯)
+	dEvent_Error, 				///< ¿À·ù
 	dEvent_EndOfType
 };
 
 /***********************************************************************/
 enum Request
 {		
-	// Â»Ã³Ã…Ã‚
+	// »óÅÂ
 	Req_Address = 0x30, 				///< IEEE address
-	Req_State, 									///< ÂµÃ¥Â·ÃÃ€Ã‡ Â»Ã³Ã…Ã‚(ÂºÃ±Ã‡Ã  Â¸Ã°ÂµÃ¥, Â¹Ã¦Ã€Â§Â±Ã¢ÃÃ˜, Â¹Ã¨Ã…ÃÂ¸Â®Â·Â®)
-	Req_Attitude, 							///< ÂµÃ¥Â·ÃÃ€Ã‡ Ã€ÃšÂ¼Â¼(Vector)
-	Req_GyroBias, 							///< Ã€ÃšÃ€ÃŒÂ·ÃŽ Â¹Ã™Ã€ÃŒÂ¾Ã®Â½Âº Â°Âª(Vector)
-	Req_TrimAll, 								///< Ã€Ã¼ÃƒÂ¼ Ã†Â®Â¸Â²
-	Req_TrimFlight, 						///< ÂºÃ±Ã‡Ã  Ã†Â®Â¸Â²
-	Req_TrimDrive, 							///< ÃÃ–Ã‡Ã  Ã†Â®Â¸Â²
-		
-	// Â¼Â¾Â¼Â­
+	Req_State, 									///< µå·ÐÀÇ »óÅÂ(ºñÇà ¸ðµå, ¹æÀ§±âÁØ, ¹èÅÍ¸®·®)
+	Req_Attitude, 							///< µå·ÐÀÇ ÀÚ¼¼(Vector)
+	Req_GyroBias, 							///< ÀÚÀÌ·Î ¹ÙÀÌ¾î½º °ª(Vector)
+	Req_TrimAll, 								///< ÀüÃ¼ Æ®¸²
+	Req_TrimFlight, 						///< ºñÇà Æ®¸²
+	Req_TrimDrive, 							///< ÁÖÇà Æ®¸²
+	
+	// ¼¾¼­
 	Req_ImuRawAndAngle = 0x50, 	///< IMU Raw + Angle
-	Req_Pressure, 							///< Â¾ÃÂ·Ã‚ Â¼Â¾Â¼Â­ ÂµÂ¥Ã€ÃŒÃ…Ã
+	Req_Pressure, 							///< ¾Ð·Â ¼¾¼­ µ¥ÀÌÅÍ
 	Req_ImageFlow, 							///< ImageFlow
-	Req_Button, 								///< Â¹Ã¶Ã†Â° Ã€Ã”Â·Ã‚
-	Req_Batery, 								///< Â¹Ã¨Ã…ÃÂ¸Â®
-	Req_Motor, 									///< Â¸Ã°Ã…Ã ÃÂ¦Â¾Ã® Â¹Ã— Ã‡Ã¶Ã€Ã§ ÃÂ¦Â¾Ã® Â°Âª ÃˆÂ®Ã€ÃŽ
-	Req_Temperature, 						///< Â¿Ã‚ÂµÂµ
+	Req_Button, 								///< ¹öÆ° ÀÔ·Â
+	Req_Batery, 								///< ¹èÅÍ¸®
+	Req_Motor, 									///< ¸ðÅÍ Á¦¾î ¹× ÇöÀç Á¦¾î °ª È®ÀÎ
+	Req_Temperature, 						///< ¿Âµµ
 	Req_EndOfType
 };
 
@@ -495,24 +472,24 @@ enum Request
 enum ModeLight
 {
   Light_None,
-  WaitingForConnect, 					///< Â¿Â¬Â°Ã¡ Â´Ã«Â±Ã¢ Â»Ã³Ã…Ã‚
+  WaitingForConnect, 					///< ¿¬°á ´ë±â »óÅÂ
   Connected,
   
   EyeNone = 0x10,
-  EyeHold, 										///< ÃÃ¶ÃÂ¤Ã‡Ã‘ Â»Ã¶Â»Ã³Ã€Â» Â°Ã¨Â¼Ã“ Ã„Ã”
-  EyeMix, 										///< Â¼Ã¸Ã‚Ã·Ã€Ã»Ã€Â¸Â·ÃŽ LED Â»Ã¶ ÂºÂ¯Â°Ã¦
-  EyeFlicker, 								///< Â±Ã´ÂºÃ½Ã€Ã“
-  EyeFlickerDouble, 					///< Â±Ã´ÂºÃ½Ã€Ã“(ÂµÃŽ Â¹Ã¸ Â±Ã´ÂºÃ½Ã€ÃŒÂ°Ã­ Â±Ã´ÂºÃ½Ã€ÃŽ Â½ÃƒÂ°Â£Â¸Â¸Ã…Â­ Â²Â¨ÃÃ¼)
-  EyeDimming, 								///< Â¹Ã Â±Ã¢ ÃÂ¦Â¾Ã®Ã‡ÃÂ¿Â© ÃƒÂµÃƒÂµÃˆÃ· Â±Ã´ÂºÃ½Ã€Ã“
+  EyeHold, 										///< ÁöÁ¤ÇÑ »ö»óÀ» °è¼Ó ÄÔ
+  EyeMix, 										///< ¼øÂ÷ÀûÀ¸·Î LED »ö º¯°æ
+  EyeFlicker, 								///< ±ôºýÀÓ
+  EyeFlickerDouble, 					///< ±ôºýÀÓ(µÎ ¹ø ±ôºýÀÌ°í ±ôºýÀÎ ½Ã°£¸¸Å­ ²¨Áü)
+  EyeDimming, 								///< ¹à±â Á¦¾îÇÏ¿© ÃµÃµÈ÷ ±ôºýÀÓ
   
   ArmNone = 0x40,
-  ArmHold, 										///< ÃÃ¶ÃÂ¤Ã‡Ã‘ Â»Ã¶Â»Ã³Ã€Â» Â°Ã¨Â¼Ã“ Ã„Ã”
-  ArmMix, 										///< Â¼Ã¸Ã‚Ã·Ã€Ã»Ã€Â¸Â·ÃŽ LED Â»Ã¶ ÂºÂ¯Â°Ã¦
-  ArmFlicker, 								///< Â±Ã´ÂºÃ½Ã€Ã“
-  ArmFlickerDouble, 					///< Â±Ã´ÂºÃ½Ã€Ã“(ÂµÃŽ Â¹Ã¸ Â±Ã´ÂºÃ½Ã€ÃŒÂ°Ã­ Â±Ã´ÂºÃ½Ã€ÃŽ Â½ÃƒÂ°Â£Â¸Â¸Ã…Â­ Â²Â¨ÃÃ¼)
-  ArmDimming, 								///< Â¹Ã Â±Ã¢ ÃÂ¦Â¾Ã®Ã‡ÃÂ¿Â© ÃƒÂµÃƒÂµÃˆÃ· Â±Ã´ÂºÃ½Ã€Ã“
-  ArmFlow, 										///< Â¾Ã•Â¿Â¡Â¼Â­ ÂµÃšÂ·ÃŽ ÃˆÃ¥Â¸Â§
-  ArmFlowReverse, 						///< ÂµÃšÂ¿Â¡Â¼Â­ Â¾Ã•Ã€Â¸Â·ÃŽ ÃˆÃ¥Â¸Â§
+  ArmHold, 										///< ÁöÁ¤ÇÑ »ö»óÀ» °è¼Ó ÄÔ
+  ArmMix, 										///< ¼øÂ÷ÀûÀ¸·Î LED »ö º¯°æ
+  ArmFlicker, 								///< ±ôºýÀÓ
+  ArmFlickerDouble, 					///< ±ôºýÀÓ(µÎ ¹ø ±ôºýÀÌ°í ±ôºýÀÎ ½Ã°£¸¸Å­ ²¨Áü)
+  ArmDimming, 								///< ¹à±â Á¦¾îÇÏ¿© ÃµÃµÈ÷ ±ôºýÀÓ
+  ArmFlow, 										///< ¾Õ¿¡¼­ µÚ·Î Èå¸§
+  ArmFlowReverse, 						///< µÚ¿¡¼­ ¾ÕÀ¸·Î Èå¸§
   EndOfLedMode
 };
 
@@ -575,15 +552,12 @@ class CoDroneClass
 {
 public:
 
-	CoDroneClass(void);
-
 /////////////////////////////////////////////////////////////////////////
 
 	void begin(long baud);
 	
 	void Receive(void);
 	
-	void Send_Control();
 	void Control();
 	void Control(int interval);
 
@@ -599,15 +573,14 @@ public:
 /////////////////////////////////////////////////////////////////////////
 	
 	void AutoConnect(byte mode);
-  	void AutoConnect(byte mode, byte address[]);	
+  void AutoConnect(byte mode, byte address[]);	
 	void Send_ConnectAddressInputDrone(byte address[]);
 	void Send_ConnectConnectedDrone();
 	void Send_ConnectNearbyDrone();	
 	void Send_Connect(byte index);
 	void Send_Disconnect();		
 	void Send_Discover(byte action);
-	void Send_Check(byte _data[], byte _length, byte _crc[]);
-
+		
 /////////////////////////////////////////////////////////////////////////
 
 	void Send_Ping();
@@ -619,18 +592,7 @@ public:
 	void DroneModeChange(byte event);			
 	void FlightEvent(byte event);
 	void DriveEvent(byte event);
-	
-/////////////////////////////////////////////////////////////////////////
-
-	void BattleShooting();
-	void BattleReceive();
-	void BattleBegin(byte teamSelect);	
-	void BattleDamageProcess();	
-	void BattleHitPoints(int points);
-	void CrashCustom(boolean custom);
-	boolean CrashedCheck();
-	void displayHealth();
-	
+		
 /////////////////////////////////////////////////////////////////////////
 		
 	void Request_DroneState();	
@@ -648,7 +610,7 @@ public:
 	void Request_Battery();	
 	void Request_Motor();	
 	void Request_Temperature();
-	
+		
 /////////////////////////////////////////////////////////////////////////
 
 	void Set_Trim(byte event);
@@ -656,6 +618,7 @@ public:
 	void Set_TrimAll(int _roll, int _pitch, int _yaw, int _throttle, int _wheel);
 	void Set_TrimFlight(int _roll, int _pitch, int _yaw, int _throttle);
 	void Set_TrimDrive(int _wheel);
+	
 
 /////////////////////////////////////////////////////////////////////////
 
@@ -666,7 +629,7 @@ public:
 	void LedEvent(byte sendMode, byte sendColor, byte sendInterval, byte sendRepeat);
 	void LedEvent(byte sendMode, byte sendColor[], byte sendInterval, byte sendRepeat);
 	void LedEvent(byte sendMode, byte r, byte g, byte b, byte sendInterval, byte sendRepeat);
-	
+
 /////////////////////////////////////////////////////////////////////////
 			
 	void LinkStateCheck();
@@ -708,9 +671,6 @@ public:
 /////////////////////////////////////////////////////////////////////////
 
 	boolean TimeCheck(word interval); 						//milliseconds
-	boolean TimeCheck1(word interval); 						//milliseconds
-	boolean TimeCheck2(word interval); 						//milliseconds
-	boolean TimeCheck3(word interval); 						//milliseconds
 	boolean TimeOutSendCheck(word interval); //milliseconds		
 	boolean TimeCheckBuzz(word interval); 				//microseconds
 	
@@ -734,42 +694,36 @@ public:
 	int receiveLikMode;
 	int receiveComplete;
 	int receiveCRC;
-			
+		
+	
 /////////////////////////////////////////////////////////////////////////
 
-	byte displayMode;	//smar inventor : default 1
-	byte debugMode;		//smar inventor : default 0
+	byte displayMode = 1;	//smar inventor : default 1
+	byte debugMode = 0;		//smar inventor : default 0
 	
 	byte discoverFlag;
 	byte connectFlag;
 			
-	boolean pairing;
-		
+	boolean pairing = 0;
+	
+	int SendInterval; //millis seconds		
 	int analogOffset;
-	byte displayLED;
-	int SendInterval; //millis seconds
-	byte timeOutRetry;
+	byte displayLED = 0;
+
+	byte timeOutRetry = 0;
 	
-	byte sendCheckFlag;
+	byte sendCheckFlag = 0;
 	
-	byte receiveAttitudeSuccess;
-	
-	int energy;
-	int MAX_ENERGY = 8;
-	boolean CustomCrash = 0;
-	boolean Crashed = 0;
-	
-	byte team;
-	unsigned long weapon;
+	byte receiveAttitudeSuccess = 0;
 	
 /////////////////////////////////////////////////////////////////////////
 	
-	byte devCount;
+	byte devCount = 0;
 	byte devFind[3];
 	
-	int devRSSI0;
-	int devRSSI1;
-	int devRSSI2;
+	int devRSSI0 = -1;
+	int devRSSI1 = -1;
+	int devRSSI2 = -1;
 		
 	byte devName0[20];
 	byte devName1[20];
@@ -784,35 +738,28 @@ public:
 	
 /////////////////////////////////////////////////////////////////////////
 	
-	int roll;
-	int pitch;
-	int yaw;
-	int throttle;
+	int roll = 0;
+	int pitch = 0;
+	int yaw = 0;
+	int throttle = 0;
 		
-	int attitudeRoll;
-	int attitudePitch;
-	int attitudeYaw;
-	
+	int attitudeRoll	= 0;
+	int attitudePitch	= 0;
+	int attitudeYaw	= 0;
+		
+		
 /////////////////////////////////////////////////////////////////////////
 	
-	int linkState;
-	int rssi;
-	byte battery;
-		
-	byte irMassageDirection;
-  	unsigned long	irMassageReceive;
-	
+	int linkState = 0;;
+	int rssi = 0;
+	byte battery = 0;
 	byte droneState[7];	
-	byte droneIrMassage[5];	
-	
-	s16 droneAttitude[3];
+	byte droneAttitude[6];
 	byte droneGyroBias[6];
 	byte droneTrimAll[10];		
 	byte droneTrimFlight[8];
 	byte droneTrimDrive[2];
-
-	s16 droneImuRawAndAngle[9];
-
+	byte droneImuRawAndAngle[9];
 	byte dronePressure[16];	
 	byte droneImageFlow[8];
 	byte droneButton[1];
@@ -820,15 +767,7 @@ public:
 	byte droneMotor[4];
 	byte droneTemperature[8];
 
-	s16 accel[3];
-	s16 gyroRaw[3];
-	s16 gyroAngle[3];
-
-	s32 imageFlowX;
-	s32 imageFlowY;
-
 /////////////////////////////////////////////////////////////////////////
-
 		long PreviousMillis;
 		
 /////////////////////////////////////////////////////////////////////////
@@ -836,10 +775,6 @@ private:
 	long PreviousBuzz;		
 
 	long timeOutSendPreviousMillis;
-
-	unsigned long HealthTime;
-
-//	SoftwareSerial DEBUG_SERIAL = SoftwareSerial(8,9);
 };
 
 extern CoDroneClass CoDrone;

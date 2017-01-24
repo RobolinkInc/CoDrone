@@ -1,33 +1,31 @@
 /*****************************************************************
   Pitch Up
-  This example shows how to control the pitch (tilt to the front or back)
-  Tilt forward:   1 to 100
-  Level:          0
-  Tilt backwards: -1 to -100
+  피치값을 입력해서 드론을 앞뒤로 이동할 수 있습니다.
+  전진(양수)  :  1 ~  100
+  후진(음수)  : -1 ~ -100
 *******************************************************************/
-#include <CoDrone.h> // The codrone library that holds all the background files for this
+#include <CoDrone.h> // 코드론을 사용하기 위한 헤더파일 
 
 void setup()
 {
-  CoDrone.begin(115200); // sets up the connection to the drone using the bluetooth module at 115200bps (bits per second)
+  CoDrone.begin(115200);                // 드론 플러그의 통신 개시 (115200bps)
 
-  CoDrone.AutoConnect(NearbyDrone);  // finds and connects to a drone that is near by
-
-  CoDrone.DroneModeChange(Flight);  // Changes the drone so that it is now in flght mode
+  CoDrone.AutoConnect(NeardbyDrone);    // 가장 가까운 위치의 드론과 연결
   
-  // PAIRING is set to true in AutoConnect if they connect together
-  if (PAIRING == true)  // Check to see that we are paired before trying to fly               
+  CoDrone.DroneModeChange(Flight);       // 드론을 플라이트 모드로 설정합니다. (비행형)
+  
+  if (PAIRING == true)                   // 연결(페어링)이 성공한 경우에만 실행
   {
-    CoDrone.FlightEvent(TakeOff);        // have the drone take off
+    CoDrone.FlightEvent(TakeOff);        // 이륙
 
-    delay(2000);                         // fly for 2 seconds (2000 milliseconds)
+    delay(2000);                          // 대기 시간
 
-    PITCH = 100;                         // set PITCH to 100 (tilt forward)
-    CoDrone.Control();                   // send the pitch values to the drone
+    PITCH = 100;                           // PITCH 값 입력
+    CoDrone.Control();                   // 조종값 전송
 
-    delay(500);                          // fly for 0.5 seconds (500 milliseconds)
+    delay(500);                           // 대기 시간
 
-    CoDrone.FlightEvent(Landing);        // land the codrone (when it hits the ground it will stop the motors)
+    CoDrone.FlightEvent(Landing);        // 서서히 착륙
   }
 }
 
@@ -35,3 +33,5 @@ void loop()
 {
 
 }
+
+
