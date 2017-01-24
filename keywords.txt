@@ -12,71 +12,105 @@ CoDrone	KEYWORD1
 # Methods and Functions (KEYWORD2)
 #######################################
 
+begin						KEYWORD2
+print						KEYWORD2
+write						KEYWORD2
 
-begin								KEYWORD2
-print								KEYWORD2
-write								KEYWORD2
-
-Control							KEYWORD2
-LedColor						KEYWORD2
-LedEvent						KEYWORD2
+Control						KEYWORD2
+LedColor					KEYWORD2
+LedEvent					KEYWORD2
 FlightEvent					KEYWORD2
 DriveEvent					KEYWORD2
-Receive							KEYWORD2
+Receive						KEYWORD2
 AutoConnect					KEYWORD2
-PrintDroneAddress		KEYWORD2	
-LowBatteryCheck			KEYWORD2	
-DroneModeChange			KEYWORD2	
+PrintDroneAddress			KEYWORD2	
+LowBatteryCheck				KEYWORD2	
+DroneModeChange				KEYWORD2	
+
+BattleBegin					KEYWORD2
+BattleReceive				KEYWORD2
+BattleShooting				KEYWORD2
+
+ButtonPreesHoldWait			KEYWORD2
+
+Set_Trim					KEYWORD2
+Set_TrimAll					KEYWORD2
+Set_TrimReset				KEYWORD2
+
+LED_Blink					KEYWORD2
+LED_Connect					KEYWORD2
+
+GestureFuntion				KEYWORD2
+GestureCheckPosition		KEYWORD2
+GestureReturnPositon		KEYWORD2
+GestureFuntion				KEYWORD2
+
+SequenceDelay				KEYWORD2
+DisplayRSSI					KEYWORD2
+
+Send_LinkModeBroadcast		KEYWORD2
+Request_DroneAttitude		KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
 #######################################
 
-Flight						LITERAL1
+Flight					LITERAL1
 FlightNoGuard			LITERAL1
-FlightFPV					LITERAL1
-Drive							LITERAL1
-DriveFPV					LITERAL1
+FlightFPV				LITERAL1
+Drive					LITERAL1
+DriveFPV				LITERAL1
 
-ROLL							LITERAL1
-PITCH							LITERAL1
-YAW								LITERAL1
-THROTTLE					LITERAL1
-NeardbyDrone			LITERAL1
-ConnectedDrone		LITERAL1
-AddressInputDrone	LITERAL1
+ROLL					LITERAL1
+PITCH					LITERAL1
+YAW						LITERAL1
+THROTTLE				LITERAL1
+NearbyDrone				LITERAL1
+ConnectedDrone			LITERAL1
+AddressInputDrone		LITERAL1
 
-
-PAIRING						LITERAL1
+PAIRING					LITERAL1
 DiscoverStart			LITERAL1
 DiscoverStop			LITERAL1
 
+Stop					LITERAL1
 
-Stop							LITERAL1
-
-
-EVENT							LITERAL1
-STATE							LITERAL1
+EVENT					LITERAL1
+STATE					LITERAL1
 SEND_INTERVAL			LITERAL1
 CONNECTION				LITERAL1
 ANALOG_OFFSET			LITERAL1
 		
-TakeOff						LITERAL1
-Landing						LITERAL1
+TakeOff					LITERAL1
+Landing					LITERAL1
 
-
-EyeNone						LITERAL1
-EyeHold						LITERAL1
-EyeMix						LITERAL1
+EyeNone					LITERAL1
+EyeHold					LITERAL1
+EyeMix					LITERAL1
 EyeFlicker				LITERAL1
-EyeFlickerDouble	LITERAL1
+EyeFlickerDouble		LITERAL1
 EyeDimming				LITERAL1
 
-ArmNone						LITERAL1
-ArmHold						LITERAL1
-ArmMix						LITERAL1
+ArmNone					LITERAL1
+ArmHold					LITERAL1
+ArmMix					LITERAL1
 ArmFlicker				LITERAL1
-ArmFlickerDouble	LITERAL1
+ArmFlickerDouble		LITERAL1
 ArmDimming				LITERAL1
-ArmFlow						LITERAL1
-ArmFlowReverse		LITERAL1
+ArmFlow					LITERAL1
+ArmFlowReverse			LITERAL1
+
+RollIncrease			LITERAL1
+RollDecrease			LITERAL1
+PitchIncrease			LITERAL1
+PitchDecrease			LITERAL1
+YawIncrease				LITERAL1
+YawDecrease				LITERAL1
+ThrottleIncrease		LITERAL1
+ThrottleDecrease		LITERAL1
+
+TEAM_RED				LITERAL1
+TEAM_BLUE				LITERAL1
+TEAM_GREEN				LITERAL1
+TEAM_YELLOW				LITERAL1
+FREE_PLAY				LITERAL1
