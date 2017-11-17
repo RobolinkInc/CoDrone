@@ -22,7 +22,7 @@ typedef int32_t s32;
 typedef int16_t s16;
 typedef int8_t s8;
 typedef uint32_t u32;
-//typedef uint16_t u16;
+typedef uint16_t u16;
 typedef uint8_t u8;
 
 /***********************************************************************/
@@ -36,12 +36,12 @@ typedef uint8_t u8;
 #define FIND_HWSERIAL1
 #endif
 
-#if defined (FIND_HWSERIAL1)	//Serial Other Setting
-#define DRONE_SERIAL 		Serial1		//drone serial
+#if defined (FIND_HWSERIAL1)		//Serial Other Setting
+#define DRONE_SERIAL 	Serial1		//drone serial
 #define DEBUG_SERIAL    Serial		//debug serial1
 
-#else	//Serial Smart Setting
-#define DRONE_SERIAL 		Serial		//drone serial	
+#else								//Serial Smart Setting
+#define DRONE_SERIAL 	Serial		//drone serial	
 #define DEBUG_SERIAL    Serial1		//debug serial1
 
 #endif
@@ -51,7 +51,7 @@ typedef uint8_t u8;
 /***********************************************************************/
 //START CODE
 #define START1    	0x0A
-#define START2   		0x55
+#define START2   	0x55
 
 /***********************************************************************/
 
@@ -65,15 +65,15 @@ typedef uint8_t u8;
 
 /***********************************************************************/
 
-#define ROLL								CoDrone.roll
-#define PITCH								CoDrone.pitch
-#define YAW									CoDrone.yaw
+#define ROLL							CoDrone.roll
+#define PITCH							CoDrone.pitch
+#define YAW								CoDrone.yaw
 #define THROTTLE						CoDrone.throttle
-#define STATE								CoDrone.state
-#define SEND_INTERVAL				CoDrone.SendInterval
-#define ANALOG_OFFSET				CoDrone.analogOffset
+#define STATE							CoDrone.state
+#define SEND_INTERVAL					CoDrone.SendInterval
+#define ANALOG_OFFSET					CoDrone.analogOffset
 #define BATTERY							CoDrone.battery
-#define RSSI								CoDrone.rssi
+#define RSSI							CoDrone.rssi
 
 #define AttitudeROLL				CoDrone.attitudeRoll
 #define AttitudePITCH				CoDrone.attitudePitch
@@ -85,29 +85,29 @@ typedef uint8_t u8;
 #define DiscoverStop  			cType_LinkDiscoverStop
 #define DiscoverStart  			cType_LinkDiscoverStart
 
-#define PollingStop					cType_LinkRssiPollingStop
-#define PollingStart				cType_LinkRssiPollingStart
+#define PollingStop				cType_LinkRssiPollingStop
+#define PollingStart			cType_LinkRssiPollingStart
 
-#define	PAIRING							CoDrone.pairing
+#define	PAIRING					CoDrone.pairing
 
-#define LinkModeMute 				LinkBroadcast_Mute
+#define LinkModeMute 			LinkBroadcast_Mute
 #define LinkModeActive			LinkBroadcast_Active
 #define LinkModePassive 		LinkBroadcast_Passive
 
 #define	NearbyDrone    			1
 #define	ConnectedDrone  		2
-#define AddressInputDrone 	3
+#define AddressInputDrone 		3
 
 //eeprom address
-#define	EEP_AddressCheck   	10
-#define	EEP_AddressFirst  	11
+#define	EEP_AddressCheck   		10
+#define	EEP_AddressFirst  		11
 #define	EEP_AddressEnd  		15
 
 /////////////////////////////////////////////////////////////////////////
 
-#define FREE_PLAY					0
-#define TEAM_RED					1
-#define TEAM_BLUE					2
+#define FREE_PLAY				0
+#define TEAM_RED				1
+#define TEAM_BLUE				2
 #define TEAM_GREEN				3
 #define TEAM_YELLOW				4
 
@@ -118,12 +118,12 @@ typedef uint8_t u8;
 #define RED_MISSILE				0xbb01
 #define BLUE_MISSILE			0xcc01
 #define GREEN_MISSILE			0xdd01
-#define YELLOW_MISSILE		0xee01
+#define YELLOW_MISSILE			0xee01
 
 /***********************************************************************/
 
 #define Flight 						dMode_Flight
-#define FlightNoGuard			dMode_FlightNoGuard,
+#define FlightNoGuard				dMode_FlightNoGuard,
 #define FlightFPV					dMode_FlightFPV
 #define Drive 				 		dMode_Drive
 #define DriveFPV					dMode_DriveFPV
@@ -136,14 +136,14 @@ typedef uint8_t u8;
 #define FlipRear					fEvent_FlipRear
 #define FlipLeft					fEvent_flipLeft
 #define FlipRight					fEvent_FlipRight
-#define Stop							fEvent_Stop
+#define Stop						fEvent_Stop
 #define Landing						fEvent_Landing
 #define TurnOver					fEvent_TurnOver
-#define Shot							fEvent_Shot
-#define UnderAttack				fEvent_UnderAttack
+#define Shot						fEvent_Shot
+#define UnderAttack					fEvent_UnderAttack
 #define Square						fEvent_Square
-#define CircleLeft				fEvent_CircleLeft
-#define CircleRight				fEvent_CircleRight
+#define CircleLeft					fEvent_CircleLeft
+#define CircleRight					fEvent_CircleRight
 #define Rotate180					fEvent_Rotate180
 
 #define RollIncrease			trim_RollIncrease
@@ -152,92 +152,91 @@ typedef uint8_t u8;
 #define PitchDecrease			trim_PitchDecrease
 #define YawIncrease				trim_YawIncrease
 #define YawDecrease				trim_YawDecrease
-#define ThrottleIncrease	trim_ThrottleIncrease
-#define ThrottleDecrease	trim_ThrottleDecrease
+#define ThrottleIncrease		trim_ThrottleIncrease
+#define ThrottleDecrease		trim_ThrottleDecrease
 
-#define DataAvailable		(DRONE_SERIAL.available() > 0)
+#define DataAvailable			(DRONE_SERIAL.available() > 0)
 
 /***********************************************************************/
 /////////////////////////LINK MODULE/////////////////////////////////////
 /***********************************************************************/
 enum ModeLink
 {
-	linkMode_None = 0,	 	 	///< ¾øÀ½
-	linkMode_Boot,	 	 	 		///< ºÎÆÃ 	 	
-	linkMode_Ready,	 		 		///< ´ë±â(¿¬°á Àü)
-	linkMode_Connecting,	 	///< ÀåÄ¡ ¿¬°á Áß
-	linkMode_Connected,	 	 	///< ÀåÄ¡ ¿¬°á ¿Ï·á
-	linkMode_Disconnecting,	///< ÀåÄ¡ ¿¬°á ÇØÁ¦ Áß
-	linkMode_ReadyToReset,	///< ¸®¼Â ´ë±â(1ÃÊ µÚ¿¡ ÀåÄ¡ ¸®¼Â)	
+	linkMode_None = 0,	 	// none
+	linkMode_Boot,	 	 	//boot
+	linkMode_Ready,	 		// ready (before connect)
+	linkMode_Connecting,	// connecting
+	linkMode_Connected,	 	// connected
+	linkMode_Disconnecting,	// during disconnecting
+	linkMode_ReadyToReset,	// wait reset(reset after 1sec)
 	linkMode_EndOfType
 };
 
 enum ModeLinkBroadcast
 {
-	LinkBroadcast_None = 0, ///< ¾øÀ½
-	LinkBroadcast_Mute, 		///< LINK ¸ðµâ µ¥ÀÌÅÍ ¼Û½Å Áß´Ü . ¾ÆµÎÀÌ³ë Æß¿þ¾î ´Ù¿î·Îµå
-	LinkBroadcast_Active, 	///< ÆäÆ®·Ð ¿¬°á ¸ðµå . ¸ðµå ÀüÈ¯ ¸Þ¼¼Áö Àü¼Û
-	LinkBroadcast_Passive, 	///< ÆäÆ®·Ð ¿¬°á ¸ðµå . ¸ðµå ÀüÈ¯ ¸Þ¼¼Áö Àü¼ÛÇÏÁö ¾ÊÀ½
+	LinkBroadcast_None = 0, // none
+	LinkBroadcast_Mute,     // stop data sending - yellow LED dimming
+	LinkBroadcast_Active, 	// send request data and every event
+	LinkBroadcast_Passive, 	// send request data and important event
 	LinkBroadcast_EndOfType
 };
 
 enum EventLink
-	{
-		linkEvent_None = 0,									///< ¾øÀ½
+{
+	linkEvent_None = 0,								// none
 		
-		linkEvent_SystemReset,							///< ½Ã½ºÅÛ ¸®¼Â
+	linkEvent_SystemReset,							// system reset
 		
-		linkEvent_Initialized,							///< ÀåÄ¡ ÃÊ±âÈ­ ¿Ï·á
+	linkEvent_Initialized,							// finish board init
 		
-		linkEvent_Scanning,									///< ÀåÄ¡ °Ë»ö ½ÃÀÛ
-		linkEvent_ScanStop,									///< ÀåÄ¡ °Ë»ö Áß´Ü
+	linkEvent_Scanning,								// start scanning
+	linkEvent_ScanStop,								// stop scanning
 
-		linkEvent_FoundDroneService,				///< µå·Ð ¼­ºñ½º °Ë»ö ¿Ï·á
+	linkEvent_FoundDroneService,				    // success scanning, drone service
 
-		linkEvent_Connecting,								///< ÀåÄ¡ ¿¬°á ½ÃÀÛ		
-		linkEvent_Connected,								///< ÀåÄ¡ ¿¬°á
+	linkEvent_Connecting,							// start connect to drone
+	linkEvent_Connected,							// finish connect
 
-		linkEvent_ConnectionFaild,					///< ¿¬°á ½ÇÆÐ
-		linkEvent_ConnectionFaildNoDevices,	///< ¿¬°á ½ÇÆÐ - ÀåÄ¡°¡ ¾øÀ½
-		linkEvent_ConnectionFaildNotReady,	///< ¿¬°á ½ÇÆÐ - ´ë±â »óÅÂ°¡ ¾Æ´Ô
+	linkEvent_ConnectionFaild,					    // connection fail
+	linkEvent_ConnectionFaildNoDevices,	            // connection fail - no device
+	linkEvent_ConnectionFaildNotReady,	            // connection fail - drone is not ready
 
-		linkEvent_PairingStart,							///< Æä¾î¸µ ½ÃÀÛ
-		linkEvent_PairingSuccess,						///< Æä¾î¸µ ¼º°ø
-		linkEvent_PairingFaild,							///< Æä¾î¸µ ½ÇÆÐ
+	linkEvent_PairingStart,							// start pairing
+	linkEvent_PairingSuccess,						// pairing success
+	linkEvent_PairingFaild,							// pairing faild
 
-		linkEvent_BondingSuccess,						///< Bonding ¼º°ø
+	linkEvent_BondingSuccess,						// bonding success
 
-		linkEvent_LookupAttribute,					///< ÀåÄ¡ ¼­ºñ½º ¹× ¼Ó¼º °Ë»ö(GATT Event ½ÇÇà)
+	linkEvent_LookupAttribute,					    // search service and status(start GATT Event)
 
-		linkEvent_RssiPollingStart,					///< RSSI Ç®¸µ ½ÃÀÛ   // 10
-		linkEvent_RssiPollingStop,					///< RSSI Ç®¸µ ÁßÁö
+	linkEvent_RssiPollingStart,					    // start RSSI Polling
+	linkEvent_RssiPollingStop,					    // stop RSSI polling
 
-		linkEvent_DiscoverService,										///< ¼­ºñ½º °Ë»ö
-		linkEvent_DiscoverCharacteristic,							///< ¼Ó¼º °Ë»ö
-		linkEvent_DiscoverCharacteristicDroneData,		///< ¼Ó¼º °Ë»öµÈ     // 1
-		linkEvent_DiscoverCharacteristicDroneConfig,	///< ¼Ó¼º °Ë»ö
-		linkEvent_DiscoverCharacteristicUnknown,			///< ¼Ó¼º °Ë»ö
-		linkEvent_DiscoverCCCD,				///< CCCD °Ë»ö
+	linkEvent_DiscoverService,						// search(discover) service
+	linkEvent_DiscoverCharacteristic,				// search(discover) characteristic
+	linkEvent_DiscoverCharacteristicDroneData,		// search(discover) characteristic
+	linkEvent_DiscoverCharacteristicDroneConfig,	// search(discover) characteristic
+	linkEvent_DiscoverCharacteristicUnknown,		// search(discover) characteristic
+	linkEvent_DiscoverCCCD,				            // search(discover) CCCD
 
-		linkEvent_ReadyToControl,			///< Á¦¾î ÁØºñ ¿Ï·á
+	linkEvent_ReadyToControl,			            // ready to control
 
-		linkEvent_Disconnecting,			///< ÀåÄ¡ ¿¬°á ÇØÁ¦ ½ÃÀÛ		// 
-		linkEvent_Disconnected,				///< ÀåÄ¡ ¿¬°á ÇØÁ¦ ¿Ï·á		// 1A
+	linkEvent_Disconnecting,			            // start disconnecting
+	linkEvent_Disconnected,				            // disconnecting done
 
-		linkEvent_GapLinkParamUpdate,	///< GAP_LINK_PARAM_UPDATE_EVENT  
+	linkEvent_GapLinkParamUpdate,	                // GAP_LINK_PARAM_UPDATE_EVENT
 
-		linkEvent_RspReadError,				///< RSP ÀÐ±â ¿À·ù
-		linkEvent_RspReadSuccess,			///< RSP ÀÐ±â ¼º°ø
+	linkEvent_RspReadError,				            // RSP read error
+	linkEvent_RspReadSuccess,			            // RSP read success
 
-		linkEvent_RspWriteError,			///< RSP ¾²±â ¿À·ù
-		linkEvent_RspWriteSuccess,		///< RSP ¾²±â ¼º°ø					// 1F
+	linkEvent_RspWriteError,			            // RSP write error
+	linkEvent_RspWriteSuccess,		                // RSP write success
 
-		linkEvent_SetNotify,					///< Notify ºñÈ°¼ºÈ­ 		// 20
+	linkEvent_SetNotify,					        // Notify activate
+	linkEvent_Write,							    // data write event
 
-		linkEvent_Write,							///< µ¥ÀÌÅÍ ¾²±â ÀÌº¥Æ® // 21
-
-		EndOfType
-	};
+	EndOfType
+};
 
 
 /***********************************************************************/
@@ -245,101 +244,101 @@ enum EventLink
 /***********************************************************************/
 enum DataType
 {
-	dType_None = 0, 					///< ¾øÀ½
+	dType_None = 0, 					// none
 	
 	// ½Ã½ºÅÛ Á¤º¸
-	dType_Ping, 							///< Åë½Å È®ÀÎ(reserve)
-	dType_Ack, 								///< µ¥ÀÌÅÍ ¼ö½Å¿¡ ´ëÇÑ ÀÀ´ä
-	dType_Error, 							///< ¿À·ù(reserve, ºñÆ® ÇÃ·¡±×´Â ÃßÈÄ¿¡ ÁöÁ¤)
-	dType_Request, 						///< ÁöÁ¤ÇÑ Å¸ÀÔÀÇ µ¥ÀÌÅÍ ¿äÃ»
-	dType_DeviceName, 				///< ÀåÄ¡ÀÇ ÀÌ¸§ º¯°æ
+	dType_Ping, 						// check connetion(reserved)
+	dType_Ack, 							// response about get data
+	dType_Error, 						// error(reserved)
+	dType_Request, 						// request specific data type
+	dType_DeviceName, 			    	//
 	
 	// Á¶Á¾, ¸í·É
-	dType_Control = 0x10, 		///< Á¶Á¾
-	dType_Command, 						///< ¸í·É
-	dType_Command2, 					///< ´ÙÁß ¸í·É(2°¡Áö ¼³Á¤À» µ¿½Ã¿¡ º¯°æ)
-	DType_Command3, 					///< ´ÙÁß ¸í·É(3°¡Áö ¼³Á¤À» µ¿½Ã¿¡ º¯°æ)
+	dType_Control = 0x10, 		        // control
+	dType_Command, 						// single command
+	dType_Command2, 					// multi command(change 2 status in same time)
+	DType_Command3, 					// multi command(change 3 status in same time)
 	
 	// LED
-	dType_LedMode = 0x20, 		///< LED ¸ðµå ÁöÁ¤
-	dType_LedMode2, 					///< LED ¸ðµå 2°³ ÁöÁ¤
-	dType_LedModeCommand, 		///< LED ¸ðµå, Ä¿¸Çµå
-	dType_LedModeCommandIr, 	///< LED ¸ðµå, Ä¿¸Çµå, IR µ¥ÀÌÅÍ ¼Û½Å
-	dType_LedModeColor, 			///< LED ¸ðµå 3»ö Á÷Á¢ ÁöÁ¤
-	dType_LedModeColor2, 			///< LED ¸ðµå 3»ö Á÷Á¢ ÁöÁ¤ 2°³
-	dType_LedEvent, 					///< LED ÀÌº¥Æ®
-	dType_LedEvent2, 					///< LED ÀÌº¥Æ® 2°³,
-	dType_LedEventCommand, 		///< LED ÀÌº¥Æ®, Ä¿¸Çµå
-	dType_LedEventCommandIr,	///< LED ÀÌº¥Æ®, Ä¿¸Çµå, IR µ¥ÀÌÅÍ ¼Û½Å
-	dType_LedEventColor, 			///< LED ÀÌº¥Æ® 3»ö Á÷Á¢ ÁöÁ¤
-	dType_LedEventColor2, 		///< LED ÀÌº¥Æ® 3»ö Á÷Á¢ ÁöÁ¤ 2°³
+	dType_LedMode = 0x20, 		        // set Single LED mode
+	dType_LedMode2, 					// set 2 LED mode
+	dType_LedModeCommand,        		// LED mode, command
+	dType_LedModeCommandIr, 	        // LED mode, command, sending IR data
+	dType_LedModeColor, 	    		// LED mode¸ set single RGB color 
+	dType_LedModeColor2, 	    		// LED mode¸ set double RGB color
+	dType_LedEvent, 					// LED single event
+	dType_LedEvent2, 					// LED double event,
+	dType_LedEventCommand, 	        	// LED event, command
+	dType_LedEventCommandIr,	        // LED event, command, sending IR data
+	dType_LedEventColor, 			    // LED event set single RGB color
+	dType_LedEventColor2,       		// LED event set double RGB color
 	
-	// »óÅÂ
-	dType_Address = 0x30, 		///< IEEE address
-	dType_State, 							///< µå·ÐÀÇ »óÅÂ(ºñÇà ¸ðµå, ¹æÀ§±âÁØ, ¹èÅÍ¸®·®)
-	dType_Attitude, 					///< µå·ÐÀÇ ÀÚ¼¼(Vector)
-	dType_GyroBias,						///< ÀÚÀÌ·Î ¹ÙÀÌ¾î½º °ª(Vector)
-	dType_TrimAll, 						///< ÀüÃ¼ Æ®¸² (ºñÇà+ÁÖÇà)ü
-	dType_TrimFlight,					///< ºñÇà Æ®¸²
-	dType_TrimDrive, 					///< ÁÖÇà Æ®¸²
+	// status
+	dType_Address = 0x30, 		        // IEEE address
+	dType_State, 						// drone's status(flight mode, coordinate, battery level)
+	dType_Attitude, 					// drone's attitude (Vector)
+	dType_GyroBias,						// gyro bias value (Vector)
+	dType_TrimAll, 						// Trim (roll, pitch, yaw, throttle, wheel)
+	dType_TrimFlight,					// flight mode trim (roll, pitch, yaw, throttle)
+	dType_TrimDrive, 					// drive mode trim (wheel)
 			
-	// µ¥ÀÌÅÍ ¼Û¼ö½Å	
-	dType_IrMessage = 0x40, 			///< IR µ¥ÀÌÅÍ ¼Û¼ö½Å
+	// data communication
+	dType_IrMessage = 0x40, 			// IR data communication
 		
-	// ¼¾¼­
-	dType_ImuRawAndAngle = 0x50, 	///< IMU Raw + Angle
-	dType_Pressure, 							///< ¾Ð·Â ¼¾¼­ µ¥ÀÌÅÍ
-	dType_ImageFlow, 							///< ImageFlow
-	dType_Button, 								///< ¹öÆ° ÀÔ·Â
-	dType_Batery, 								///< ¹èÅÍ¸®
-	dType_Motor, 									///< ¸ðÅÍ Á¦¾î ¹× ÇöÀç Á¦¾î °ª È®ÀÎ
-	dType_Temperature, 						///< ¿Âµµ
+	// sensor and control
+	dType_ImuRawAndAngle = 0x50, 	    // IMU Raw + Angle
+	dType_Pressure, 					// pressure sensor data
+	dType_ImageFlow, 					// ImageFlow
+	dType_Button, 					    // button value
+	dType_Batery, 						// battery
+	dType_Motor, 						// motor control, check motor contol value
+	dType_Temperature, 					// Temperature
 	
-	// ¸µÅ© º¸µå
-	dType_LinkState = 0xE0,				///< ¸µÅ© ¸ðµâÀÇ »óÅÂ
-	dType_LinkEvent,							///< ¸µÅ© ¸ðµâÀÇ ÀÌº¥Æ®
-	dType_LinkEventAddress,				///< ¸µÅ© ¸ðµâÀÇ ÀÌº¥Æ® + ÁÖ¼Ò
-	dType_LinkRssi,								///< ¸µÅ©¿Í ¿¬°áµÈ ÀåÄ¡ÀÇ RSSI°ª
-	dType_LinkDiscoveredDevice,		///< °Ë»öµÈ ÀåÄ¡
-	dType_LinkPasscode,          	///< ¿¬°áÇÒ ´ë»ó ÀåÄ¡ÀÇ ¾ÏÈ£ ÁöÁ¤
-	dType_StringMessage = 0xD0, 	///< ¹®ÀÚ¿­ ¸Þ¼¼Áö
+	// Link module
+	dType_LinkState = 0xE0,				// link module state
+	dType_LinkEvent,					// link module event
+	dType_LinkEventAddress,				// link module event + address
+	dType_LinkRssi,						// value of RSSI between link and connected device
+	dType_LinkDiscoveredDevice, 		// discovered devices
+	dType_LinkPasscode,                	// set necessary Passcode when pairing
+	dType_StringMessage = 0xD0,     	//
 	dType_EndOfType
 };
 
 /***********************************************************************/
 enum CommandType
 {
-	cType_None = 0, 								///< ÀÌº¥Æ® ¾øÀ½
+	cType_None = 0, 						// none
 	
-	// ¼³Á¤	
-	cType_ModeDrone = 0x10, 				///< µå·Ð µ¿ÀÛ ¸ðµå ÀüÈ¯
+	// setting
+	cType_ModeDrone = 0x10, 				// change drone mode
 	
-	// Á¦¾î
-	cType_Coordinate = 0x20, 				///< ¹æÀ§ ±âÁØ º¯°æ
-	cType_Trim, 										///< Æ®¸² º¯°æ
-	cType_FlightEvent, 							///< ºñÇà ÀÌº¥Æ® ½ÇÇà
-	cType_DriveEvent, 							///< ÁÖÇà ÀÌº¥Æ® ½ÇÇà
-	cType_Stop, 										///< Á¤Áö
-	cType_ResetHeading = 0x50, 			///< ¹æÇâÀ» ¸®¼Â(¾Û¼Ö·çÆ® ¸ðµå ÀÏ ¶§ ÇöÀç headingÀ» 0µµ·Î º¯°æ)
-	cType_ClearGyroBiasAndTrim, 		///< ÀÚÀÌ·Î ¹ÙÀÌ¾î½º¿Í Æ®¸² ¼³Á¤ ÃÊ±âÈ­
+	// control
+	cType_Coordinate = 0x20, 				// change coordinate
+	cType_Trim, 							// change trim
+	cType_FlightEvent, 						// run flight event
+	cType_DriveEvent, 						// run drive event
+	cType_Stop, 							// stop
+	cType_ResetHeading = 0x50, 			    // reset direction
+	cType_ClearGyroBiasAndTrim, 		    // clear gyro sensor data and trim
 	
 	// Åë½Å
-	cType_PairingActivate = 0x80, 	///< Æä¾î¸µ È°¼ºÈ­
-	cType_PairingDeactivate, 				///< Æä¾î¸µ ºñÈ°¼ºÈ­
-	cType_TerminateConnection, 			///< ¿¬°á Á¾·á
+	cType_PairingActivate = 0x80, 	        //
+	cType_PairingDeactivate, 	    		//
+	cType_TerminateConnection,   			//
+
+	// request
+	cType_Request = 0x90, 					// request specific data type
 	
-	// ¿äÃ»
-	cType_Request = 0x90, 					///< ÁöÁ¤ÇÑ Å¸ÀÔÀÇ µ¥ÀÌÅÍ ¿äÃ»
-	
-	// ¸µÅ© º¸µå
-	cType_LinkModeBroadcast = 0xE0, ///< LINK ¼Û¼ö½Å ¸ðµå ÀüÈ¯
-	cType_LinkSystemReset, 					///< ½Ã½ºÅÛ Àç½ÃÀÛ
-	cType_LinkDiscoverStart, 				///< ÀåÄ¡ °Ë»ö ½ÃÀÛ
-	cType_LinkDiscoverStop, 				///< ÀåÄ¡ °Ë»ö Áß´Ü
-	cType_LinkConnect, 							///< ¿¬°á
-	cType_LinkDisconnect, 					///< ¿¬°á ÇØÁ¦
-	cType_LinkRssiPollingStart, 		///< RSSI ¼öÁý ½ÃÀÛ
-	cType_LinkRssiPollingStop, 			///< RSSI ¼öÁý Áß´Ü
+	// CODRONE(PETRONE) LINK
+	cType_LinkModeBroadcast = 0xE0,         // change LINK(link board) send/receive mode
+	cType_LinkSystemReset, 					// restart system
+	cType_LinkDiscoverStart, 				// start searching device
+	cType_LinkDiscoverStop, 				// stop searching device
+	cType_LinkConnect, 						// connect device that user selected
+	cType_LinkDisconnect, 					// disconnect
+	cType_LinkRssiPollingStart, 	    	// start collecting RSSI
+	cType_LinkRssiPollingStop, 		    	///stop collecting RSSI
 
 	cType_EndOfType
 };
@@ -347,27 +346,27 @@ enum CommandType
 /***********************************************************************/
 enum ModeDrone
 {
-	dMode_None = 0, 			///< ¾øÀ½
-	dMode_Flight = 0x10, 	///< ºñÇà ¸ðµå(°¡µå Æ÷ÇÔ)
-	dMode_FlightNoGuard, 	///< ºñÇà ¸ðµå(°¡µå ¾øÀ½)
-	dMode_FlightFPV, 			///< ºñÇà ¸ðµå(FPV)
-	dMode_Drive = 0x20, 	///< ÁÖÇà ¸ðµå
-	dMode_DriveFPV, 			///< ÁÖÇà ¸ðµå(FPV)
-	dMode_Test = 0x30, 		///< Å×½ºÆ® ¸ðµå
+	dMode_None = 0, 			// none
+	dMode_Flight = 0x10,    	// flight mode(include guard)
+	dMode_FlightNoGuard,    	// flight mode(none guard)
+	dMode_FlightFPV, 			// flight mode(FPV)
+	dMode_Drive = 0x20,     	// drive mode
+	dMode_DriveFPV, 			// drive mode(FPV)
+	dMode_Test = 0x30, 	    	// test mode
 	dMode_EndOfType
 };
 
 /***********************************************************************/
-enum ModeVehicle
+enum ModeVehicle //actual mode is system
 {
 	vMode_None = 0,
-	vMode_Boot, 					///< ºÎÆÃ
-	vMode_Wait, 					///< ¿¬°á ´ë±â »óÅÂ
-	vMode_Ready, 					///< ´ë±â »óÅÂ
-	vMode_Running, 				///< ¸ÞÀÎ ÄÚµå µ¿ÀÛ
-	vMode_Update, 				///< Æß¿þ¾î ¾÷µ¥ÀÌÆ®
-	vMode_UpdateComplete,	///< Æß¿þ¾î ¾÷µ¥ÀÌÆ® ¿Ï·á
-	vMode_Error, 					///< ¿À·ù
+	vMode_Boot, 				// booting
+	vMode_Wait, 				// wait connectable status
+	vMode_Ready, 				// ready
+	vMode_Running, 				// running main code
+	vMode_Update, 				// firmware update
+	vMode_UpdateComplete,	    // complete firmware update
+	vMode_Error, 				// error
 	vMode_EndOfType
 };
 
@@ -375,15 +374,15 @@ enum ModeVehicle
 enum ModeFlight
 {
 	fMode_None = 0,
-	fMode_Ready, 					///< ºñÇà ÁØºñ
-	fMode_TakeOff, 				///< ÀÌ·ú (Flight·Î ÀÚµ¿ÀüÈ¯)
-	fMode_Flight, 				///< ºñÇà
-	fMode_Flip, 					///< È¸Àü
-	fMode_Stop, 					///< °­Á¦ Á¤Áö
-	fMode_Landing, 				///< Âø·ú
-	fMode_Reverse, 				///< µÚÁý±â
-	fMode_Accident, 			///< »ç°í (Ready·Î ÀÚµ¿ÀüÈ¯)
-	fMode_Error, 					///< ¿À·ù
+	fMode_Ready, 				// ready for flight
+	fMode_TakeOff, 				// take off(change to Flight status automatically)
+	fMode_Flight, 				// flight
+	fMode_Flip, 				// rotate(flip)
+	fMode_Stop, 				// forced stop
+	fMode_Landing, 				// landing
+	fMode_Reverse, 				// reverse
+	fMode_Accident, 			// accident(change Ready status automatically)
+	fMode_Error, 				// error
 	fMode_EndOfType
 };
 
@@ -391,12 +390,12 @@ enum ModeFlight
 enum ModeDrive
 {
 	dvMode_None = 0,
-	dvMode_Ready, 				///< ÁØºñ
-	dvMode_Start, 				///< Ãâ¹ß
-	dvMode_Drive, 				///< ÁÖÇà
-	dvMode_Stop, 					///< °­Á¦ Á¤Áö
-	dvMode_Accident, 			///< »ç°í (Ready·Î ÀÚµ¿ÀüÈ¯)
-	dvMode_Error, 				///< ¿À·ù
+	dvMode_Ready, 				// ready
+	dvMode_Start, 				// drive start
+	dvMode_Drive, 				// drive
+	dvMode_Stop, 				// forced stop
+	dvMode_Accident, 			// accident(change Ready status automatically)
+	dvMode_Error, 				// error
 	dvMode_EndOfType
 };
 
@@ -404,18 +403,18 @@ enum ModeDrive
 enum SensorOrientation
 {
 	senOri_None = 0,
-	senOri_Normal, 				///< Á¤»ó
-	senOri_ReverseStart, 	///< µÚÁýÈ÷±â ½ÃÀÛ
-	senOri_Reverse, 			///< µÚÁýÈû
+	senOri_Normal, 				// normal
+	senOri_ReverseStart, 	    // start reverse
+	senOri_Reverse, 			// reversed
 	senOri_EndOfType
 };
 
 /***********************************************************************/
 enum Coordinate
 {
-	cSet_None = 0, 				///< ¾øÀ½
-	cSet_Absolute, 				///< °íÁ¤ ÁÂÇ¥°è
-	cSet_Relative, 				///< »ó´ë ÁÂÇ¥°è
+	cSet_None = 0, 				// none
+	cSet_Absolute, 				// static coordinate(Absolute position)
+	cSet_Relative, 				// normal coordinate(relative position)
 	cSet_EndOfType
 };
 
@@ -423,15 +422,15 @@ enum Coordinate
 
 enum Trim
 {
-	trim_None = 0, 					///< ¾øÀ½
-	trim_RollIncrease, 			///< Roll Áõ°¡
-	trim_RollDecrease, 			///< Roll °¨¼Ò
-	trim_PitchIncrease, 		///< Pitch Áõ°¡
-	trim_PitchDecrease, 		///< Pitch °¨¼Ò
-	trim_YawIncrease, 			///< Yaw Áõ°¡
-	trim_YawDecrease, 			///< Yaw °¨¼Ò
-	trim_ThrottleIncrease, 	///< Throttle Áõ°¡
-	trim_ThrottleDecrease, 	///< Throttle °¨¼Ò
+	trim_None = 0,
+	trim_RollIncrease, 			// Roll increase
+	trim_RollDecrease, 			// Roll decrease
+	trim_PitchIncrease, 		// Pitch increase
+	trim_PitchDecrease, 		// Pitch decrease
+	trim_YawIncrease, 			// Yaw increase
+	trim_YawDecrease, 			// Yaw decrease
+	trim_ThrottleIncrease, 	    // Throttle increase
+	trim_ThrottleDecrease, 	    // Throttle decrease
 	trim_EndOfType
 };
 
@@ -439,33 +438,33 @@ enum Trim
 
 enum FlightEvent
 {
-	fEvent_None = 0, 			///< ¾øÀ½
-	fEvent_TakeOff, 			///< ÀÌ·ú
-	fEvent_FlipFront, 		///< È¸Àü
-	fEvent_FlipRear, 			///< È¸Àü
-	fEvent_flipLeft, 			///< È¸Àü
-	fEvent_FlipRight, 		///< È¸Àü
-	fEvent_Stop, 					///< Á¤Áö
-	fEvent_Landing, 			///< Âø·ú
-	fEvent_TurnOver, 			///< µÚÁý±â
-	fEvent_Shot, 					///< ¹Ì»çÀÏÀ» ½ò ¶§ ¿òÁ÷ÀÓ
-	fEvent_UnderAttack, 	///< ¹Ì»çÀÏÀ» ¸ÂÀ» ¶§ ¿òÁ÷ÀÓ
-	fEvent_Square, 				///< Á¤¹æÇâ µ¹±â
-	fEvent_CircleLeft, 		///< ¿ÞÂÊÀ¸·Î È¸Àü
-	fEvent_CircleRight, 	///< ¿À¸¥ÂÊÀ¸·Î È¸Àü
-	fEvent_Rotate180,			///< 180µµ È¸Àü
+	fEvent_None = 0,
+	fEvent_TakeOff, 			// take off
+	fEvent_FlipFront, 		    // flip(not yet)
+	fEvent_FlipRear, 			// flip(not yet)
+	fEvent_flipLeft, 			// flip(not yet)
+	fEvent_FlipRight, 	    	// flip(not yet)
+	fEvent_Stop, 				// forced stop
+	fEvent_Landing, 			// landing
+	fEvent_TurnOver, 			//
+	fEvent_Shot, 				//
+	fEvent_UnderAttack, 	    //
+	fEvent_Square, 				//
+	fEvent_CircleLeft, 	    	//
+	fEvent_CircleRight,     	//
+	fEvent_Rotate180,			//
 	fEvent_EndOfType
 };
 
 enum DriveEvent
 {
 	dEvent_None = 0,
-	dEvent_Ready, 				///< ÁØºñ
-	dEvent_Start, 				///< Ãâ¹ß
-	dEvent_Drive, 				///< ÁÖÇà
-	dEvent_Stop, 					///< °­Á¦ Á¤Áö
-	dEvent_Accident, 			///< »ç°í (Ready·Î ÀÚµ¿ÀüÈ¯)
-	dEvent_Error, 				///< ¿À·ù
+	dEvent_Ready, 				//
+	dEvent_Start, 				//
+	dEvent_Drive, 				//
+	dEvent_Stop, 				//
+	dEvent_Accident, 			//
+	dEvent_Error, 				//
 	dEvent_EndOfType
 };
 
@@ -473,22 +472,22 @@ enum DriveEvent
 enum Request
 {		
 	// »óÅÂ
-	Req_Address = 0x30, 				///< IEEE address
-	Req_State, 									///< µå·ÐÀÇ »óÅÂ(ºñÇà ¸ðµå, ¹æÀ§±âÁØ, ¹èÅÍ¸®·®)
-	Req_Attitude, 							///< µå·ÐÀÇ ÀÚ¼¼(Vector)
-	Req_GyroBias, 							///< ÀÚÀÌ·Î ¹ÙÀÌ¾î½º °ª(Vector)
-	Req_TrimAll, 								///< ÀüÃ¼ Æ®¸²
-	Req_TrimFlight, 						///< ºñÇà Æ®¸²
-	Req_TrimDrive, 							///< ÁÖÇà Æ®¸²
+	Req_Address = 0x30, 				    // device(IEEE) address
+	Req_State, 								// state (flight mode, coordinate, battery level)
+	Req_Attitude, 							// drone's attitude(Vector)
+	Req_GyroBias, 							// gyro bias value(Vector)
+	Req_TrimAll, 							// trim all (roll, pitch, yaw, throttle, wheel)
+	Req_TrimFlight, 						// flight trim (roll, pitch, yaw, throttle)
+	Req_TrimDrive, 							// drive trim (wheel)
 		
 	// ¼¾¼­
-	Req_ImuRawAndAngle = 0x50, 	///< IMU Raw + Angle
-	Req_Pressure, 							///< ¾Ð·Â ¼¾¼­ µ¥ÀÌÅÍ
-	Req_ImageFlow, 							///< ImageFlow
-	Req_Button, 								///< ¹öÆ° ÀÔ·Â
-	Req_Batery, 								///< ¹èÅÍ¸®
-	Req_Motor, 									///< ¸ðÅÍ Á¦¾î ¹× ÇöÀç Á¦¾î °ª È®ÀÎ
-	Req_Temperature, 						///< ¿Âµµ
+	Req_ImuRawAndAngle = 0x50, 	            // IMU Raw + Angle
+	Req_Pressure, 							// pressure sensor value
+	Req_ImageFlow, 							// ImageFlow sensor
+	Req_Button, 							// botton value
+	Req_Batery, 							// battery level
+	Req_Motor, 								// 4 Motors value
+	Req_Temperature, 						// temperature
 	Req_EndOfType
 };
 
@@ -496,26 +495,27 @@ enum Request
 enum ModeLight
 {
   Light_None,
-  WaitingForConnect, 					///< ¿¬°á ´ë±â »óÅÂ
+  WaitingForConnect, 					//
   Connected,
   
   EyeNone = 0x10,
-  EyeHold, 										///< ÁöÁ¤ÇÑ »ö»óÀ» °è¼Ó ÄÔ
-  EyeMix, 										///< ¼øÂ÷ÀûÀ¸·Î LED »ö º¯°æ
-  EyeFlicker, 								///< ±ôºýÀÓ
-  EyeFlickerDouble, 					///< ±ôºýÀÓ(µÎ ¹ø ±ôºýÀÌ°í ±ôºýÀÎ ½Ã°£¸¸Å­ ²¨Áü)
-  EyeDimming, 								///< ¹à±â Á¦¾îÇÏ¿© ÃµÃµÈ÷ ±ôºýÀÓ
+  EyeHold, 								// Eye's LED hold one color
+  EyeMix, 								// Eye's LED change color in order
+  EyeFlicker, 							// Eye's LED flicker
+  EyeFlickerDouble, 					// Eye's LED repeat duoble flicker and stop same time
+  EyeDimming, 							// Eye's LED slow flicking
   
   ArmNone = 0x40,
-  ArmHold, 										///< ÁöÁ¤ÇÑ »ö»óÀ» °è¼Ó ÄÔ
-  ArmMix, 										///< ¼øÂ÷ÀûÀ¸·Î LED »ö º¯°æ
-  ArmFlicker, 								///< ±ôºýÀÓ
-  ArmFlickerDouble, 					///< ±ôºýÀÓ(µÎ ¹ø ±ôºýÀÌ°í ±ôºýÀÎ ½Ã°£¸¸Å­ ²¨Áü)
-  ArmDimming, 								///< ¹à±â Á¦¾îÇÏ¿© ÃµÃµÈ÷ ±ôºýÀÓ
-  ArmFlow, 										///< ¾Õ¿¡¼­ µÚ·Î Èå¸§
-  ArmFlowReverse, 						///< µÚ¿¡¼­ ¾ÕÀ¸·Î Èå¸§
+  ArmHold, 								// arm's LED hold one color
+  ArmMix, 								// arm's LED change color in order
+  ArmFlicker, 							// arm's LED flicker
+  ArmFlickerDouble, 					// arm's LED repeat duoble flicker and stop same time
+  ArmDimming, 							// arm's LED slow flicking
+  ArmFlow, 								// arm's LED flow light forward to backward
+  ArmFlowReverse, 						// arm's LEDf low light backward to forward
   EndOfLedMode
 };
+
 
 /***********************************************************************/
 enum Colors
@@ -717,8 +717,8 @@ public:
 	boolean TimeCheck1(word interval); 						//milliseconds
 	boolean TimeCheck2(word interval); 						//milliseconds
 	boolean TimeCheck3(word interval); 						//milliseconds
-	boolean TimeOutSendCheck(word interval); //milliseconds		
-	boolean TimeCheckBuzz(word interval); 				//microseconds
+	boolean TimeOutSendCheck(word interval); 				//milliseconds		
+	boolean TimeCheckBuzz(word interval); 					//microseconds
 	
 /////////////////////////////////////////////////////////////////////////
 
@@ -753,7 +753,7 @@ public:
 		
 	int analogOffset;
 	byte displayLED;
-	int SendInterval; //millis seconds
+	int SendInterval; 	//millis seconds
 	byte timeOutRetry;
 	
 	byte sendCheckFlag;
