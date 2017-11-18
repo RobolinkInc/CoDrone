@@ -1,18 +1,22 @@
 /*
   CoDrone.h - CoDrone library
   Copyright (C) 2014 RoboLink.  All rights reserved.
-  LastUpdate : 2016-04-20
+  LastUpdate : 2017-11-17
 */
 
 #ifndef CoDrone_h
 #define CoDrone_h
 #include "Arduino.h"
-//#include <SoftwareSerial.h>
 #include <avr/interrupt.h>
 
 
 /***********************************************************************/
 
+//add 2017-11-17
+# define JOY_UP_LIMIT          1023 - 100
+# define JOY_UP_RETURN_LIMIT   512	+ 100
+# define JOY_DOWN_LIMIT        0 	+ 100
+# define JOY_DOWN_RETURN_LIMIT 512 	- 100
 
 /***********************************************************************/
 //////////////////////////typedef///////////////////////////////////////
@@ -36,11 +40,11 @@ typedef uint8_t u8;
 #define FIND_HWSERIAL1
 #endif
 
-#if defined (FIND_HWSERIAL1)		//Serial Other Setting
+#if defined (FIND_HWSERIAL1)		//Serial Other Setting - two serial
 #define DRONE_SERIAL 	Serial1		//drone serial
 #define DEBUG_SERIAL    Serial		//debug serial1
 
-#else								//Serial Smart Setting
+#else								//Serial Smart Setting - one serial
 #define DRONE_SERIAL 	Serial		//drone serial	
 #define DEBUG_SERIAL    Serial1		//debug serial1
 
@@ -55,13 +59,16 @@ typedef uint8_t u8;
 
 /***********************************************************************/
 
-#define MAX_PACKET_LENGTH 	100
+/serial buffer
+#if defined (FIND_HWSERIAL1)	// Atmega128
+#define MAX_PACKET_LENGTH 	200
+
+#else							// Smart Setting
+#define MAX_PACKET_LENGTH 	40
+#endif
 
 /***********************************************************************/
-#define BATTLE_CHECK_TIME  		500
-#define LED_CHECK_TIME 			60
-#define	SEND_CHECK_TIME    		10
-#define RECEIVE_CHECK_TIME      10
+#define	SEND_CHECK_TIME    		50
 
 /***********************************************************************/
 
@@ -69,6 +76,7 @@ typedef uint8_t u8;
 #define PITCH							CoDrone.pitch
 #define YAW								CoDrone.yaw
 #define THROTTLE						CoDrone.throttle
+
 #define STATE							CoDrone.state
 #define SEND_INTERVAL					CoDrone.SendInterval
 #define ANALOG_OFFSET					CoDrone.analogOffset
@@ -111,7 +119,7 @@ typedef uint8_t u8;
 #define TEAM_GREEN				3
 #define TEAM_YELLOW				4
 
-
+#define MAX_ENERGY				8
 /**********************	IR DATA****************************************/
 
 #define FREE_MISSILE			0xaa01
@@ -154,8 +162,6 @@ typedef uint8_t u8;
 #define YawDecrease				trim_YawDecrease
 #define ThrottleIncrease		trim_ThrottleIncrease
 #define ThrottleDecrease		trim_ThrottleDecrease
-
-#define DataAvailable			(DRONE_SERIAL.available() > 0)
 
 /***********************************************************************/
 /////////////////////////LINK MODULE/////////////////////////////////////
@@ -281,7 +287,11 @@ enum DataType
 	dType_TrimAll, 						// Trim (roll, pitch, yaw, throttle, wheel)
 	dType_TrimFlight,					// flight mode trim (roll, pitch, yaw, throttle)
 	dType_TrimDrive, 					// drive mode trim (wheel)
-			
+	
+	//update count data
+	dType_CountFlight,            	// ºñÇà °ü·Ã Ä«¿îÆ®
+	dType_CountDrive,             	// ÁÖÇà °ü·Ã Ä«¿îÆ® 
+
 	// data communication
 	dType_IrMessage = 0x40, 			// IR data communication
 		
@@ -293,6 +303,9 @@ enum DataType
 	dType_Batery, 						// battery
 	dType_Motor, 						// motor control, check motor contol value
 	dType_Temperature, 					// Temperature
+
+	update IRrange
+	dtype_Range,						//Range
 	
 	// Link module
 	dType_LinkState = 0xE0,				// link module state
@@ -321,6 +334,9 @@ enum CommandType
 	cType_Stop, 							// stop
 	cType_ResetHeading = 0x50, 			    // reset direction
 	cType_ClearGyroBiasAndTrim, 		    // clear gyro sensor data and trim
+
+	//update
+	cType_ClearTrim,						// clear trim
 	
 	// Åë½Å
 	cType_PairingActivate = 0x80, 	        //
@@ -488,6 +504,9 @@ enum Request
 	Req_Batery, 							// battery level
 	Req_Motor, 								// 4 Motors value
 	Req_Temperature, 						// temperature
+
+	//update
+	Req_Range,								// range
 	Req_EndOfType
 };
 
@@ -627,10 +646,6 @@ public:
 	void BattleReceive();
 	void BattleBegin(byte teamSelect);	
 	void BattleDamageProcess();	
-	void BattleHitPoints(int points);
-	void CrashCustom(boolean custom);
-	boolean CrashedCheck();
-	void displayHealth();
 	
 /////////////////////////////////////////////////////////////////////////
 		
@@ -650,7 +665,13 @@ public:
 	void Request_Motor();	
 	void Request_Temperature();
 
+	//update
+	void Request_CountFlight();
+	void Request_CountDrive();
+	void Request_Range();
+
 /////////////////////////////////////////////////////////////////////////
+	// not work now
 	void PrintGyro();
 	void PrintPressure();
 	void PrintFlow();
@@ -672,6 +693,11 @@ public:
 	void LedEvent(byte sendMode, byte sendColor, byte sendInterval, byte sendRepeat);
 	void LedEvent(byte sendMode, byte sendColor[], byte sendInterval, byte sendRepeat);
 	void LedEvent(byte sendMode, byte r, byte g, byte b, byte sendInterval, byte sendRepeat);
+
+	//update
+	void LedColorDefault(byte sendMode, byte r, byte g, byte b, byte sendInterval);
+	void LedColorDefault(byte sendMode, byte sendColor[], byte sendInterval);
+	void LedColorDefault(byte sendMode, byte sendColor[], byte sendInterval, byte sendMode2, byte sendColor2[], byte sendInterval2);
 	
 /////////////////////////////////////////////////////////////////////////
 			
@@ -699,10 +725,7 @@ public:
 /////////////////////////////////////////////////////////////////////////
 
 	void PrintDroneAddress();	
-	void DisplayAddress(byte count);
-	
-	void ReadSensor(void);
-	void PrintSensor(void);
+	void DisplayAddress(byte count, byte _devName0[], byte _devName1[],byte _devName2[], byte _devName3[], byte _devName4[]);
 	
 /////////////////////////////////////////////////////////////////////////
 	
@@ -714,9 +737,6 @@ public:
 /////////////////////////////////////////////////////////////////////////
 
 	boolean TimeCheck(word interval); 						//milliseconds
-	boolean TimeCheck1(word interval); 						//milliseconds
-	boolean TimeCheck2(word interval); 						//milliseconds
-	boolean TimeCheck3(word interval); 						//milliseconds
 	boolean TimeOutSendCheck(word interval); 				//milliseconds		
 	boolean TimeCheckBuzz(word interval); 					//microseconds
 	
@@ -727,131 +747,157 @@ public:
 
 /////////////////////////////////////////////////////////////////////////
 
+	int TrimAll_Roll;
+	int TrimAll_Pitch;
+	int TrimAll_Yaw;
+	int TrimAll_Throttle;
+	int TrimAll_Wheel;
+
 	byte cmdBuff[MAX_PACKET_LENGTH];
-	byte dataBuff[MAX_PACKET_LENGTH];
-	byte crcBuff[2];
-	
+
 	byte checkHeader;
-	int cmdIndex;
-	int receiveDtype;
-	int receiveLength;
+	byte cmdIndex;
+	byte receiveDtype;
+	byte receiveLength;
+	
+	byte receiveLikMode;
+	byte receiveLinkState;
 	int receiveEventState;
-	int receiveLinkState;
-	int receiveLikMode;
 	int receiveComplete;
-	int receiveCRC;
 			
 /////////////////////////////////////////////////////////////////////////
 
-	byte displayMode;	//smar inventor : default 1
-	byte debugMode;		//smar inventor : default 0
+	byte displayMode = 1;	//smar inventor : default 1
+	byte debugMode = 0;		//smar inventor : default 0
 	
 	byte discoverFlag;
 	byte connectFlag;
 			
-	boolean pairing;
-		
+	boolean pairing = 0;
+	
+	int SendInterval; //millis seconds		
 	int analogOffset;
-	byte displayLED;
-	int SendInterval; 	//millis seconds
-	byte timeOutRetry;
 	
-	byte sendCheckFlag;
+	byte displayLED = 0;
+
+	byte timeOutRetry = 0;
 	
-	byte receiveAttitudeSuccess;
-	byte receivePressureSuccess;
-	byte receiveFlowSuccess;
+	byte sendCheckCount = 0;
+	byte sendCheckFlag = 0;
+	byte receiveAttitudeSuccess = 0;
+	byte receiveRangeSuccess = 0;
 	
-	int energy;
-	int MAX_ENERGY = 8;
-	boolean CustomCrash = 0;
-	boolean Crashed = 0;
-	
-	byte team;
-	unsigned long weapon;
+	byte energy = 8;	
+	byte team = FREE_PLAY;
+	unsigned long weapon = FREE_MISSILE;
 	
 /////////////////////////////////////////////////////////////////////////
 	
-	byte devCount;
-	byte devFind[3];
+	byte devCount = 0;
+	byte devFind[5];
 	
-	int devRSSI0;
-	int devRSSI1;
-	int devRSSI2;
-		
-	byte devName0[20];
-	byte devName1[20];
-	byte devName2[20];
-		
+	int devRSSI0 = -1;
+	int devRSSI1 = -1;
+	int devRSSI2 = -1;		
+	int devRSSI3 = -1;
+	int devRSSI4 = -1;
+	
 	byte devAddress0[6];
 	byte devAddress1[6];
 	byte devAddress2[6];
-	
+	byte devAddress3[6];
+	byte devAddress4[6];
+
 	byte devAddressBuf[6];
 	byte devAddressConnected[6];
 	
 /////////////////////////////////////////////////////////////////////////
 	
-	int roll;
-	int pitch;
-	int yaw;
-	int throttle;
+	byte dataBuff[30];
 	
-    int prevControl[4];
+	int roll = 0;
+	int pitch = 0;
+	int yaw = 0;
+	int throttle = 0;
 		
-	int attitudeRoll;
-	int attitudePitch;
-	int attitudeYaw;
-	
+	int attitudeRoll	= 0;
+	int attitudePitch	= 0;
+	int attitudeYaw	= 0;
+
+	int GyroBias_Roll	= 0;
+	int GyroBias_Pitch	= 0;
+	int GyroBias_Yaw	= 0;
+
+	int ImuAccX	= 0;
+	int ImuAccY	= 0;
+	int ImuAccZ	= 0;
+							
+	int ImuGyroRoll		= 0;
+	int ImuGyroPitch	= 0;
+	int ImuGyroYaw		= 0;
+									
+	int ImuAngleRoll	= 0;
+	int ImuAnglePitch	= 0;
+	int ImuAngleYaw		= 0;
+
+	long d1				= 0;
+	long d2				= 0;
+	long temperature	= 0;
+	long pressure		= 0;
+
+	long fVelocitySumX 	= 0;
+	long fVelocitySumY	= 0;
+
+	byte button = 0;
+
+	int Battery_v30			= 0;
+	int Battery_v33			= 0;
+	int Battery_gradient	= 0;
+	int Battery_yIntercept	= 0;
+	int flagBatteryCalibration	= 0;
+	long Battery_Raw		= 0;
+	int Battery_Percent		= 0;
+	int Battery_voltage		= 0;
+
+	int countAccident	= 0;
+	int countTakeOff	= 0;
+	int countLanding	= 0;
+
+	int m1_forward	= 0;
+	int m1_reverse	= 0;
+	int m2_forward	= 0;
+	int m2_reverse	= 0;
+	int m3_forward	= 0;
+	int m3_reverse	= 0;
+	int m4_forward	= 0;
+	int m4_reverse	= 0;
+
+	long imu_temp		= 0;
+	long pressure_temp	= 0;
+
 /////////////////////////////////////////////////////////////////////////
 	
-	int linkState;
-	int rssi;
-	byte battery;
-		
-	byte irMassageDirection;
-  	unsigned long	irMassageReceive;
+	byte linkState = 0;;
+	int rssi = 0;
+	byte battery = 0;		
+  	unsigned long	irMassageReceive;	
+	byte droneState[7];		
+	int sensorRange[6];		
 	
-	byte droneState[7];	
-	byte droneIrMassage[5];	
-	
-	s16 droneAttitude[3];
-	byte droneGyroBias[6];
-	byte droneTrimAll[10];		
-	byte droneTrimFlight[8];
-	byte droneTrimDrive[2];
+	long PreviousMillis;
+			
+/////////////////////////////////////////////////////////////////////////
 
-	s16 droneImuRawAndAngle[9];
-
-	byte dronePressure[16];	
-	byte droneImageFlow[8];
-	byte droneButton[1];
-	byte droneBattery[16];
-	byte droneMotor[4];
-	byte droneTemperature[8];
-
-	s16 accel[3];
-	s16 gyroRaw[3];
-	s16 gyroAngle[3];
-
-	s32 imageFlowX;
-	s32 imageFlowY;
+	int prevControl[4];
+	void SequenceDelay(int setTime);	
 
 /////////////////////////////////////////////////////////////////////////
 
-		long PreviousMillis;
-		
-/////////////////////////////////////////////////////////////////////////
 private:
-	long PreviousBuzz;		
-
+	long PreviousBuzz;	
 	long timeOutSendPreviousMillis;
-
-	unsigned long HealthTime;
-
-//	SoftwareSerial DEBUG_SERIAL = SoftwareSerial(8,9);
 };
 
 extern CoDroneClass CoDrone;
 
-#endif 
+#endif  
