@@ -21,15 +21,15 @@ void setup()
   {
     THROTTLE  = 100;                     // set THROTTLE to 100 (full),
     // note that we do not need to call TakeOff since we are starting the throttle ourselves,
-    // but to do so the throttle must be high (recommend 75 or more)
+    // but to do so the throttle must be high (recommend 50~75)
     
     CoDrone.Control();                  // send the throttle values to the drone
 
     delay(2000);                        // fly for 2 seconds (2000 milliseconds)
 
-    CoDrone.FlightEvent(Stop);          // turn off the motors
-    // Landing could be used here, but if you do you need to set the throttle to a
-    // large negative value first (recommend -75 or more)
+    CoDrone.FlightEvent(Stop);              // turn off the motors
+    //CoDrone.FlightEvent(Landing);         // you could use landing
+    //stop might make a damage for drone if drone goes really high
   }
 }
 
