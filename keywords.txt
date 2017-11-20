@@ -18,8 +18,11 @@ print				KEYWORD2
 write				KEYWORD2
 
 Control				KEYWORD2
+
 LedColor			KEYWORD2
 LedEvent			KEYWORD2
+LedColorDefault			KEYWORD2
+
 FlightEvent			KEYWORD2
 DriveEvent			KEYWORD2
 Receive				KEYWORD2
@@ -43,6 +46,7 @@ Request_Button		KEYWORD2
 Request_Battery		KEYWORD2
 Request_Motor		KEYWORD2
 Request_Temprature	KEYWORD2
+Request_Range 		KEYWORD2
 
 Send_ResetHeading	KEYWORD2
 
