@@ -1,7 +1,7 @@
 /*
   CoDrone.cpp - CoDrone library
   Copyright (C) 2014 RoboLink.  All rights reserved.
-  LastUpdate : 2017-11-17
+  LastUpdate : 2016-07-12
 */
 
 #include "CoDrone.h"
@@ -2456,5 +2456,244 @@ void CoDroneClass::SequenceDelay(int setTime)
 	delay(_interval);
 }
 
+/////////////////////////////////////////////////////////////////////////
+// 2018, 1, 22 added
+	
+//getter and setter
+void CoDroneClass::setRoll(int _roll)
+{
+	roll = _roll;
+}
+
+int CoDroneClass::getRoll()
+{
+	return roll;
+}
+
+void CoDroneClass::setPitch(int _pitch)
+{
+	pitch = _pitch;
+}
+int CoDroneClass::getPitch()
+{
+	return pitch;
+}
+
+void CoDroneClass::setYaw()(int _yaw)
+{
+	yaw = _yaw;
+}
+
+int CoDroneClass::getYaw(){
+	return yaw;
+}
+
+void CoDroneClass::setThrottle(int throttle){
+	throttle = _throttle;
+}
+
+int CoDroneClass::getThrottle(){
+	return throttle;
+}
+
+
+//flight command
+void CoDroneClass::move(){
+	byte _packet[10];
+	byte _crc[2];
+
+	/*
+  		header + data
+  		data type = Control(_packet[0])
+  		data length =  (_packet[1])
+  	*/   
+
+  	//header
+	_packet[0] = dType_Control;
+	_packet[1] = 4;
+
+ 	 //data
+	_packet[2] = roll;
+	_packet[3] = pitch;
+	_packet[4] = yaw;
+	_packet[5] = throttle;
+q
+	unsigned short crcCal = CRC16_Make(_packet, _packet[1]+2);
+	_crc[0] = (crcCal >> 8) & 0xff;
+	_crc[1] = crcCal & 0xff;
+
+	//Don't know why they use send check
+	sendCheckFlag = 0;
+	Send_Processing(_packet,_packet[1],_crc); 
+	Send_Check(_packet,_packet[1],_crc);
+
+}
+
+void CoDroneClass::move(int duration)
+{
+	move();
+	delay((int)(duration*1000));
+	move(0,0,0,0);
+}
+
+void CoDroneClass::move(int _roll, int _pitch, int _yaw, int _throttle)
+{
+	byte _packet[10];
+	byte _crc[2];
+
+	/*
+  		header + data
+  		data type = Control(_packet[0])
+  		data length =  (_packet[1])
+  	*/   
+
+  	//header
+	_packet[0] = dType_Control;
+	_packet[1] = 4;
+
+ 	 //data
+	_packet[2] = _roll;
+	_packet[3] = _pitch;
+	_packet[4] = _yaw;
+	_packet[5] = _throttle;
+
+	unsigned short crcCal = CRC16_Make(_packet, _packet[1]+2);
+	_crc[0] = (crcCal >> 8) & 0xff;
+	_crc[1] = crcCal & 0xff;
+
+	//Don't know why they use send check
+	sendCheckFlag = 0;
+	Send_Processing(_packet,_packet[1],_crc); 
+	Send_Check(_packet,_packet[1],_crc);
+}
+
+void CoDroneClass::move(int duration, int _roll, _int pitch, int _yaw, int _throttle)
+{
+	move(_roll, _pitch, _yaw, _throttle);
+	delay((int)(duration*1000));
+	move(0,0,0,0);
+}
+
+void CoDroneClass::go(int direction)
+{
+	switch(direction)
+	{
+		case direction_forward:
+			move(0, 50, 0, 0);
+			break;
+		case direction_up:
+			move(0, 0, 0, 50);
+			break;
+		case direction_right:
+			move(50, 0, 0, 0);
+			break;
+		case direction_backward:
+			move(0, -50, 0, 0);
+			break;
+		case direction_down:
+			move(0, 0, 0, -50);
+			break;
+		case direction_left:
+			move(-50, 0, 0, 0);
+			break;
+	}
+
+}
+
+void CoDroneClass::go(int direction, float duration)
+{
+	go(direction);
+	delay((int)(duration*1000));
+	move(0,0,0,0);
+}
+
+void CoDroneClass::go(int direction, float duration, int power)
+{
+	switch(direction)
+	{
+		case direction_forward:
+			move(0, power, 0, 0);
+			delay((int)(duration*1000));
+			move(0, 0, 0, 0);
+			break;
+		case direction_up:
+			move(0, 0, 0, power);
+			delay((int)(duration*1000));
+			move(0, 0, 0, 0);
+			break;
+		case direction_right:
+			move(power, 0, 0, 0);
+			delay((int)(duration*1000));
+			move(0, 0, 0, 0);
+			break;
+		case direction_backward:
+			move(0, (-1)*power, 0, 0);
+			delay((int)(duration*1000));
+			move(0, 0, 0, 0);
+			break;
+		case direction_down:
+			move(0, 0, 0, (-1)*power);
+			delay((int)(duration*1000));
+			move(0, 0, 0, 0);
+			break;
+		case direction_left:
+			move((-1)*power, 0, 0, 0);
+			delay((int)(duration*1000));
+			move(0, 0, 0, 0);
+			break;
+	}
+}
+
+void CoDroneClass::turn(int direction)
+{
+	switch(direction)
+	{
+		case direction_right:
+			go(0, 0, 50, 0);
+			break;
+		case direction_left:
+			go(0, 0, -50, 0);
+			break;
+	}
+}
+
+void CoDroneClass::turn(int direction, float duration)
+{
+
+}
+
+void CoDroneClass::turn(int direction, float duration, int power)
+{
+	case direction_right:
+			go(0, 0, 50, 0);
+			delay((int)(duration*1000));
+			move(0, 0, 0, 0);
+			break;
+		case direction_left:
+			go(0, 0, -50, 0);
+			delay((int)(duration*1000));
+			move(0, 0, 0, 0);
+			break;
+}
+
+
+
+//FlightEvnet
+void CoDroneClass::takeOff()
+{
+	FlightEvent(TakeOff);
+}
+
+void land()
+{
+	FlightEvent(Landing);
+}
+
+void emergencyStop()
+{
+	FlightEvent(Stop);
+}
+
+////////////////////////////////////////////////////
 
 CoDroneClass CoDrone;                         
