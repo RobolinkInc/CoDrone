@@ -184,9 +184,9 @@ enum Direction
 //
 typedef struct gyrodata
 {
-	int x;
-	int y;
-	int z;
+	int roll;
+	int pitch;
+	int yaw;
 }gyrodata;
 
 typedef struct acceldata

@@ -2752,42 +2752,285 @@ int CoDroneClass::getHeight()
 
 int CoDroneClass::getPressure()
 {
+	receivePressureSuccess = 0;
+	sendCheckFlag = 1;
+	byte _packet[9];
+	byte _crc[2];
 
+  	//header
+	_packet[0] = dType_Command;
+	_packet[1] = 0x02;
+
+ 	//data
+	_packet[2] = cType_Request;
+	_packet[3] = Req_Pressure;
+
+	unsigned short crcCal = CRC16_Make(_packet, _packet[1]+2);
+	_crc[0] = (crcCal >> 8) & 0xff;
+	_crc[1] = crcCal & 0xff;
+
+
+	Send_Processing(_packet,_packet[1],_crc);
+	//receive work in send check
+	Send_Check(_packet,_packet[1],_crc);
+
+	long oldTime = millis();
+	while(receivePressureSuccess == 0)
+	{
+		Receive();
+		if (oldTime + 1000 < millis()) break; //time out check 
+	}
+	return pressure;
 }
 
 int CoDroneClass::getDroneTemp()
 {
+	receivePressureSuccess = 0;
+	sendCheckFlag = 1;
+	byte _packet[9];
+	byte _crc[2];
+
+  	//header
+	_packet[0] = dType_Command;
+	_packet[1] = 0x02;
+
+ 	//data
+	_packet[2] = cType_Request;
+	_packet[3] = Req_Pressure;
+
+	unsigned short crcCal = CRC16_Make(_packet, _packet[1]+2);
+	_crc[0] = (crcCal >> 8) & 0xff;
+	_crc[1] = crcCal & 0xff;
+
+
+	Send_Processing(_packet,_packet[1],_crc);
+	//receive work in send check
+	Send_Check(_packet,_packet[1],_crc);
+
+	long oldTime = millis();
+	while(receivePressureSuccess == 0)
+	{
+		Receive();
+		if (oldTime + 1000 < millis()) break; //time out check 
+	}
+	return temperature;
 
 }
 
 gyrodata CoDroneClass::getGyrometer()
 {
+	receiveAccelSuccess = 0;
+	sendCheckFlag = 1;
+	byte _packet[9];
+	byte _crc[2];
 
+  	//header
+	_packet[0] = dType_Command;
+	_packet[1] = 0x02;
+
+ 	//data
+	_packet[2] = cType_Request;
+	_packet[3] = Req_ImuRawAndAngle;
+
+	unsigned short crcCal = CRC16_Make(_packet, _packet[1]+2);
+	_crc[0] = (crcCal >> 8) & 0xff;
+	_crc[1] = crcCal & 0xff;
+
+
+	Send_Processing(_packet,_packet[1],_crc);
+	//receive work in send check
+	Send_Check(_packet,_packet[1],_crc);
+
+	long oldTime = millis();
+	while(receiveAccelSuccess == 0)
+	{
+		Receive();
+		if (oldTime + 1000 < millis()) break; //time out check 
+	}
+	gyrodata result;
+	result.roll = ImuGyroRoll;
+	result.pitch = ImuGyroPitch;
+	result.yaw = ImuGyroYaw;
+	return result;
 }
 
 angledata CoDroneClass::getAngles()
 {
+	receiveAttitudeSuccess = 0;
+	sendCheckFlag = 1;
+	byte _packet[9];
+	byte _crc[2];
 
+  	//header
+	_packet[0] = dType_Command;
+	_packet[1] = 0x02;
+
+ 	//data
+	_packet[2] = cType_Request;
+	_packet[3] = Req_Attitude;
+
+	unsigned short crcCal = CRC16_Make(_packet, _packet[1]+2);
+	_crc[0] = (crcCal >> 8) & 0xff;
+	_crc[1] = crcCal & 0xff;
+
+
+	Send_Processing(_packet,_packet[1],_crc);
+	//receive work in send check
+	Send_Check(_packet,_packet[1],_crc);
+
+	long oldTime = millis();
+	while(receiveAttitudeSuccess == 0)
+	{
+		Receive();
+		if (oldTime + 1000 < millis()) break; //time out check 
+	}
+	angledata result;
+	result.roll = attitudeRoll;
+	result.pitch = attitudePitch;
+	result.yaw = attitudeYaw;
+	return result;
 }
 
 acceldata CoDroneClass::getAceelerometer()
 {
+	receiveAccelSuccess = 0;
+	sendCheckFlag = 1;
+	byte _packet[9];
+	byte _crc[2];
 
+  	//header
+	_packet[0] = dType_Command;
+	_packet[1] = 0x02;
+
+ 	//data
+	_packet[2] = cType_Request;
+	_packet[3] = Req_ImuRawAndAngle;
+
+	unsigned short crcCal = CRC16_Make(_packet, _packet[1]+2);
+	_crc[0] = (crcCal >> 8) & 0xff;
+	_crc[1] = crcCal & 0xff;
+
+
+	Send_Processing(_packet,_packet[1],_crc);
+	//receive work in send check
+	Send_Check(_packet,_packet[1],_crc);
+
+	long oldTime = millis();
+	while(receiveAccelSuccess == 0)
+	{
+		Receive();
+		if (oldTime + 1000 < millis()) break; //time out check 
+	}
+	acceldata result;
+	result.x = ImuAccX;
+	result.y = ImuAccY;
+	result.z = ImuAccZ;
+	return result;
 }
 
 int CoDroneClass::getBatteryPercentage()
 {
+	receiveBatterySuccess = 0;
+	sendCheckFlag = 1;
+	byte _packet[9];
+	byte _crc[2];
 
+  	//header
+	_packet[0] = dType_Command;
+	_packet[1] = 0x02;
+
+ 	//data
+	_packet[2] = cType_Request;
+	_packet[3] = Req_Battery;
+
+	unsigned short crcCal = CRC16_Make(_packet, _packet[1]+2);
+	_crc[0] = (crcCal >> 8) & 0xff;
+	_crc[1] = crcCal & 0xff;
+
+
+	Send_Processing(_packet,_packet[1],_crc);
+	//receive work in send check
+	Send_Check(_packet,_packet[1],_crc);
+
+	long oldTime = millis();
+	while(receiveBatterySuccess == 0)
+	{
+		Receive();
+		if (oldTime + 1000 < millis()) break; //time out check 
+	}
+	return Battery_Percent;
 }
 
 int CoDroneClass::getBatteryVoltage()
 {
+	receiveBatterySuccess = 0;
+	sendCheckFlag = 1;
+	byte _packet[9];
+	byte _crc[2];
 
+  	//header
+	_packet[0] = dType_Command;
+	_packet[1] = 0x02;
+
+ 	//data
+	_packet[2] = cType_Request;
+	_packet[3] = Req_Battery;
+
+	unsigned short crcCal = CRC16_Make(_packet, _packet[1]+2);
+	_crc[0] = (crcCal >> 8) & 0xff;
+	_crc[1] = crcCal & 0xff;
+
+
+	Send_Processing(_packet,_packet[1],_crc);
+	//receive work in send check
+	Send_Check(_packet,_packet[1],_crc);
+
+	long oldTime = millis();
+	while(receiveBatterySuccess == 0)
+	{
+		Receive();
+		if (oldTime + 1000 < millis()) break; //time out check 
+	}
+	return Battery_voltage;
 }
 
 trimdata CoDroneClass::getTrim()
 {
+	receiveTrimSuccess = 0;
+	sendCheckFlag = 1;
+	byte _packet[9];
+	byte _crc[2];
 
+  	//header
+	_packet[0] = dType_Command;
+	_packet[1] = 0x02;
+
+ 	//data
+	_packet[2] = cType_Request;
+	_packet[3] = Req_TrimFlight;
+
+	unsigned short crcCal = CRC16_Make(_packet, _packet[1]+2);
+	_crc[0] = (crcCal >> 8) & 0xff;
+	_crc[1] = crcCal & 0xff;
+
+
+	Send_Processing(_packet,_packet[1],_crc);
+	//receive work in send check
+	Send_Check(_packet,_packet[1],_crc);
+
+	long oldTime = millis();
+	while(receiveTrimSuccess == 0)
+	{
+		Receive();
+		if (oldTime + 1000 < millis()) break; //time out check 
+	}
+	trimdata result;
+	result.roll = TrimAll_Roll;
+	result.pitch = TrimAll_Pitch;
+	result.yaw = TrimAll_Yaw;
+	result.throttle = TrimAll_Throttle;
+
+	return result;
 }
 
 ////////////////////////////////////////////////////
