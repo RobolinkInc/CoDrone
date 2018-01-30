@@ -181,6 +181,39 @@ enum Direction
 	direction_down,
 	direction_EndOfType
 };
+//
+typedef sdtuct gyrodata
+{
+	int x;
+	int y;
+	int z;
+}gyrodata;
+
+typedef sdtuct acceldata
+{
+	int x;
+	int y;
+	int z;
+}acceldata;
+
+typedef sdtuct angle
+{
+	int roll;
+	int pitch;
+	int yaw;
+}angle;
+
+typedef sdtuct trim
+{
+	int roll;
+	int pitch;
+	int yaw;
+	int throttle;
+}angle;
+
+
+
+
 
 
 
@@ -816,7 +849,10 @@ public:
 	void takeOff();
 	void land();
 	void emergencyStop();
+/////////////////////////////////////////////////////////////////////////
 
+	//2018. 1. 29 added
+	int getHeight();
 
 
 /////////////////////////////////////////////////////////////////////////
