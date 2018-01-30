@@ -2073,6 +2073,7 @@ void CoDroneClass::ReceiveEventCheck(byte _completeData[])
 			GyroBias_Roll	= ((_completeData[1] << 8) | (_completeData[0]  & 0xff));
 			GyroBias_Pitch	= ((_completeData[3] << 8) | (_completeData[2]  & 0xff));
 			GyroBias_Yaw	= ((_completeData[5] << 8) | (_completeData[4]  & 0xff));
+			receiveGyroSuccess = 1;
 		}
 
 		else if (receiveDtype == dType_TrimAll)
@@ -2090,6 +2091,7 @@ void CoDroneClass::ReceiveEventCheck(byte _completeData[])
 			TrimAll_Pitch		= ((_completeData[3] << 8) | (_completeData[2]  & 0xff));
 			TrimAll_Yaw			= ((_completeData[5] << 8) | (_completeData[4]  & 0xff));
 			TrimAll_Throttle	= ((_completeData[7] << 8) | (_completeData[6]  & 0xff));
+			receuveTrimSuccess = 1;
 		}
 
 		else if (receiveDtype == dType_TrimDrive)
@@ -2110,6 +2112,8 @@ void CoDroneClass::ReceiveEventCheck(byte _completeData[])
 			ImuAngleRoll	= (_completeData[13] << 8) | (_completeData[12]);
 			ImuAnglePitch	= (_completeData[15] << 8) | (_completeData[14]);
 			ImuAngleYaw		= (_completeData[17] << 8) | (_completeData[16]);
+
+			byte receiveAccelSuccess = 0;
 		}
 
 	  	else if(receiveDtype == dType_Pressure)
@@ -2118,7 +2122,7 @@ void CoDroneClass::ReceiveEventCheck(byte _completeData[])
 			d2			= ((_completeData[7] << 32)  |(_completeData[6] << 16)  |(_completeData[5] << 8)  | (_completeData[4]  & 0xff));			  			
 			temperature	= ((_completeData[11] << 32) |(_completeData[10] << 16) |(_completeData[9] << 8)  | (_completeData[8]  & 0xff));
 			pressure	= ((_completeData[15] << 32) |(_completeData[14] << 16) |(_completeData[13] << 8) | (_completeData[12]  & 0xff));	  						  			
-	  		//receivePressureSuccess = 1;	
+	  		receivePressureSuccess = 1;	
 	  	}
 	  	
 	  	else if (receiveDtype ==  dType_ImageFlow)
@@ -2143,6 +2147,7 @@ void CoDroneClass::ReceiveEventCheck(byte _completeData[])
 			Battery_Raw			= ((_completeData[12] << 32) |(_completeData[11] << 16) |(_completeData[10] << 8) | (_completeData[9]  & 0xff));			  
 			Battery_Percent		= _completeData[13];			  	
 			Battery_voltage		= ((_completeData[15] << 8) | (_completeData[14]  & 0xff));
+			receiveBatterySuccess = 1;
 		}
 
 		else if (receiveDtype == dType_Range)
@@ -2692,6 +2697,80 @@ void land()
 void emergencyStop()
 {
 	FlightEvent(Stop);
+}
+
+int CoDroneClass::getHeight()
+{
+	receiveRangeSuccess = 0;
+	sendCheckFlag = 1;
+	byte _packet[9];
+	byte _crc[2];
+
+  	//header
+	_packet[0] = dType_Command;
+	_packet[1] = 0x02;
+
+ 	//data
+	_packet[2] = cType_Request;
+	_packet[3] = Req_Range;
+
+	unsigned short crcCal = CRC16_Make(_packet, _packet[1]+2);
+	_crc[0] = (crcCal >> 8) & 0xff;
+	_crc[1] = crcCal & 0xff;
+
+
+	Send_Processing(_packet,_packet[1],_crc);
+	//receive work in send check
+	Send_Check(_packet,_packet[1],_crc);
+
+	long oldTime = millis();
+	while(receiveRangeSuccess == 0)
+	{
+		receive();
+		if (oldTime + 1000 < millis()) break; //time out check 
+	}
+	return sensorRange[5];
+
+}
+
+int CoDroneClass::getPressure()
+{
+
+}
+
+int CoDroneClass::getDroneTemp()
+{
+
+}
+
+gyrodata CoDroneClass::getGyrometer()
+{
+
+}
+
+angledata CoDroneClass::getAngles()
+{
+
+}
+
+acceldata CoDroneClass::getAceelerometer()
+{
+
+}
+
+int CoDroneClass::getBatteryPercentage()
+{
+
+}
+
+int CoDroneClass::getBatteryVoltage()
+{
+
+}
+
+trimdata CoDroneClass::getTrim()
+{
+
 }
 
 ////////////////////////////////////////////////////

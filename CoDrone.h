@@ -196,20 +196,21 @@ typedef sdtuct acceldata
 	int z;
 }acceldata;
 
-typedef sdtuct angle
+//angle
+typedef sdtuct angledata
 {
 	int roll;
 	int pitch;
 	int yaw;
-}angle;
+}angledata;
 
-typedef sdtuct trim
+typedef sdtuct trimdata
 {
 	int roll;
 	int pitch;
 	int yaw;
 	int throttle;
-}angle;
+}trimdata;
 
 
 
@@ -853,6 +854,16 @@ public:
 
 	//2018. 1. 29 added
 	int getHeight();
+	int getPressure();
+	int getDroneTemp();
+	gyrodata getGyrometer();
+	angledata getAngles();
+	acceldata getAceelerometer();
+	int getBatteryPercentage();
+	int getBatteryVoltage();
+	trimdata getTrim();
+	// not finalized!!
+	//int getState();
 
 
 /////////////////////////////////////////////////////////////////////////
@@ -874,6 +885,7 @@ public:
 	byte receiveLinkState;
 	int receiveEventState;
 	int receiveComplete;
+	
 			
 /////////////////////////////////////////////////////////////////////////
 
@@ -894,8 +906,17 @@ public:
 	
 	byte sendCheckCount = 0;
 	byte sendCheckFlag = 0;
+
+/////////////////////////////////////////////////////////////////////////////
 	byte receiveAttitudeSuccess = 0;
 	byte receiveRangeSuccess = 0;
+	byte receiveGyroSuccess = 0;
+	byte receiveAccelSuccess = 0;
+	byte receivePressureSuccess = 0;
+	byte receiveTrimSuccess = 0;
+	byte receiveStateSuccess = 0;
+	byte receiveBatterySuccess = 0
+
 	
 	byte energy = 8;	
 	byte team = FREE_PLAY;
