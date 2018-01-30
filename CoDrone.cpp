@@ -2091,7 +2091,7 @@ void CoDroneClass::ReceiveEventCheck(byte _completeData[])
 			TrimAll_Pitch		= ((_completeData[3] << 8) | (_completeData[2]  & 0xff));
 			TrimAll_Yaw			= ((_completeData[5] << 8) | (_completeData[4]  & 0xff));
 			TrimAll_Throttle	= ((_completeData[7] << 8) | (_completeData[6]  & 0xff));
-			receuveTrimSuccess = 1;
+			receiveTrimSuccess = 1;
 		}
 
 		else if (receiveDtype == dType_TrimDrive)
@@ -2484,7 +2484,7 @@ int CoDroneClass::getPitch()
 	return pitch;
 }
 
-void CoDroneClass::setYaw()(int _yaw)
+void CoDroneClass::setYaw(int _yaw)
 {
 	yaw = _yaw;
 }
@@ -2493,7 +2493,7 @@ int CoDroneClass::getYaw(){
 	return yaw;
 }
 
-void CoDroneClass::setThrottle(int throttle){
+void CoDroneClass::setThrottle(int _throttle){
 	throttle = _throttle;
 }
 
@@ -2522,7 +2522,7 @@ void CoDroneClass::move(){
 	_packet[3] = pitch;
 	_packet[4] = yaw;
 	_packet[5] = throttle;
-q
+
 	unsigned short crcCal = CRC16_Make(_packet, _packet[1]+2);
 	_crc[0] = (crcCal >> 8) & 0xff;
 	_crc[1] = crcCal & 0xff;
@@ -2534,7 +2534,7 @@ q
 
 }
 
-void CoDroneClass::move(int duration)
+void CoDroneClass::move(float duration)
 {
 	move();
 	delay((int)(duration*1000));
@@ -2572,7 +2572,7 @@ void CoDroneClass::move(int _roll, int _pitch, int _yaw, int _throttle)
 	Send_Check(_packet,_packet[1],_crc);
 }
 
-void CoDroneClass::move(int duration, int _roll, _int pitch, int _yaw, int _throttle)
+void CoDroneClass::move(float duration, int _roll, int _pitch, int _yaw, int _throttle)
 {
 	move(_roll, _pitch, _yaw, _throttle);
 	delay((int)(duration*1000));
@@ -2654,31 +2654,48 @@ void CoDroneClass::turn(int direction)
 	switch(direction)
 	{
 		case direction_right:
-			go(0, 0, 50, 0);
+			move(0, 0, 50, 0);
 			break;
 		case direction_left:
-			go(0, 0, -50, 0);
+			move(0, 0, -50, 0);
 			break;
 	}
 }
 
 void CoDroneClass::turn(int direction, float duration)
 {
+	switch(direction)
+	{
+		case direction_right:
+			move(0, 0, 50, 0);
+			delay((int)(duration*1000));
+			move(0, 0, 0, 0);
+			break;
+		case direction_left:
+			move(0, 0, -50, 0);
+			delay((int)(duration*1000));
+			move(0, 0, 0, 0);
+			break;
+	}
 
 }
 
 void CoDroneClass::turn(int direction, float duration, int power)
 {
-	case direction_right:
-			go(0, 0, 50, 0);
+	
+	switch(direction)
+	{
+		case direction_right:
+			move(0, 0, 50, 0);
 			delay((int)(duration*1000));
 			move(0, 0, 0, 0);
 			break;
 		case direction_left:
-			go(0, 0, -50, 0);
+			move(0, 0, -50, 0);
 			delay((int)(duration*1000));
 			move(0, 0, 0, 0);
 			break;
+	}
 }
 
 
@@ -2726,7 +2743,7 @@ int CoDroneClass::getHeight()
 	long oldTime = millis();
 	while(receiveRangeSuccess == 0)
 	{
-		receive();
+		Receive();
 		if (oldTime + 1000 < millis()) break; //time out check 
 	}
 	return sensorRange[5];

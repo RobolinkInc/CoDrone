@@ -22,16 +22,10 @@ void loop()
 void RangeSensorToSerialMonitor() 
 { 
 //---------------------------------------------------------------------------------------------// 
+  int height = 0;
   CoDrone.Send_LinkModeBroadcast(LinkBroadcast_Active); //link module mode change => Active 
   delay(100); 
-  CoDrone.Request_Range(); 
-  
-  long oldTime = millis(); 
-  while (CoDrone.receiveRangeSuccess == false) //receiveRangeSuccess check 
-  { 
-    CoDrone.Receive(); 
-    if (oldTime + 1000 < millis()) break; //time out check 
-  } 
+  height = CoDrone.getHeight();
   //---------------------------------------------------------------------------------------------// 
   if (CoDrone.receiveRangeSuccess == true) 
   { 
@@ -41,7 +35,7 @@ void RangeSensorToSerialMonitor()
   Serial.println(""); 
   Serial.println("--------------- Sensor ---------------"); 
   Serial.print("range : "); 
-  Serial.println(CoDrone.sensorRange[5]);  
+  Serial.println(height);  
   Serial.println("-------------------------------------- "); 
   delay(500); 
   } 

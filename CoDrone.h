@@ -5,7 +5,7 @@
 */
 
 #ifndef CoDrone_h
-#define CoDrone_h
+#define CoDrone_hs
 #include "Arduino.h"
 #include <avr/interrupt.h>
 
@@ -182,14 +182,14 @@ enum Direction
 	direction_EndOfType
 };
 //
-typedef sdtuct gyrodata
+typedef struct gyrodata
 {
 	int x;
 	int y;
 	int z;
 }gyrodata;
 
-typedef sdtuct acceldata
+typedef struct acceldata
 {
 	int x;
 	int y;
@@ -197,14 +197,14 @@ typedef sdtuct acceldata
 }acceldata;
 
 //angle
-typedef sdtuct angledata
+typedef struct angledata
 {
 	int roll;
 	int pitch;
 	int yaw;
 }angledata;
 
-typedef sdtuct trimdata
+typedef struct trimdata
 {
 	int roll;
 	int pitch;
@@ -915,7 +915,7 @@ public:
 	byte receivePressureSuccess = 0;
 	byte receiveTrimSuccess = 0;
 	byte receiveStateSuccess = 0;
-	byte receiveBatterySuccess = 0
+	byte receiveBatterySuccess = 0;
 
 	
 	byte energy = 8;	
