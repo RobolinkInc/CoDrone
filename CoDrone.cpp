@@ -2143,9 +2143,9 @@ void CoDroneClass::ReceiveEventCheck(byte _completeData[])
 			Battery_v33			= ((_completeData[3] << 8) | (_completeData[2]  & 0xff));			  	 	
 			Battery_gradient	= ((_completeData[5] << 8) | (_completeData[4]  & 0xff));
 			Battery_yIntercept	= ((_completeData[7] << 8) | (_completeData[6]  & 0xff));
-			flagBatteryCalibration	= _completeData[8];			  	
+			flagBatteryCalibration	= _completeData[8] & 0xff;			  	
 			Battery_Raw			= ((_completeData[12] << 32) |(_completeData[11] << 16) |(_completeData[10] << 8) | (_completeData[9]  & 0xff));			  
-			Battery_Percent		= _completeData[13];			  	
+			Battery_Percent		= _completeData[13] & 0xff;			  	
 			Battery_voltage		= ((_completeData[15] << 8) | (_completeData[14]  & 0xff));
 			receiveBatterySuccess = 1;
 		}

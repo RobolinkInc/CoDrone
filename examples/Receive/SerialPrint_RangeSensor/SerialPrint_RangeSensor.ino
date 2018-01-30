@@ -22,23 +22,26 @@ void loop()
 void RangeSensorToSerialMonitor() 
 { 
 //---------------------------------------------------------------------------------------------// 
-  int height = 0;
+  angledata save;
   CoDrone.Send_LinkModeBroadcast(LinkBroadcast_Active); //link module mode change => Active 
   delay(100); 
-  height = CoDrone.getHeight();
+  save = CoDrone.getAngles();
   //---------------------------------------------------------------------------------------------// 
-  if (CoDrone.receiveRangeSuccess == true) 
-  { 
+   
   CoDrone.Send_LinkModeBroadcast(LinkModeMute); //link module mode change => Mute 
   delay(300); 
   
   Serial.println(""); 
   Serial.println("--------------- Sensor ---------------"); 
-  Serial.print("range : "); 
-  Serial.println(height);  
+  Serial.print("roll : "); 
+  Serial.println(save.roll);
+  Serial.print("pitch : "); 
+  Serial.println(save.pitch);
+  Serial.print("yaw : "); 
+  Serial.println(save.yaw);  
   Serial.println("-------------------------------------- "); 
   delay(500); 
-  } 
+   
   //---------------------------------------------------------------------------------------------// 
   CoDrone.Send_LinkModeBroadcast(LinkBroadcast_Active); //link module mode change => Active 
 }
