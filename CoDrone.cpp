@@ -1,7 +1,7 @@
 /*
   CoDrone.cpp - CoDrone library
   Copyright (C) 2014 RoboLink.  All rights reserved.
-  LastUpdate : 2016-07-12
+  LastUpdate : 2018-01-30
 */
 
 #include "CoDrone.h"

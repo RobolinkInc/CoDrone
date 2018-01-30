@@ -1,7 +1,7 @@
 /*
   CoDrone.h - CoDrone library
   Copyright (C) 2014 RoboLink.  All rights reserved.
-  LastUpdate : 2016-04-20
+  LastUpdate : 2018-01-30
 */
 
 #ifndef CoDrone_h
