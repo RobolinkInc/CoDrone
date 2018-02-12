@@ -473,7 +473,7 @@ void CoDroneClass::BattleBegin(byte teamSelect)
 		weapon = RED_MISSILE;
 		CoDrone.LedColor(ArmHold,  Red, 7);
 		delay(300);
-		CoDrone.LedColor(EyeDimming, Red, 7);	  		    
+		CoDrone.:Color(EyeDimming, Red, 7);	  		    
 	}		
 	else if	(team == TEAM_BLUE)
 	{		
@@ -856,7 +856,28 @@ void CoDroneClass::LedColorDefault(byte sendMode, byte sendColor[], byte sendInt
 	
 	Send_Processing(_packet,_packet[1],_crc);     
 }
+void CoDroneClass::LedColorTwo(byte sendMode, byte r, byte g, byte b, byte sendInterval, byte sendMode, byte r, byte g, byte b, byte sendInterval)
+{
+	byte _packet[9];
+	byte _crc[2];
 
+  	//header
+	_packet[0] = dType_LedDefaultColor;
+	_packet[1] = 5;
+
+ 	//data
+	_packet[2] = sendMode;
+	_packet[3] = sendColor[0];
+	_packet[4] = sendColor[1];  
+	_packet[5] = sendColor[2]; 
+	_packet[6] = sendInterval;
+
+	unsigned short crcCal = CRC16_Make(_packet, _packet[1]+2);
+	_crc[0] = (crcCal >> 8) & 0xff;
+	_crc[1] = crcCal & 0xff;
+
+	Send_Processing(_packet,_packet[1],_crc);
+}
 //////////////////Request//////////////////////////////////////
 
 void CoDroneClass::Request_DroneState()
@@ -3031,6 +3052,158 @@ trimdata CoDroneClass::getTrim()
 	result.throttle = TrimAll_Throttle;
 
 	return result;
+}
+
+void CoDroneClass::goToHeight(int set)
+{
+	while(true){
+		int height = getHeight();
+		if(height < (set - 30))
+			go(direction_up);
+		else if(height > (set + 30))
+			go(direction_down);
+		else
+			move(0,0,0,0);
+			break;
+		delay(100);
+	}
+}
+
+void CoDroneClass::setArmRGB(int r, int g, int b)
+{
+	byte _packet[9];
+	byte _crc[2];
+
+	armred = r;
+	armgreen = g;
+	armblue = b;
+
+  	//header
+	_packet[0] = dType_LedModeColor;
+	_packet[1] = 5;
+
+ 	//data
+	_packet[2] = armmode;
+	_packet[3] = r;
+	_packet[4] = g;  
+	_packet[5] = b;  
+	_packet[6] = 255;
+
+	unsigned short crcCal = CRC16_Make(_packet, _packet[1]+2);
+	_crc[0] = (crcCal >> 8) & 0xff;
+	_crc[1] = crcCal & 0xff;
+
+	Send_Processing(_packet,_packet[1],_crc);
+}
+
+void CoDroneClass::setEyeRGB(int r, int g, int b)
+{
+	byte _packet[9];
+	byte _crc[2];
+	
+	eyered = r;
+	eyegreen = g;
+	eyeblue = b;
+
+  	//header
+	_packet[0] = dType_LedModeColor;
+	_packet[1] = 5;
+
+ 	//data
+	_packet[2] = eyemode;
+	_packet[3] = r;
+	_packet[4] = g;  
+	_packet[5] = b;  
+	_packet[6] = 255;
+
+	unsigned short crcCal = CRC16_Make(_packet, _packet[1]+2);
+	_crc[0] = (crcCal >> 8) & 0xff;
+	_crc[1] = crcCal & 0xff;
+
+	Send_Processing(_packet,_packet[1],_crc);
+
+}
+
+void CoDroneClass::setAllRGB(int r, int g, int b)
+{
+	byte _packet[9];
+	byte _crc[2];
+	
+	eyered = armred = r;
+	eyegreen = armgreen = g;
+	eyeblue = armblue = b;
+
+  	//header
+	_packet[0] = dType_LedModeColor2;
+	_packet[1] = 10;
+
+ 	//data
+	_packet[2] = armmode;
+	_packet[3] = r;
+	_packet[4] = g;  
+	_packet[5] = b;  
+	_packet[6] = 255;
+	_packet[2] = eyemode;
+	_packet[3] = r;
+	_packet[4] = g;  
+	_packet[5] = b;  
+	_packet[6] = 255;
+
+	unsigned short crcCal = CRC16_Make(_packet, _packet[1]+2);
+	_crc[0] = (crcCal >> 8) & 0xff;
+	_crc[1] = crcCal & 0xff;
+
+	Send_Processing(_packet,_packet[1],_crc);	
+}
+
+void CoDroneClass::setArmDefaultRGB(int r, int g, int b)
+{
+
+}
+
+void CoDroneClass::setArmDefaultRGB(int r, int g, int b)
+{
+
+}
+
+void CoDroneClass::setArmDefaultRGB(int r, int g, int b)
+{
+
+}
+
+void CoDroneClass::resetDefualtLED()
+{
+
+}
+
+void CoDroneClass::setArmMode(int mode)
+{
+
+}
+
+void CoDroneClass::setArmMode(int mode)
+{
+
+}
+
+void CoDroneClass::setArmMode(int mode)
+{
+
+}
+
+void CoDroneClass::setDefaultArmMode(int mode)
+{
+
+}
+
+void CoDroneClass::setDefaultArmMode(int mode)
+{
+
+}
+
+void CoDroneClass::setDefaultArmMode(int mode)
+{
+
 }
 
 ////////////////////////////////////////////////////

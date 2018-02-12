@@ -753,6 +753,7 @@ public:
 	void LedColor(byte sendMode, byte sendColor, byte sendInterval);
 	void LedColor(byte sendMode, byte r, byte g, byte b, byte sendInterval);
 	void LedColor(byte sendMode, byte sendColor[], byte sendInterval);
+	void LedColorTwo(byte sendMode, byte r, byte g, byte b, byte sendInterval, byte sendMode, byte r, byte g, byte b, byte sendInterval);
 	
 	void LedEvent(byte sendMode, byte sendColor, byte sendInterval, byte sendRepeat);	
 	void LedEvent(byte sendMode, byte r, byte g, byte b, byte sendInterval, byte sendRepeat);
@@ -864,6 +865,27 @@ public:
 	trimdata getTrim();
 	// not finalized!!
 	//int getState();
+	void goToHeight(int set);
+
+/////////////////////////////////////////////////////////////////////////
+
+	//2018. 2. 12 added
+	void setArmRGB(int r, int g, int b);
+	void setEyeRGB(int r, int g, int b);
+	void setAllRGB(int r, int g, int b);
+	void setArmDefaultRGB(int r, int g, int b);//not yet
+	void setEyeDefaultRGB(int r, int g, int b);//not yet
+	void setAllDefaultRGB(int r, int g, int b);//not yet
+
+	void resetDefaultLED();
+
+	void setArmMode(int mode);
+	void setEyeMode(int mode);
+	void setAllMode(int mode);
+	void setArmDefaultMode(int mode);//not yet
+	void setEyeDefaultMode(int mode);//not yet
+	void setAllDefaultMode(int mode);//not yet
+
 
 
 /////////////////////////////////////////////////////////////////////////
@@ -1020,8 +1042,16 @@ public:
 /////////////////////////////////////////////////////////////////////////
 
 	int prevControl[4];
-	void SequenceDelay(int setTime);	
-
+	void SequenceDelay(int setTime);
+//////////////////////////////////////////////////////////////////////////	
+	byte armred = 255;
+	byte armgreen = 0;
+	byte armblue = 0;
+	byte eyered = 255;
+	byte eyegreen = 0;
+	byte eyeblue = 0;
+	byte armmode = ArmHold;
+	byte eyemode EyeHold;
 /////////////////////////////////////////////////////////////////////////
 
 private:
