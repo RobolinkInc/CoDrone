@@ -753,7 +753,7 @@ public:
 	void LedColor(byte sendMode, byte sendColor, byte sendInterval);
 	void LedColor(byte sendMode, byte r, byte g, byte b, byte sendInterval);
 	void LedColor(byte sendMode, byte sendColor[], byte sendInterval);
-	void LedColorTwo(byte sendMode, byte r, byte g, byte b, byte sendInterval, byte sendMode, byte r, byte g, byte b, byte sendInterval);
+	//void LedColorTwo(byte sendMode, byte r, byte g, byte b, byte sendInterval, byte sendMode, byte r, byte g, byte b, byte sendInterval);
 	
 	void LedEvent(byte sendMode, byte sendColor, byte sendInterval, byte sendRepeat);	
 	void LedEvent(byte sendMode, byte r, byte g, byte b, byte sendInterval, byte sendRepeat);
@@ -870,21 +870,21 @@ public:
 /////////////////////////////////////////////////////////////////////////
 
 	//2018. 2. 12 added
-	void setArmRGB(int r, int g, int b);
-	void setEyeRGB(int r, int g, int b);
-	void setAllRGB(int r, int g, int b);
-	void setArmDefaultRGB(int r, int g, int b);//not yet
-	void setEyeDefaultRGB(int r, int g, int b);//not yet
-	void setAllDefaultRGB(int r, int g, int b);//not yet
+	void setArmRGB(byte r, byte g, byte b);
+	void setEyeRGB(byte r, byte g, byte b);
+	void setAllRGB(byte r, byte g, byte b);
+	void setArmDefaultRGB(byte r, byte g, byte b);//not yet
+	void setEyeDefaultRGB(byte r, byte g, byte b);//not yet
+	void setAllDefaultRGB(byte r, byte g, byte b);//not yet
 
 	void resetDefaultLED();
 
-	void setArmMode(int mode);
-	void setEyeMode(int mode);
-	void setAllMode(int mode);
-	void setArmDefaultMode(int mode);//not yet
-	void setEyeDefaultMode(int mode);//not yet
-	void setAllDefaultMode(int mode);//not yet
+	void setArmMode(byte mode);
+	void setEyeMode(byte mode);
+	void setAllMode(byte mode);
+	void setArmDefaultMode(byte mode);//not yet
+	void setEyeDefaultMode(byte mode);//not yet
+	void setAllDefaultMode(byte mode);//not yet
 
 
 
@@ -1051,7 +1051,7 @@ public:
 	byte eyegreen = 0;
 	byte eyeblue = 0;
 	byte armmode = ArmHold;
-	byte eyemode EyeHold;
+	byte eyemode = EyeHold;
 /////////////////////////////////////////////////////////////////////////
 
 private:
