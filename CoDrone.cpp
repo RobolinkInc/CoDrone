@@ -2086,6 +2086,7 @@ void CoDroneClass::ReceiveEventCheck(byte _completeData[])
 			attitudeRoll	= ((_completeData[1] << 8) | (_completeData[0]  & 0xff));
 			attitudePitch	= ((_completeData[3] << 8) | (_completeData[2]  & 0xff));
 			attitudeYaw		= ((_completeData[5] << 8) | (_completeData[4]  & 0xff));
+			yawDegree		= (attitudeYaw >= 0 ? attitudeYaw : 360 + attitudeYaw );
 			receiveAttitudeSuccess = 1;														  	
 		}	 
 		
@@ -2557,9 +2558,13 @@ void CoDroneClass::move(){
 
 void CoDroneClass::move(float duration)
 {
-	move();
-	delay((int)(duration*1000));
-	move(0,0,0,0);
+	unsigned long startMillis = millis();
+	while(millis() - startMillis < duration*1000)
+	{
+		move();
+		delay(100);
+	}
+	hover(1);
 }
 
 void CoDroneClass::move(int _roll, int _pitch, int _yaw, int _throttle)
@@ -2595,9 +2600,13 @@ void CoDroneClass::move(int _roll, int _pitch, int _yaw, int _throttle)
 
 void CoDroneClass::move(float duration, int _roll, int _pitch, int _yaw, int _throttle)
 {
-	move(_roll, _pitch, _yaw, _throttle);
-	delay((int)(duration*1000));
-	move(0,0,0,0);
+	unsigned long startMillis = millis();
+	while(millis() - startMillis < duration*1000)
+	{
+		move(_roll, _pitch, _yaw, _throttle);
+		delay(100);
+	}
+	hover(1);	
 }
 
 void CoDroneClass::go(int direction)
@@ -2631,43 +2640,50 @@ void CoDroneClass::go(int direction, float duration)
 	go(direction);
 	delay((int)(duration*1000));
 	move(0,0,0,0);
+	delay(1000);
+	unsigned long startMillis = millis();
+	while(millis() - startMillis < duration*1000)
+	{
+		go(direction);
+		delay(100);
+	}
+	move(0,0,0,0);
+	delay(1000);
 }
 
 void CoDroneClass::go(int direction, float duration, int power)
 {
+	int r,p,t;
+	r = p = t = 0;
 	switch(direction)
 	{
 		case direction_forward:
-			move(0, power, 0, 0);
-			delay((int)(duration*1000));
-			move(0, 0, 0, 0);
+			p = power;
 			break;
 		case direction_up:
-			move(0, 0, 0, power);
-			delay((int)(duration*1000));
-			move(0, 0, 0, 0);
+			t = power;
 			break;
 		case direction_right:
-			move(power, 0, 0, 0);
-			delay((int)(duration*1000));
-			move(0, 0, 0, 0);
+			r = power;
 			break;
 		case direction_backward:
-			move(0, (-1)*power, 0, 0);
-			delay((int)(duration*1000));
-			move(0, 0, 0, 0);
+			p = (-1)*power;
 			break;
 		case direction_down:
-			move(0, 0, 0, (-1)*power);
-			delay((int)(duration*1000));
-			move(0, 0, 0, 0);
+			t = (-1)*power;
 			break;
 		case direction_left:
-			move((-1)*power, 0, 0, 0);
-			delay((int)(duration*1000));
-			move(0, 0, 0, 0);
+			r = (-1)*power;
 			break;
 	}
+	unsigned long startMillis = millis();
+	while(millis() - startMillis < duration*1000)
+	{
+		move(r,p,0,t);
+		delay(100);
+	}
+	move(0,0,0,0);
+	delay(1000);
 }
 
 void CoDroneClass::turn(int direction)
@@ -2685,54 +2701,81 @@ void CoDroneClass::turn(int direction)
 
 void CoDroneClass::turn(int direction, float duration)
 {
-	switch(direction)
+	unsigned long startMillis = millis();
+	while(millis() - startMillis < duration*1000)
 	{
-		case direction_right:
-			move(0, 0, 50, 0);
-			delay((int)(duration*1000));
-			move(0, 0, 0, 0);
-			break;
-		case direction_left:
-			move(0, 0, -50, 0);
-			delay((int)(duration*1000));
-			move(0, 0, 0, 0);
-			break;
+		turn(direction);
+		delay(100);
 	}
+	move(0,0,0,0);
+	delay(1000);
 
 }
 
 void CoDroneClass::turn(int direction, float duration, int power)
 {
-	
-	switch(direction)
+	int y = power ;
+	if(direction == direction_left)
+		y *= -1;
+	unsigned long startMillis = millis();
+	while(millis() - startMillis < duration*1000)
 	{
-		case direction_right:
-			move(0, 0, 50, 0);
-			delay((int)(duration*1000));
-			move(0, 0, 0, 0);
-			break;
-		case direction_left:
-			move(0, 0, -50, 0);
-			delay((int)(duration*1000));
-			move(0, 0, 0, 0);
-			break;
+		move(0,0,y,0);
+		delay(100);
 	}
+	move(0,0,0,0);
+	delay(1000);
 }
 
 
+void CoDroneClass::hover(int duration)
+{
+	unsigned long startMillis = millis();
+	while(millis() - startMillis < duration*1000)
+	{
+		move(0,0,0,0);
+		delay(100);
+	}
+}
+void CoDroneClass::turnDegree(int direction, int degree)
+{
+	angledata angle = getAngles();
+	direction = (direction == right ? 1 : -1);
 
+	int speed = direction * 30;
+	int dest = 360 + yawDegree + degree * direction;
+	int min = (dest - 5)%360;
+	int max = (dest + 5)%360;
+
+	while(true)
+	{
+		angle = getAngles();
+		if(min>max){
+			if(min<yawDegree || max>yawDegree)
+				break;
+		}
+		else{
+			if(min<yawDegree && max>yawDegree)
+				break;
+		}
+		delay(50);
+		move(0,0,speed,0);
+		delay(50);
+	}
+	hover(1);
+}
 //FlightEvnet
 void CoDroneClass::takeOff()
 {
 	FlightEvent(TakeOff);
 }
 
-void land()
+void CoDroneClass::land()
 {
 	FlightEvent(Landing);
 }
 
-void emergencyStop()
+void CoDroneClass::emergencyStop()
 {
 	FlightEvent(Stop);
 }
@@ -2950,7 +2993,10 @@ acceldata CoDroneClass::getAceelerometer()
 }
 
 int CoDroneClass::getBatteryPercentage()
-{
+{	
+	if(batterytime + 5000 > millis())
+		return Battery_Percent;
+	batterytime  = millis();
 	receiveBatterySuccess = 0;
 	sendCheckFlag = 1;
 	byte _packet[9];
@@ -2984,6 +3030,9 @@ int CoDroneClass::getBatteryPercentage()
 
 int CoDroneClass::getBatteryVoltage()
 {
+	if(batterytime + 5000 > millis())
+		return Battery_Percent;
+	batterytime  = millis();
 	receiveBatterySuccess = 0;
 	sendCheckFlag = 1;
 	byte _packet[9];
@@ -3056,16 +3105,19 @@ trimdata CoDroneClass::getTrim()
 
 void CoDroneClass::goToHeight(int set)
 {
-	while(true){
+	while(true)
+	{
 		int height = getHeight();
-		if(height < (set - 30))
-			go(direction_up);
-		else if(height > (set + 30))
-			go(direction_down);
-		else
+		delay(50);
+		if(height < set - 100)
+			move(0,0,0,20);
+		else if(height > set + 100)
+			move(0,0,0,-20);
+		else if( height > set-100 || height < set+ 100){
 			move(0,0,0,0);
 			break;
-		delay(100);
+		}
+		delay(50);
 	}
 }
 
@@ -3223,6 +3275,14 @@ void CoDroneClass::setEyeDefaultMode(byte mode)
 void CoDroneClass::setAllDefaultMode(byte mode)
 {
 
+}
+void CoDroneClass::test()
+{
+	while(true){
+		int a =1;
+		int b = 2;
+		a+=b;
+	}
 }
 
 ////////////////////////////////////////////////////

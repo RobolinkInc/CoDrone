@@ -860,6 +860,9 @@ public:
 	void turn(int direction, float duration, int power);
 
 
+	void hover(int duration);
+	void turnDegree(int direction, int degree);
+
 	//FlightEvnet
 	void takeOff();
 	void land();
@@ -899,7 +902,7 @@ public:
 	void setEyeDefaultMode(byte mode);//not yet
 	void setAllDefaultMode(byte mode);//not yet
 
-
+	void test();
 
 /////////////////////////////////////////////////////////////////////////
 
@@ -989,6 +992,7 @@ public:
 	int attitudeRoll	= 0;
 	int attitudePitch	= 0;
 	int attitudeYaw	= 0;
+	int yawDegree = 0;
 
 	int GyroBias_Roll	= 0;
 	int GyroBias_Pitch	= 0;
@@ -1041,6 +1045,7 @@ public:
 	long imu_temp		= 0;
 	long pressure_temp	= 0;
 
+
 /////////////////////////////////////////////////////////////////////////
 	
 	byte linkState = 0;;
@@ -1051,7 +1056,7 @@ public:
 	int sensorRange[6];		
 	
 	long PreviousMillis;
-			
+	long batterytime = -5000;		
 /////////////////////////////////////////////////////////////////////////
 
 	int prevControl[4];
