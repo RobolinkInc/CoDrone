@@ -212,6 +212,12 @@ typedef struct trimdata
 	int throttle;
 }trimdata;
 
+typedef struct optdata
+{
+	int x;
+	int y;
+};
+
 
 
 
@@ -860,7 +866,7 @@ public:
 	void turn(int direction, float duration, int power);
 
 
-	void hover(int duration);
+	void hover(float duration);
 	void turnDegree(int direction, int degree);
 
 	//FlightEvnet
@@ -954,6 +960,7 @@ public:
 	byte receiveTrimSuccess = 0;
 	byte receiveStateSuccess = 0;
 	byte receiveBatterySuccess = 0;
+	byte receiveOptSuccess = 0;
 
 	
 	byte energy = 8;	
