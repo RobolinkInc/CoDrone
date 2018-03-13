@@ -2734,9 +2734,6 @@ void CoDroneClass::go(int direction)
 void CoDroneClass::go(int direction, float duration)
 {
 	go(direction);
-	delay((int)(duration*1000));
-	move(0,0,0,0);
-	delay(1000);
 	unsigned long startMillis = millis();
 	while(millis() - startMillis < duration*1000)
 	{
@@ -3363,9 +3360,9 @@ bool CoDroneClass::isReadyToFly()
  *	function	:	setArmRGB(r, g, b)
  *	description : 	setArmRGB(r, g, b) is function for change color for arm LED
  *	param 		:
- *					- r : int
- *					- g : int 
- *					- b : int 
+ *					- r : int (0 ~ 255)
+ *					- g : int (0 ~ 255)
+ *					- b : int (0 ~ 255)
  *	return 	 	:	none
  */
 void CoDroneClass::setArmRGB(byte r, byte g, byte b)
@@ -3401,9 +3398,9 @@ void CoDroneClass::setArmRGB(byte r, byte g, byte b)
  *	function	:	setEyeRGB(r, g, b)
  *	description : 	setEyeRGB(r, g, b) is function for change color for eye LED
  *	param 		:
- *					- r : int
- *					- g : int 
- *					- b : int 
+ *					- r : int (0 ~ 255)
+ *					- g : int (0 ~ 255)
+ *					- b : int (0 ~ 255)
  *	return 	 	:	none
  */
 void CoDroneClass::setEyeRGB(byte r, byte g, byte b)
@@ -3439,9 +3436,9 @@ void CoDroneClass::setEyeRGB(byte r, byte g, byte b)
  *	function	:	setAllRGB(r, g, b)
  *	description : 	setAllRGB(r, g, b) is function for change color for both arm and eye LED
  *	param 		:
- *					- r : int
- *					- g : int 
- *					- b : int 
+ *					- r : int (0 ~ 255)
+ *					- g : int (0 ~ 255)
+ *					- b : int (0 ~ 255)
  *	return 	 	:	none
  */
 void CoDroneClass::setAllRGB(byte r, byte g, byte b)
