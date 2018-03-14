@@ -3564,6 +3564,48 @@ void CoDroneClass::setAllDefaultMode(byte mode)
 
 
 /*
+ *	function	:	flySequence(shape)
+ *	description : 	flySequence(shape) is do some of squence fly
+ *					Option is ZIPZAG, SWAY, SQUARE, CIRCLE, SPIRAL, TRIANGLE, HOP
+ *	param 		:	
+ *					- shape : int
+ *	return 	 	:	none
+ */
+void CoDroneClass::flySequence(int shape)
+{
+	switch(shape)
+	{
+		case ZIGZAG :
+			zigzag();
+			break;
+
+		case SWAY 	:
+			sway();
+			break;
+
+		case SQUARE :
+			square();
+			break;
+
+		case CIRCLE :
+			circle();
+			break;
+
+		case SPIRAL :
+			spiral();
+			break;
+
+		case TRIANGLE:
+			triangle();
+			break;
+
+		case HOP:
+			hop();
+			break;
+	}
+}
+
+/*
  *	function	:	sway()
  *	description : 	sway() is function for move drone left and right twice
  *					this function is called by flySequence()
