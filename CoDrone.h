@@ -181,6 +181,19 @@ enum Direction
 	direction_down,
 	direction_EndOfType
 };
+
+enum Sequence
+{
+	Seq_none = 0,
+	Seq_zigzag,
+	Seq_sway,
+	Seq_square,
+	Seq_circle,
+	Seq_spiral,
+	Seq_triangle,
+	Seq_hop,
+	Seq_EndOfType,
+}
 //
 typedef struct gyrodata
 {
@@ -879,8 +892,8 @@ public:
 	int getHeight();
 	int getPressure();
 	int getDroneTemp();
-	gyrodata getGyrometer();
-	angledata getAngles();
+	gyrodata getAngulerSpeed();
+	angledata getGyroAngles();
 	acceldata getAceelerometer();
 	int getBatteryPercentage();
 	int getBatteryVoltage();
@@ -908,7 +921,15 @@ public:
 	void setEyeDefaultMode(byte mode);//not yet
 	void setAllDefaultMode(byte mode);//not yet
 
-	void test();
+
+	//sequence
+	void sway();
+	void zigzag();
+	void square();
+	void triangle();
+	void hop();
+	void circle();
+	void spiral();
 
 /////////////////////////////////////////////////////////////////////////
 
@@ -960,7 +981,7 @@ public:
 	byte receiveTrimSuccess = 0;
 	byte receiveStateSuccess = 0;
 	byte receiveBatterySuccess = 0;
-	byte receiveOptSuccess = 0;
+	byte receiveOpt	Success = 0;
 
 	
 	byte energy = 8;	

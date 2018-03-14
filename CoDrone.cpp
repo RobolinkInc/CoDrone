@@ -2740,8 +2740,7 @@ void CoDroneClass::go(int direction, float duration)
 		go(direction);
 		delay(100);
 	}
-	move(0,0,0,0);
-	delay(1000);
+	hover(1);
 }
 
 
@@ -2789,8 +2788,7 @@ void CoDroneClass::go(int direction, float duration, int power)
 		move(r,p,0,t);
 		delay(100);
 	}
-	move(0,0,0,0);
-	delay(1000);
+	hover(1);
 }
 
 
@@ -2835,8 +2833,7 @@ void CoDroneClass::turn(int direction, float duration)
 		turn(direction);
 		delay(100);
 	}
-	move(0,0,0,0);
-	delay(1000);
+	hover(1);
 
 }
 
@@ -2865,9 +2862,11 @@ void CoDroneClass::turn(int direction, float duration, int power)
 		move(0,0,y,0);
 		delay(100);
 	}
-	move(0,0,0,0);
-	delay(1000);
+	hover(1);
 }
+
+
+
 
 /*
  *	function	: 	hover(duration)
@@ -2880,8 +2879,10 @@ void CoDroneClass::turn(int direction, float duration, int power)
  */
 void CoDroneClass::hover(float duration)
 {
+	move(0,0,0,0);
+	delay(50);
 	unsigned long startMillis = millis();
-	while(millis() - startMillis < duration*1000)
+	while(millis() - startMillis < duration*1000)`
 	{
 		move(0,0,0,0);
 		delay(100);
@@ -3561,6 +3562,131 @@ void CoDroneClass::setAllDefaultMode(byte mode)
 
 }
 
+
+/*
+ *	function	:	sway()
+ *	description : 	sway() is function for move drone left and right twice
+ *					this function is called by flySequence()
+ *	param 		:	none
+ *	return 	 	:	none
+ */
+void CoDroneClass::sway()
+{
+	move(2, 50, 0, 0, 0);
+  	move(2, -50, 0, 0, 0);
+  	move(2, 50, 0, 0, 0);
+  	move(2, -50, 0, 0, 0);
+}
+
+
+/*
+ *	function	:	zigzag()
+ *	description : 	zigzag() is function for move drone zigzag twice
+ *					this function is called by flySequence()
+ *	param 		:	none
+ *	return 	 	:	none
+ */
+void CoDroneClass::zigzag()
+{
+	move(2, 50, 50, 0, 0);
+  	move(2, -50, 50, 0, 0);
+  	move(2, 50, 50, 0, 0);
+  	move(2, -50, 50, 0, 0);
+}
+
+
+/*
+ *	function	:	square()
+ *	description : 	square() is function for fly square shape
+ 					It will fly right -> forward -> left -> back
+ *					this function is called by flySequence()
+ *	param 		:	none
+ *	return 	 	:	none
+ */
+void CoDroneClass::square()
+{
+	move(2, 50, 0, 0, 0);
+  	move(2, 0, 50, 0, 0);
+  	move(2, -50, 0, 0, 0);
+  	move(2, 0, -50, 0, 0);
+
+}
+
+
+/*
+ *	function	:	triangle()
+ *	description : 	triangle() is function for fly triangle shape
+ 					It will fly forward -> turn left 120 degree
+ *					-> fly forward -> turn left 120 degree -> fly forward
+ *					this function is called by flySequence()
+ *	param 		:	none
+ *	return 	 	:	none
+ */
+void CoDroneClass::triangle()
+{
+	move(1.5, 0,50,0,0);
+  	turnDegree(left,120);
+  	move(1.5, 0,50,0,0);
+  	turnDegree(left,120);
+  	move(1.5, 0,50,0,0);
+}
+
+
+
+/*
+ *	function	:	hop()
+ *	description : 	hop() is function for drone looks like hopping.
+ *					Drone will go up and down for 1second each while flying forward
+ *					this function is called by flySequence()
+ *	param 		:	none
+ *	return 	 	:	none
+ */
+void CoDroneClass::hop()
+{
+	move(30, 0, 50, 1)
+	delay(1000);
+    move(30, 0, -50, 1)
+    delay(1000);
+    hover(1);
+}
+
+
+/*
+ *	function	:	circle()
+ *	description : 	circle() is function for fly circle shape
+ *					Drone will do yaw and roll at the same time
+ *					yaw direction and roll direction is oposite
+ *					this function is called by flySequence()
+ *	param 		:	none
+ *	return 	 	:	none
+ */
+void CoDroneClass::circle()
+{
+	move(10,20,0,-20,0);
+}
+
+
+/*
+ *	function	:	spiral()
+ *	description : 	spiral() is function for fly spiral shape
+ *					set yaw for -50 and increase roll with for loop
+ *					after finish
+ *					the function is called by flySequence()
+ *	param 		:	none
+ *	return 	 	:	none
+ */
+void CoDroneClass::spiral()
+{
+	for(int i = 0 ;i<100 ;i++){
+    	setRoll((int)(i/8));
+    	setYaw(-50);
+    	move();
+    	delay(100);
+  	}
+  hover(1);
+  setRoll(0);
+  setYaw(0);
+}
 ////////////////////////////////////////////////////
 
 CoDroneClass CoDrone;                         
