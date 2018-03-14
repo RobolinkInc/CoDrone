@@ -1,7 +1,7 @@
 /*
   CoDrone.cpp - CoDrone library
   Copyright (C) 2014 RoboLink.  All rights reserved.
-  LastUpdate : 2017-11-17
+  LastUpdate : 2018-01-30
 */
 
 #include "CoDrone.h"
@@ -856,7 +856,28 @@ void CoDroneClass::LedColorDefault(byte sendMode, byte sendColor[], byte sendInt
 	
 	Send_Processing(_packet,_packet[1],_crc);     
 }
+/*void CoDroneClass::LedColorTwo(byte sendMode, byte r, byte g, byte b, byte sendInterval, byte sendMode, byte r, byte g, byte b, byte sendInterval)
+{
+	byte _packet[9];
+	byte _crc[2];
 
+  	//header
+	_packet[0] = dType_LedDefaultColor;
+	_packet[1] = 5;
+
+ 	//data
+	_packet[2] = sendMode;
+	_packet[3] = sendColor[0];
+	_packet[4] = sendColor[1];  
+	_packet[5] = sendColor[2]; 
+	_packet[6] = sendInterval;
+
+	unsigned short crcCal = CRC16_Make(_packet, _packet[1]+2);
+	_crc[0] = (crcCal >> 8) & 0xff;
+	_crc[1] = crcCal & 0xff;
+
+	Send_Processing(_packet,_packet[1],_crc);
+}*/
 //////////////////Request//////////////////////////////////////
 
 void CoDroneClass::Request_DroneState()
@@ -2045,7 +2066,8 @@ void CoDroneClass::ReceiveEventCheck(byte _completeData[])
 				droneState[3] = _completeData[3];
 				droneState[4] = _completeData[4];
 				droneState[5] = _completeData[5];	
-				droneState[6] = _completeData[6]; 		  
+				droneState[6] = _completeData[6];
+				receiveStateSuccess = 1; 		  
 			}		
 		}
 			
@@ -2065,6 +2087,7 @@ void CoDroneClass::ReceiveEventCheck(byte _completeData[])
 			attitudeRoll	= ((_completeData[1] << 8) | (_completeData[0]  & 0xff));
 			attitudePitch	= ((_completeData[3] << 8) | (_completeData[2]  & 0xff));
 			attitudeYaw		= ((_completeData[5] << 8) | (_completeData[4]  & 0xff));
+			yawDegree		= (attitudeYaw >= 0 ? attitudeYaw : 360 + attitudeYaw );
 			receiveAttitudeSuccess = 1;														  	
 		}	 
 		
@@ -2073,6 +2096,7 @@ void CoDroneClass::ReceiveEventCheck(byte _completeData[])
 			GyroBias_Roll	= ((_completeData[1] << 8) | (_completeData[0]  & 0xff));
 			GyroBias_Pitch	= ((_completeData[3] << 8) | (_completeData[2]  & 0xff));
 			GyroBias_Yaw	= ((_completeData[5] << 8) | (_completeData[4]  & 0xff));
+			receiveGyroSuccess = 1;
 		}
 
 		else if (receiveDtype == dType_TrimAll)
@@ -2090,6 +2114,7 @@ void CoDroneClass::ReceiveEventCheck(byte _completeData[])
 			TrimAll_Pitch		= ((_completeData[3] << 8) | (_completeData[2]  & 0xff));
 			TrimAll_Yaw			= ((_completeData[5] << 8) | (_completeData[4]  & 0xff));
 			TrimAll_Throttle	= ((_completeData[7] << 8) | (_completeData[6]  & 0xff));
+			receiveTrimSuccess = 1;
 		}
 
 		else if (receiveDtype == dType_TrimDrive)
@@ -2110,6 +2135,9 @@ void CoDroneClass::ReceiveEventCheck(byte _completeData[])
 			ImuAngleRoll	= (_completeData[13] << 8) | (_completeData[12]);
 			ImuAnglePitch	= (_completeData[15] << 8) | (_completeData[14]);
 			ImuAngleYaw		= (_completeData[17] << 8) | (_completeData[16]);
+
+			receiveAccelSuccess = 1;
+			receiveGyroSuccess = 1;
 		}
 
 	  	else if(receiveDtype == dType_Pressure)
@@ -2118,14 +2146,14 @@ void CoDroneClass::ReceiveEventCheck(byte _completeData[])
 			d2			= ((_completeData[7] << 32)  |(_completeData[6] << 16)  |(_completeData[5] << 8)  | (_completeData[4]  & 0xff));			  			
 			temperature	= ((_completeData[11] << 32) |(_completeData[10] << 16) |(_completeData[9] << 8)  | (_completeData[8]  & 0xff));
 			pressure	= ((_completeData[15] << 32) |(_completeData[14] << 16) |(_completeData[13] << 8) | (_completeData[12]  & 0xff));	  						  			
-	  		//receivePressureSuccess = 1;	
+	  		receivePressureSuccess = 1;	
 	  	}
 	  	
 	  	else if (receiveDtype ==  dType_ImageFlow)
 	  	{
 	  		fVelocitySumX	= ((_completeData[3] << 32)  |(_completeData[2] << 16)  |(_completeData[1] << 8)  | (_completeData[0]  & 0xff));
 	  		fVelocitySumY	= ((_completeData[7] << 32)  |(_completeData[6] << 16)  |(_completeData[5] << 8)  | (_completeData[4]  & 0xff));
-	  		//receiveFlowSuccess = 1;
+	  		receiveOptSuccess = 1;
 	  	}
 		
 		else if (receiveDtype == dType_Button)
@@ -2139,10 +2167,11 @@ void CoDroneClass::ReceiveEventCheck(byte _completeData[])
 			Battery_v33			= ((_completeData[3] << 8) | (_completeData[2]  & 0xff));			  	 	
 			Battery_gradient	= ((_completeData[5] << 8) | (_completeData[4]  & 0xff));
 			Battery_yIntercept	= ((_completeData[7] << 8) | (_completeData[6]  & 0xff));
-			flagBatteryCalibration	= _completeData[8];			  	
+			flagBatteryCalibration	= _completeData[8] & 0xff;			  	
 			Battery_Raw			= ((_completeData[12] << 32) |(_completeData[11] << 16) |(_completeData[10] << 8) | (_completeData[9]  & 0xff));			  
-			Battery_Percent		= _completeData[13];			  	
+			Battery_Percent		= _completeData[13] & 0xff;			  	
 			Battery_voltage		= ((_completeData[15] << 8) | (_completeData[14]  & 0xff));
+			receiveBatterySuccess = 1;
 		}
 
 		else if (receiveDtype == dType_Range)
@@ -2456,5 +2485,1208 @@ void CoDroneClass::SequenceDelay(int setTime)
 	delay(_interval);
 }
 
+/////////////////////////////////////////////////////////////////////////
+// 2018, 1, 22 added
+	
+//------------getter and setter-----------------------
+
+/*
+ *	description :	all these function for getter and setter  
+ *				 	set value to variable or return the variable value
+ *	
+ *	getter function
+ *	praram 		: 	none
+ *	return 		:	
+ *					- roll 		: int
+ *					- pitch 	: int
+ *					- yaw 		: int
+ *					- throttle 	: int 
+ *
+ *	setter fuction
+ *	param 		:
+ *					- roll 		: int
+ *					- pitch 	: int
+ *					- yaw 		: int
+ *					- throttle 	: int 
+ *	return 		:	 none
+ */
+
+void CoDroneClass::setRoll(int _roll)
+{
+	roll = _roll;
+}
+
+int CoDroneClass::getRoll()
+{
+	return roll;
+}
+
+void CoDroneClass::setPitch(int _pitch)
+{
+	pitch = _pitch;
+}
+int CoDroneClass::getPitch()
+{
+	return pitch;
+}
+
+void CoDroneClass::setYaw(int _yaw)
+{
+	yaw = _yaw;
+}
+
+int CoDroneClass::getYaw(){
+	return yaw;
+}
+
+void CoDroneClass::setThrottle(int _throttle){
+	throttle = _throttle;
+}
+
+int CoDroneClass::getThrottle(){
+	return throttle;
+}
+
+//------------flight command--------------------------
+
+/*
+ *	function	: 	move()
+ *	description : 	move() function is using global variables to control drone .
+ *					Drone will move with roll, pitch, yaw, throttle value infinitely.
+ *				 	If you wanna set variable's value, use setter function.
+ *				 	if you wanna check variable's value, use getter function.
+ *
+ *	param 		:	none
+ *	return  	:	none
+ */
+
+void CoDroneClass::move(){
+	byte _packet[10];
+	byte _crc[2];
+	/*
+  		header + data
+  		data type = Control(_packet[0])
+  		data length =  (_packet[1])
+  	*/   
+
+  	//header
+	_packet[0] = dType_Control;
+	_packet[1] = 4;
+
+ 	 //data
+	_packet[2] = roll;
+	_packet[3] = pitch;
+	_packet[4] = yaw;
+	_packet[5] = throttle;
+
+	unsigned short crcCal = CRC16_Make(_packet, _packet[1]+2);
+	_crc[0] = (crcCal >> 8) & 0xff;
+	_crc[1] = crcCal & 0xff;
+
+	//send control message to drone(write serial)
+	Send_Processing(_packet,_packet[1],_crc); 
+
+}
+
+
+/*
+ *	function	: 	move(duration)
+ *	description : 	move(duration) is extend function of move() for limit moving time.
+ 					Also instead of send command once, function will send every 100ms during duration time.
+ *					Parameter "duration" will be set the timer for control drone.
+ *
+ *
+ *	param 		:	
+ 					- duration	: float
+ *	return 	 	:	none
+ */
+void CoDroneClass::move(float duration)
+{
+	//set the timer with duration.
+	// duration have to convert second to millisecond
+	unsigned long startMillis = millis();
+	while(millis() - startMillis < duration*1000)
+	{
+		move();
+		//gap for command sending
+		delay(100);
+	}
+	hover(1);
+}
+
+
+/*
+ *	function	: 	move(roll, pitch, yaw, throttle)
+ *	description : 	move(roll, pitch, yaw, throttle) is extend function of move() for set instance values for control.
+ *					Parameter "roll, pitch, yaw, throttle " are one time value for control.
+ *
+ *	param 		:	
+ * 					- roll		: int
+ * 					- pitch		: int
+ * 					- yaw		: int
+ * 					- throttle	: int
+ *	return 	 	:	none
+ */
+void CoDroneClass::move(int _roll, int _pitch, int _yaw, int _throttle)
+{
+	byte _packet[10];
+	byte _crc[2];
+
+	/*
+  		header + data
+  		data type = Control(_packet[0])
+  		data length =  (_packet[1])
+  	*/   
+
+  	//header
+	_packet[0] = dType_Control;
+	_packet[1] = 4;
+
+ 	 //data
+	_packet[2] = _roll;
+	_packet[3] = _pitch;
+	_packet[4] = _yaw;
+	_packet[5] = _throttle;
+
+	unsigned short crcCal = CRC16_Make(_packet, _packet[1]+2);
+	_crc[0] = (crcCal >> 8) & 0xff;
+	_crc[1] = crcCal & 0xff;
+
+	Send_Processing(_packet,_packet[1],_crc); 
+
+}
+
+/*
+ *	function	: 	move(duration, roll, pitch, yaw, throttle)
+ *	description : 	move(duration, roll, pitch, yaw, throttle) is extend function of move() for set instance values for control.
+ *					Parameter "duration" will be set the timer for control drone.
+ *					Parameter "roll, pitch, yaw, throttle " are one time value for control.
+ *
+ *	param 		:	
+ *					- duration 	: float
+ * 					- roll		: int
+ * 					- pitch		: int
+ * 					- yaw		: int
+ * 					- throttle	: int
+ *	return 	 	:	none
+ */
+void CoDroneClass::move(float duration, int _roll, int _pitch, int _yaw, int _throttle)
+{
+	unsigned long startMillis = millis();
+	while(millis() - startMillis < duration*1000)
+	{
+		move(_roll, _pitch, _yaw, _throttle);
+		delay(100);
+	}
+	hover(1);	
+}
+
+
+/*
+ *	function	: 	go(direction)
+ *	description : 	go(direction) is simple version of move function.
+ *					Instead of using "roll, pitch, yaw throttle", using direction for control drone.
+ *					Parameter "direction" is enum for set direction.
+ *					Power will be set 50% defualt, It will move infinitely.
+ *
+ *	param 		:	
+ *					- direction : int
+ *	return 	 	:	none
+ */
+void CoDroneClass::go(int direction)
+{
+	switch(direction)
+	{
+		case direction_forward:
+			move(0, 50, 0, 0);
+			break;
+		case direction_up:
+			move(0, 0, 0, 50);
+			break;
+		case direction_right:
+			move(50, 0, 0, 0);
+			break;
+		case direction_backward:
+			move(0, -50, 0, 0);
+			break;
+		case direction_down:
+			move(0, 0, 0, -50);
+			break;
+		case direction_left:
+			move(-50, 0, 0, 0);
+			break;
+	}
+
+}
+
+/*
+ *	function	: 	go(direction, duration)
+ *	description : 	go(direction, duration) adding duration parameter to go(direction)
+ *					Parameter "direction" is enum for set direction.
+ *					Parameter "duration" will be set the timer for control drone.
+ *					Power will be set 50% defualt.
+ *
+ *	param 		:	
+ *					- direction : int
+ *					- duration 	: float
+ *	return 	 	:	none
+ */
+void CoDroneClass::go(int direction, float duration)
+{
+	go(direction);
+	unsigned long startMillis = millis();
+	while(millis() - startMillis < duration*1000)
+	{
+		go(direction);
+		delay(100);
+	}
+	hover(1);
+}
+
+
+/*
+ *	function	: 	go(direction, duration, power)
+ *	description : 	go(direction, duration, power) adding duration and power parameter to go(direction)
+ *					Parameter "direction" is enum for set direction.
+ *					Parameter "duration" will be set the timer for control drone.
+ *					Parameter "power" will be set the movement power. (0 ~ 100)
+ *
+ *	param 		:	
+ *					- direction : int
+ *					- duration 	: float
+ *					- power 	: int
+ *	return 	 	:	none
+ */
+void CoDroneClass::go(int direction, float duration, int power)
+{
+	int r,p,t;
+	r = p = t = 0;
+	switch(direction)
+	{
+		case direction_forward:
+			p = power;
+			break;
+		case direction_up:
+			t = power;
+			break;
+		case direction_right:
+			r = power;
+			break;
+		case direction_backward:
+			p = (-1)*power;
+			break;
+		case direction_down:
+			t = (-1)*power;
+			break;
+		case direction_left:
+			r = (-1)*power;
+			break;
+	}
+	unsigned long startMillis = millis();
+	while(millis() - startMillis < duration*1000)
+	{
+		move(r,p,0,t);
+		delay(100);
+	}
+	hover(1);
+}
+
+
+/*
+ *	function	:  	turn(direction)
+ *	description : 	turn(direction) is function for turn left or right infinitely
+ *					Parameter "direction" is enum for set direction.
+ *
+ *	param 		:	
+ *					- direction : int
+ *	return 	 	:	none
+ */
+void CoDroneClass::turn(int direction)
+{
+	switch(direction)
+	{
+		case direction_right:
+			move(0, 0, 50, 0);
+			break;
+		case direction_left:
+			move(0, 0, -50, 0);
+			break;
+	}
+}
+
+/*
+ *	function	: 	turn(direction, duration)
+ *	description : 	turn(direction, duration) adding duration to for turn(direction)
+ *					Parameter "direction" is enum for set direction.
+ *					Parameter "duration" will be set the timer for control drone.
+ *
+ *	param 		:	
+ *					- direction : int
+ *					- duration 	: float
+ *	return 	 	:	none
+ */
+void CoDroneClass::turn(int direction, float duration)
+{
+	unsigned long startMillis = millis();
+	while(millis() - startMillis < duration*1000)
+	{
+		turn(direction);
+		delay(100);
+	}
+	hover(1);
+
+}
+
+
+/*
+ *	function	: 	turn(direction, duration, power)
+ *	description : 	turn(direction, duration, power) adding duration and power parameter to turn(direction)
+ *					Parameter "direction" is enum for set direction.
+ *					Parameter "duration" will be set the timer for control drone.
+ *					Parameter "power" will be set the movement power. (0 ~ 100)
+ *
+ *	param 		:	
+ *					- direction : int
+ *					- duration 	: float
+ *					- power 	: int
+ *	return 	 	:	none
+ */
+void CoDroneClass::turn(int direction, float duration, int power)
+{
+	int y = power ;
+	if(direction == direction_left)
+		y *= -1;
+	unsigned long startMillis = millis();
+	while(millis() - startMillis < duration*1000)
+	{
+		move(0,0,y,0);
+		delay(100);
+	}
+	hover(1);
+}
+
+
+
+
+/*
+ *	function	: 	hover(duration)
+ *	description : 	hover(duration) is make drone hover when drone get this message for duration.
+ *					Parameter "duration" will be set the timer for control drone.
+ *
+ *	param 		:	
+ *					- duration 	: float
+ *	return 	 	:	none
+ */
+void CoDroneClass::hover(float duration)
+{
+	move(0,0,0,0);
+	delay(50);
+	unsigned long startMillis = millis();
+	while(millis() - startMillis < duration*1000)`
+	{
+		move(0,0,0,0);
+		delay(100);
+	}
+}
+
+/*
+ *	function	:	turnDegree(direction, degree)
+ *	description : 	turnDegree(direction, degree) is turn drone to certain degree.
+ *					Small or big amount of degree does not work proper. 
+ *					Parameter "direction" is enum for set direction.
+ *					Parameter "degree" is set goal degree. 30, 45, 60, 90, 120, 135, 150, 180 are recommanded.
+ *
+ *	param 		:	
+ *					- direction : int
+ *					- degree 	: int
+ *	return 	 	:	none
+ */
+void CoDroneClass::turnDegree(int direction, int degree)
+{
+	angledata angle = getAngles();
+	direction = (direction == right ? 1 : -1);
+
+	int speed = direction * 30;
+	int dest = 360 + yawDegree + degree * direction;
+	int min = (dest - 5)%360;
+	int max = (dest + 5)%360;
+
+	while(true)
+	{
+		angle = getAngles();
+		if(min>max){
+			if(min<yawDegree || max>yawDegree)
+				break;
+		}
+		else{
+			if(min<yawDegree && max>yawDegree)
+				break;
+		}
+		delay(50);
+		move(0,0,speed,0);
+		delay(50);
+	}
+	hover(1);
+}
+
+
+//FlightEvnet
+
+/*
+ *	function	:	takeOff()
+ *	description : 	takeOff() make the drone take off when drone is ready.
+ *					If drone is upside down, it will do turtle turn instead of take off.
+ *	param 		:	none
+ *	return 	 	:	none
+ */
+
+void CoDroneClass::takeOff()
+{
+	FlightEvent(TakeOff);
+	delay(3000);
+}
+
+/*
+ *	function	:	land()
+ *	description : 	land() make the drone landing.
+ *					Drone will going down and when drone is get close to floor, it will shut down motors.
+ *	param 		:	none
+ *	return 	 	:	none
+ */
+
+void CoDroneClass::land()
+{
+	FlightEvent(Landing);
+}
+
+
+/*
+ *	function	:	emargencyStop()
+ *	description : 	emargencyStop() shut down the power of motors imediately.
+ *					Use this function for kill switch.
+ *	param 		:	none
+ *	return 	 	:	none
+ */
+
+void CoDroneClass::emergencyStop()
+{
+	FlightEvent(Stop);
+}
+
+
+//get data
+
+/*
+ *	function	:	getHeight()
+ *	description : 	getHeight() is function for get height from IR distance sensor.
+ *					this function is sending message to drone and wait for 0 ~ 1 second to get data
+ *					this value is save at global bariable in header file also
+ *	param 		:	none
+ *	return 	 	:	
+ *					- height 	: int
+ */
+int CoDroneClass::getHeight()
+{
+	receiveRangeSuccess = 0;
+	sendCheckFlag = 1;
+	Send_Command(cType_Request, Req_Range);
+	long oldTime = millis();
+	while(receiveRangeSuccess == 0)
+	{
+		Receive();
+		if (oldTime + 1000 < millis()) break; //time out check 
+	}
+	return sensorRange[5];
+
+}
+
+
+/*
+ *	function	:	getPressure()
+ *	description : 	getPressure() is function for get pressure from barometer sensor.
+ *					this function is sending message to drone and wait for 0 ~ 1 second to get data
+ *					this value is save at global bariable in header file also
+ *	param 		:	none
+ *	return 	 	:	
+ *					- pressure 	: int
+ */
+int CoDroneClass::getPressure()
+{
+	receivePressureSuccess = 0;
+	sendCheckFlag = 1;
+	Send_Command(cType_Request, Req_Temperature);
+	long oldTime = millis();
+	while(receivePressureSuccess == 0)
+	{
+		Receive();
+		if (oldTime + 1000 < millis()) break; //time out check 
+	}
+	return pressure;
+}
+
+
+/*
+ *	function	:	getDroneTemp()
+ *	description : 	getDroneTemp() is function for get temperature from barometer sensor.
+ *					this function is sending message to drone and wait for 0 ~ 1 second to get data
+ *					this value is save at global bariable in header file also
+ *	param 		:	none
+ *	return 	 	:	
+ *					- temperature 	: int
+ */
+int CoDroneClass::getDroneTemp()
+{
+	receivePressureSuccess = 0;
+	sendCheckFlag = 1;
+	Send_Command(cType_Request, Req_Temperature);
+	long oldTime = millis();
+	while(receivePressureSuccess == 0)
+	{
+		Receive();
+		if (oldTime + 1000 < millis()) break; //time out check 
+	}
+	return temperature;
+
+}
+
+
+
+/*
+ *	function	:	getAngulerSpeed()
+ *	description : 	getAngulerSpeed() is function for get gyro value from gyro sensor.
+ *					this function is sending message to drone and wait for 0 ~ 1 second to get data
+ *					this value is save at global variable in header file also
+ *					Structure gyrodata  is made of roll, pitch, and yaw
+ *	param 		:	none
+ *	return 	 	:	
+ *					- result 	: gyrodata
+ */
+
+gyrodata CoDroneClass::getAngulerSpeed()
+{
+	receiveAccelSuccess = 0;
+	sendCheckFlag = 1;
+	Send_Command(cType_Request, Req_ImuRawAndAngle);
+	long oldTime = millis();
+	while(receiveAccelSuccess == 0)
+	{
+		Receive();
+		if (oldTime + 1000 < millis()) break; //time out check 
+	}
+	gyrodata result;
+	result.roll = ImuGyroRoll;
+	result.pitch = ImuGyroPitch;
+	result.yaw = ImuGyroYaw;
+	return result;
+}
+
+/*
+ *	function	:	getAngulerAngles()
+ *	description : 	getAngulerAngles() is function for get angle value.
+ *					this function is sending message to drone and wait for 0 ~ 1 second to get data
+ *					this value is save at global variable in header file also
+ *					Structure angledata  is made of roll, pitch, and yaw
+ *	param 		:	none
+ *	return 	 	:	
+ *					- result	: angledata
+ */
+angledata CoDroneClass::getGyroAngles()
+{
+	receiveAttitudeSuccess = 0;
+	sendCheckFlag = 1;
+	Send_Command(cType_Request, Req_Attitude);
+	long oldTime = millis();
+	while(receiveAttitudeSuccess == 0)
+	{
+		Receive();
+		if (oldTime + 1000 < millis()) break; //time out check 
+	}
+	angledata result;
+	result.roll = attitudeRoll;
+	result.pitch = attitudePitch;
+	result.yaw = attitudeYaw;
+	return result;
+}
+
+
+/*
+ *	function	:	getAceelerometer()
+ *	description : 	getAceelerometer() is function for get Aceelerometer value from gyro sensor.
+ *					this function is sending message to drone and wait for 0 ~ 1 second to get data
+ *					this value is save at global variable in header file also
+ *					Structure gyrodata  is made of x, y, and z
+ *	param 		:	none
+ *	return 	 	:	
+ *					- result 	: acceldata
+ */
+acceldata CoDroneClass::getAceelerometer()
+{
+	receiveAccelSuccess = 0;
+	sendCheckFlag = 1;
+	Send_Command(cType_Request, Req_ImuRawAndAngle);
+	acceldata result;
+	result.x = ImuAccX;
+	result.y = ImuAccY;
+	result.z = ImuAccZ;
+	return result;
+}
+
+
+/*
+ *	function	:	getOptFlowPosition()
+ *	description : 	getOptFlowPosition() is function for get x,y position value from optical flow sensor.
+ *					this function is sending message to drone and wait for 0 ~ 1 second to get data
+ *					this value is save at global variable in header file also
+ *					Structure gyrodata  is made of x, and y
+ *	param 		:	none
+ *	return 	 	:	
+ *					- result 	: optdata
+ */
+optdata CoDroneClass::getOptFlowPosition()
+{
+	receiveoptSuccess = 0;
+	sendCheckFlag = 1;
+	Send_Command(cType_Request, Req_ImageFlow);
+	long oldTime = millis();
+	while(receiveOptSuccess == 0)
+	{
+		Receive();
+		if (oldTime + 1000 < millis()) break; //time out check 
+	}
+	optdata result;
+	result.x = fVelocitySumX;
+	result.y = fVelocitySumY;
+	return result;
+}
+
+
+/*
+ *	function	:	getState()
+ *	description : 	getState() is function for get drone state.
+ *					this function is sending message to drone and wait for 0 ~ 1 second to get data
+ *					this value is save at global variable in header file also
+ *					Have to use with enum modeFlight
+					- fMode_None = 0,
+					- fMode_Ready,
+					- fMode_TakeOff,
+					- fMode_Flight, 
+					- fMode_Flip, 	
+					- fMode_Stop, 	
+					- fMode_Landing,
+					- fMode_Reverse,
+					- fMode_Accident,
+					- fMode_Error, 
+					- fMode_EndOfType
+ *	param 		:	none
+ *	return 	 	:	
+ *					- droneState[3] 	: int
+ */
+int CoDroneClass::getState()
+{
+	receiveStateSuccess = 0;
+	sendCheckFlag = 1;
+	Send_Command(cType_Requestm Req_State);
+	long oldTime = millis();
+	while(receiveStateSuccess == 0)
+	{
+		Receive();
+		if (oldTime + 1000 < millis()) break; //time out check 
+	}
+	return droneState[3];	
+}
+
+
+/*
+ *	function	:	getBatteryPercentage()
+ *	description : 	getBatteryPercentage() is function for get battery percentage.
+ *					this function is sending message to drone and wait for 0 ~ 1 second to get data
+ *					this value is save at global variable in header file also
+ *					If you request in a 5 seconds, it's return data that save in a header file.
+ *	param 		:	none
+ *	return 	 	:	
+ *					- Battery_Percent 	: int
+ */
+int CoDroneClass::getBatteryPercentage()
+{	
+	if(batterytime + 5000 > millis())
+		return Battery_Percent;
+	receiveBatterySuccess = 0;
+	sendCheckFlag = 1;
+	Send_Command(cType_Request, Req_Battery);
+	long oldTime = millis();
+	while(receiveBatterySuccess == 0)
+	{
+		Receive();
+		if(receiveBatterySuccess == 1)	batterytime  = millis();
+		if (oldTime + 1000 < millis()) break; //time out check 
+	}
+	return Battery_Percent;
+}
+
+
+/*
+ *	function	:	getBatteryVoltage()
+ *	description : 	getBatteryVoltage() is function for get battery voltage.
+ *					this function is sending message to drone and wait for 0 ~ 1 second to get data
+ *					this value is save at global variable in header file also
+ *					If you request in a 5 seconds, it's return data that save in a header file.
+ *	param 		:	none
+ *	return 	 	:	
+ *					- Battery_voltage 	: int
+ */
+int CoDroneClass::getBatteryVoltage()
+{
+	if(batterytime + 5000 > millis())
+		return Battery_voltage;
+	receiveBatterySuccess = 0;
+	sendCheckFlag = 1;
+	Send_Command(cType_Request, Req_Battery);
+	long oldTime = millis();
+	while(receiveBatterySuccess == 0)
+	{
+		Receive();
+		if(receiveBatterySuccess == 1)	batterytime  = millis();
+		if (oldTime + 1000 < millis()) break; //time out check 
+	}
+	return Battery_voltage;
+}
+
+
+/*
+ *	function	:	getTrim()
+ *	description : 	getTrim() is function for get current trim value for flight.
+ *					this function is sending message to drone and wait for 0 ~ 1 second to get data
+ *					this value is save at global variable in header file also.
+ *					Structure trim data has roll, pitch, yaw, and throttle.
+ *	param 		:	none
+ *	return 	 	:	
+ *					- result 	: int
+ */
+trimdata CoDroneClass::getTrim()
+{
+	receiveTrimSuccess = 0;
+	sendCheckFlag = 1;
+	Send_Command(cType_Request, Req_TrimFlight	);
+	long oldTime = millis();
+	while(receiveTrimSuccess == 0)
+	{
+		Receive();
+		if (oldTime + 1000 < millis()) break; //time out check 
+	}
+	trimdata result;
+	result.roll = TrimAll_Roll;
+	result.pitch = TrimAll_Pitch;
+	result.yaw = TrimAll_Yaw;
+	result.throttle = TrimAll_Throttle;
+
+	return result;
+}
+
+
+/*
+ *	function	:	goToHeight(set)
+ *	description : 	goToHeight(set) is function for fly to certain height.
+ *					default power is 20%. If drone is not move, change power.
+ *					It will send every 100 millisecond for request height and control.
+ *					Parameter set is goal height(mm) for drone.
+ *	param 		:	
+ 					- set 	: int  
+ *	return 	 	:	none
+ */
+void CoDroneClass::goToHeight(int set)
+{
+	while(true)
+	{
+		int height = getHeight();
+		delay(50);
+		if(height < set - 100)
+			move(0,0,0,20);
+		else if(height > set + 100)
+			move(0,0,0,-20);
+		else if( height > set-100 || height < set+ 100){
+			hover(0.5);
+			break;
+		}
+		delay(50);
+	}
+}
+
+
+/*
+ *	function	:	isUpsideDown()
+ *	description : 	isUpsideDown() is function for check drone is upside down or not
+ *					If drone is flipped return true. else return false.
+ *	param 		:	none
+ *	return 	 	:	none
+ */
+bool CoDroneClass::isUpsideDown()
+{
+	if(getState() == fMode_Flip)
+		return true;
+	return false;
+}
+
+
+/*
+ *	function	:	isFlying()
+ *	description : 	isFlying() is function for check drone is flying or not
+ *					If drone is flipped return true. else return false.
+ *	param 		:	none
+ *	return 	 	:	none
+ */
+bool CoDroneClass::isFlying()
+{
+	if(getState() == fMode_Flight)
+		return true;
+	return false;
+}
+
+
+/*
+ *	function	:	isReadyToFly()
+ *	description : 	isReadyToFly() is function for check drone is ready or not
+ *					If drone is flipped return true. else return false.
+ *	param 		:	none
+ *	return 	 	:	none
+ */
+bool CoDroneClass::isReadyToFly()
+{
+	if(getState() == fMode_Ready)
+		return true;
+	return false;
+}
+
+
+/*
+ *	function	:	setArmRGB(r, g, b)
+ *	description : 	setArmRGB(r, g, b) is function for change color for arm LED
+ *	param 		:
+ *					- r : int (0 ~ 255)
+ *					- g : int (0 ~ 255)
+ *					- b : int (0 ~ 255)
+ *	return 	 	:	none
+ */
+void CoDroneClass::setArmRGB(byte r, byte g, byte b)
+{
+	byte _packet[9];
+	byte _crc[2];
+
+	armred = r;
+	armgreen = g;
+	armblue = b;
+
+  	//header
+	_packet[0] = dType_LedModeColor;
+	_packet[1] = 5;
+
+ 	//data
+	_packet[2] = armmode;
+	_packet[3] = r;
+	_packet[4] = g;  
+	_packet[5] = b;  
+	_packet[6] = 100;
+
+	unsigned short crcCal = CRC16_Make(_packet, _packet[1]+2);
+	_crc[0] = (crcCal >> 8) & 0xff;
+	_crc[1] = crcCal & 0xff;
+
+	Send_Processing(_packet,_packet[1],_crc);
+	delay(250);
+}
+
+
+/*
+ *	function	:	setEyeRGB(r, g, b)
+ *	description : 	setEyeRGB(r, g, b) is function for change color for eye LED
+ *	param 		:
+ *					- r : int (0 ~ 255)
+ *					- g : int (0 ~ 255)
+ *					- b : int (0 ~ 255)
+ *	return 	 	:	none
+ */
+void CoDroneClass::setEyeRGB(byte r, byte g, byte b)
+{
+	byte _packet[9];
+	byte _crc[2];
+	
+	eyered = r;
+	eyegreen = g;
+	eyeblue = b;
+
+  	//header
+	_packet[0] = dType_LedModeColor;
+	_packet[1] = 5;
+
+ 	//data
+	_packet[2] = eyemode;
+	_packet[3] = r;
+	_packet[4] = g;  
+	_packet[5] = b;  
+	_packet[6] = 100;
+
+	unsigned short crcCal = CRC16_Make(_packet, _packet[1]+2);
+	_crc[0] = (crcCal >> 8) & 0xff;
+	_crc[1] = crcCal & 0xff;
+
+	Send_Processing(_packet,_packet[1],_crc);
+	delay(250);
+
+}
+
+/*
+ *	function	:	setAllRGB(r, g, b)
+ *	description : 	setAllRGB(r, g, b) is function for change color for both arm and eye LED
+ *	param 		:
+ *					- r : int (0 ~ 255)
+ *					- g : int (0 ~ 255)
+ *					- b : int (0 ~ 255)
+ *	return 	 	:	none
+ */
+void CoDroneClass::setAllRGB(byte r, byte g, byte b)
+{
+	setArmRGB(r,g,b);
+	setEyeRGB(r,g,b);
+}
+
+void CoDroneClass::setArmDefaultRGB(byte r, byte g, byte b)
+{
+
+}
+
+void CoDroneClass::setEyeDefaultRGB(byte r, byte g, byte b)
+{
+
+}
+
+void CoDroneClass::setAllDefaultRGB(byte r, byte g, byte b)
+{
+
+}
+
+void CoDroneClass::resetDefaultLED()
+{
+
+}
+
+
+/*
+ *	function	:	setArmMode(mode)
+ *	description : 	setArmMode(mode) is function for change mode for arm LED
+ *	param 		:
+ *					- r : mode
+ *	return 	 	:	none
+ */
+void CoDroneClass::setArmMode(byte mode)
+{
+	byte _packet[9];
+	byte _crc[2];
+
+	armmode = mode+0x30;
+
+  	//header
+	_packet[0] = dType_LedModeColor;
+	_packet[1] = 5;
+
+ 	//data
+	_packet[2] = armmode;
+	_packet[3] = armred;
+	_packet[4] = armgreen;  
+	_packet[5] = armblue;  
+	_packet[6] = 100;
+
+	unsigned short crcCal = CRC16_Make(_packet, _packet[1]+2);
+	_crc[0] = (crcCal >> 8) & 0xff;
+	_crc[1] = crcCal & 0xff;
+
+	Send_Processing(_packet,_packet[1],_crc);
+	delay(250);
+}
+/*
+ *	function	:	setArmMode(mode)
+ *	description : 	setArmMode(mode) is function for change mode for arm LED
+ *	param 		:
+ *					- r : mode
+ *	return 	 	:	none
+ */
+void CoDroneClass::setEyeMode(byte mode)
+{
+	byte _packet[9];
+	byte _crc[2];
+
+	eyemode = mode;
+
+  	//header
+	_packet[0] = dType_LedModeColor;
+	_packet[1] = 5;
+
+ 	//data
+	_packet[2] = eyemode;
+	_packet[3] = eyered;
+	_packet[4] = eyegreen;  
+	_packet[5] = eyeblue;    
+	_packet[6] = 100;
+
+	unsigned short crcCal = CRC16_Make(_packet, _packet[1]+2);
+	_crc[0] = (crcCal >> 8) & 0xff;
+	_crc[1] = crcCal & 0xff;
+
+	Send_Processing(_packet,_packet[1],_crc);
+	delay(250);
+}
+
+/*
+ *	function	:	setArmMode(mode)
+ *	description : 	setArmMode(mode) is function for change mode for arm LED
+ *	param 		:
+ *					- r : mode
+ *	return 	 	:	none
+ */
+void CoDroneClass::setAllMode(byte mode)
+{
+	setArmMode(mode);
+	setEyeMode(mode);
+}
+
+void CoDroneClass::setArmDefaultMode(byte mode)
+{
+
+}
+
+void CoDroneClass::setEyeDefaultMode(byte mode)
+{
+
+}
+
+void CoDroneClass::setAllDefaultMode(byte mode)
+{
+
+}
+
+
+/*
+ *	function	:	sway()
+ *	description : 	sway() is function for move drone left and right twice
+ *					this function is called by flySequence()
+ *	param 		:	none
+ *	return 	 	:	none
+ */
+void CoDroneClass::sway()
+{
+	move(2, 50, 0, 0, 0);
+  	move(2, -50, 0, 0, 0);
+  	move(2, 50, 0, 0, 0);
+  	move(2, -50, 0, 0, 0);
+}
+
+
+/*
+ *	function	:	zigzag()
+ *	description : 	zigzag() is function for move drone zigzag twice
+ *					this function is called by flySequence()
+ *	param 		:	none
+ *	return 	 	:	none
+ */
+void CoDroneClass::zigzag()
+{
+	move(2, 50, 50, 0, 0);
+  	move(2, -50, 50, 0, 0);
+  	move(2, 50, 50, 0, 0);
+  	move(2, -50, 50, 0, 0);
+}
+
+
+/*
+ *	function	:	square()
+ *	description : 	square() is function for fly square shape
+ 					It will fly right -> forward -> left -> back
+ *					this function is called by flySequence()
+ *	param 		:	none
+ *	return 	 	:	none
+ */
+void CoDroneClass::square()
+{
+	move(2, 50, 0, 0, 0);
+  	move(2, 0, 50, 0, 0);
+  	move(2, -50, 0, 0, 0);
+  	move(2, 0, -50, 0, 0);
+
+}
+
+
+/*
+ *	function	:	triangle()
+ *	description : 	triangle() is function for fly triangle shape
+ 					It will fly forward -> turn left 120 degree
+ *					-> fly forward -> turn left 120 degree -> fly forward
+ *					this function is called by flySequence()
+ *	param 		:	none
+ *	return 	 	:	none
+ */
+void CoDroneClass::triangle()
+{
+	move(1.5, 0,50,0,0);
+  	turnDegree(left,120);
+  	move(1.5, 0,50,0,0);
+  	turnDegree(left,120);
+  	move(1.5, 0,50,0,0);
+}
+
+
+
+/*
+ *	function	:	hop()
+ *	description : 	hop() is function for drone looks like hopping.
+ *					Drone will go up and down for 1second each while flying forward
+ *					this function is called by flySequence()
+ *	param 		:	none
+ *	return 	 	:	none
+ */
+void CoDroneClass::hop()
+{
+	move(30, 0, 50, 1)
+	delay(1000);
+    move(30, 0, -50, 1)
+    delay(1000);
+    hover(1);
+}
+
+
+/*
+ *	function	:	circle()
+ *	description : 	circle() is function for fly circle shape
+ *					Drone will do yaw and roll at the same time
+ *					yaw direction and roll direction is oposite
+ *					this function is called by flySequence()
+ *	param 		:	none
+ *	return 	 	:	none
+ */
+void CoDroneClass::circle()
+{
+	move(10,20,0,-20,0);
+}
+
+
+/*
+ *	function	:	spiral()
+ *	description : 	spiral() is function for fly spiral shape
+ *					set yaw for -50 and increase roll with for loop
+ *					after finish
+ *					the function is called by flySequence()
+ *	param 		:	none
+ *	return 	 	:	none
+ */
+void CoDroneClass::spiral()
+{
+	for(int i = 0 ;i<100 ;i++){
+    	setRoll((int)(i/8));
+    	setYaw(-50);
+    	move();
+    	delay(100);
+  	}
+  hover(1);
+  setRoll(0);
+  setYaw(0);
+}
+////////////////////////////////////////////////////
 
 CoDroneClass CoDrone;                         
