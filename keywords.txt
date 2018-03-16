@@ -7,7 +7,11 @@
 #######################################
 
 CoDrone				KEYWORD1
-
+gyrodata			KEYWORD1
+acceldata			KEYWORD1
+angledata			KEYWORD1
+trimdata			KEYWORD1
+optdata				KEYWORD1
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
@@ -68,6 +72,8 @@ Set_TrimReset		KEYWORD2
 
 LED_Blink			KEYWORD2
 LED_Connect			KEYWORD2
+
+
 
 #######################################
 # Constants (LITERAL1)
@@ -139,3 +145,32 @@ TEAM_YELLOW			LITERAL1
 FREE_PLAY			LITERAL1
 
 energy				LITERAL1
+
+LEFT				LITERAL1
+FORWARD				LITERAL1
+RIGHT				LITERAL1
+BACKWARD			LITERAL1
+UP					LITERAL1
+DOWN				LITERAL1
+
+ZIGZAG				LITERAL1
+SWAY				LITERAL1
+SQUARE				LITERAL1
+CIRCLE				LITERAL1
+SPIRAL				LITERAL1
+TRIANGLE			LITERAL1
+HOP					LITERAL1
+
+LED_None 			LITERAL1
+LED_Hold			LITERAL1
+LED_Mix				LITERAL1
+LED_Flicker			LITERAL1
+LED_FlickerDouble	LITERAL1
+LED_Dimming			LITERAL1
+LED_Flow			LITERAL1
+LED_FlowReverse		LITERAL1
+LED_EndOfType		LITERAL1
+
+
+
+

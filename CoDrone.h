@@ -163,12 +163,21 @@ typedef uint8_t u8;
 #define ThrottleDecrease		trim_ThrottleDecrease
 
 // 2018, 1, 22 added
-#define left 					direction_left
-#define forward 				direction_forward
-#define right 					direction_right
-#define backward				direction_backward
-#define up  					direction_up
-#define down 					direction_down
+#define LEFT 					direction_left
+#define FORWARD 				direction_forward
+#define RIGHT 					direction_right
+#define BACKWARD				direction_backward
+#define UP  					direction_up
+#define DOWN 					direction_down
+
+// 2018, 3, 12 added
+#define ZIGZAG 					Seq_zigzag
+#define SWAY 					Seq_sway
+#define SQUARE 					Seq_square
+#define CIRCLE 					Seq_circle
+#define SPIRAL 					Seq_spiral
+#define TRIANGLE 				Seq_triangle
+#define HOP 					Seq_hop
 
 enum Direction
 {
@@ -229,7 +238,7 @@ typedef struct optdata
 {
 	int x;
 	int y;
-};
+}optdata;
 
 
 
@@ -628,13 +637,13 @@ enum ModeLight
 enum LED
 {
   LED_None = 0x10,
-  LED_Hold, 							///< ÁöÁ¤ÇÑ »ö»óÀ» °è¼Ó ÄÔ
-  LED_Mix, 							///< ¼øÂ÷ÀûÀ¸·Î LED »ö º¯°æ
-  LED_Flicker, 						///< ±ôºýÀÓ
-  LED_FlickerDouble, 				///< ±ôºýÀÓ(µÎ ¹ø ±ôºýÀÌ°í ±ôºýÀÎ ½Ã°£¸¸Å­ ²¨Áü)
-  LED_Dimming, 						///< ¹à±â Á¦¾îÇÏ¿© ÃµÃµÈ÷ ±ôºýÀÓ						///< ¹à±â Á¦¾îÇÏ¿© ÃµÃµÈ÷ ±ôºýÀÓ
-  LED_Flow, 							///< ¾Õ¿¡¼­ µÚ·Î Èå¸§
-  LED_FlowReverse, 					///< µÚ¿¡¼­ ¾ÕÀ¸·Î Èå¸§
+  LED_Hold,
+  LED_Mix, 
+  LED_Flicker,
+  LED_FlickerDouble,
+  LED_Dimming,
+  LED_Flow, 
+  LED_FlowReverse, 	
   LED_EndOfType
 };
 
@@ -923,6 +932,7 @@ public:
 
 
 	//sequence
+	void flySequence(int shape);
 	void sway();
 	void zigzag();
 	void square();
