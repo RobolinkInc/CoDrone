@@ -16,21 +16,15 @@
 /*******************************************************************/
 PATCH NOTES
 /*******************************************************************/
-1.4.5
+1.5.0
 ---------------------------------------------------------------------
-deleted Functions:
--PrintGyro(), PrintPressure(), PrintFlow(): delete print function
-
 added Function:
--requestRangeSensor() : get range sensor data from IR rangesensor
+-go(), move(), turn(), request----() etc..
 
-other fix point:
--remove debug part for receive check(over 1000 lines) if you need it download lower version to use it
+- we keep old functions but add new functions for younger kid and user
 
-- Actual receive check data is range and attitude if you need more information for sensor data please let me know. We can get pressure, motor input voltage, raw gyro and accel data, bettery, etc. more.
+- New library is more close to natural language
 
-- Add example for print range sensor and change default led color.
+- Request battery info in new function only request once int 3 seconds 
 
--time check merge one time check. Don't need other time check
-
--receive function is little change
+- If you request more than once in 3 seconds, It will request at first time and use that data for 3 second
