@@ -2957,6 +2957,10 @@ void CoDroneClass::takeOff()
 void CoDroneClass::land()
 {
 	FlightEvent(Landing);
+	setroll(0);
+	setPitch(0);
+	setYaw(0);
+	setThrottle(0);
 }
 
 
@@ -2971,6 +2975,10 @@ void CoDroneClass::land()
 void CoDroneClass::emergencyStop()
 {
 	FlightEvent(Stop);
+	setroll(0);
+	setPitch(0);
+	setYaw(0);
+	setThrottle(0);
 }
 
 
