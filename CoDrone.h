@@ -654,14 +654,14 @@ enum ModeLight
 
 enum LED
 {
-  LED_None = 0x10,
-  LED_Hold,
-  LED_Mix, 
-  LED_Flicker,
-  LED_FlickerDouble,
-  LED_Dimming,
-  LED_Flow, 
-  LED_FlowReverse, 	
+  LED_NONE = 0x10,
+  LED_HOLD,
+  LED_MIX, 
+  LED_FLICKER,
+  LED_FLICKERDOUBLE,
+  LED_DIMMING,
+  LED_FLOW, 
+  LED_FLOWREVERSE, 	
   LED_EndOfType
 };
 
