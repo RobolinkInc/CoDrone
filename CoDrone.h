@@ -203,6 +203,24 @@ enum Sequence
 	Seq_hop,
 	Seq_EndOfType,
 }
+enum Angle
+{
+	ANGLE_30 = 30,
+	ANGLE_45 = 45,
+	ANGLE_60 = 60,
+	ANGLE_90 = 90,
+	ANGLE_120 = 120,
+	ANGLE_135 = 135,
+	ANGLE_150 = 150,
+	ANGLE_180 = 180,
+	ANGLE_210 = 210,
+	ANGLE_225 = 225,
+	ANGLE_240 = 240,
+	ANGLE_270 = 270,
+	ANGLE_300 = 300,
+	ANGLE_315 = 315, 
+	ANGLE_330 = 330
+}
 //
 typedef struct gyrodata
 {
@@ -636,14 +654,14 @@ enum ModeLight
 
 enum LED
 {
-  LED_None = 0x10,
-  LED_Hold,
-  LED_Mix, 
-  LED_Flicker,
-  LED_FlickerDouble,
-  LED_Dimming,
-  LED_Flow, 
-  LED_FlowReverse, 	
+  LED_NONE = 0x10,
+  LED_HOLD,
+  LED_MIX, 
+  LED_FLICKER,
+  LED_FLICKERDOUBLE,
+  LED_DIMMING,
+  LED_FLOW, 
+  LED_FLOWREVERSE, 	
   LED_EndOfType
 };
 
