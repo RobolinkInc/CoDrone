@@ -2903,7 +2903,7 @@ void CoDroneClass::hover(float duration)
  */
 void CoDroneClass::turnDegree(int direction, int degree)
 {
-	angledata angle = getAngles();
+	angledata angle = getGyroAngles();
 	direction = (direction == right ? 1 : -1);
 
 	int speed = direction * 30;
@@ -2913,7 +2913,7 @@ void CoDroneClass::turnDegree(int direction, int degree)
 
 	while(true)
 	{
-		angle = getAngles();
+		angle = getGyroAngles();
 		if(min>max){
 			if(min<yawDegree || max>yawDegree)
 				break;
@@ -3089,8 +3089,8 @@ gyrodata CoDroneClass::getAngulerSpeed()
 }
 
 /*
- *	function	:	getAngulerAngles()
- *	description : 	getAngulerAngles() is function for get angle value.
+ *	function	:	getGyroAngles()
+ *	description : 	getGyroAngles() is function for get angle value.
  *					this function is sending message to drone and wait for 0 ~ 1 second to get data
  *					this value is save at global variable in header file also
  *					Structure angledata  is made of roll, pitch, and yaw
