@@ -2740,27 +2740,38 @@ void CoDroneClass::move(float duration, int _roll, int _pitch, int _yaw, int _th
  */
 void CoDroneClass::go(int direction)
 {
+	int r,p,t;
+	r = p = t = 0;
+	
 	switch(direction)
 	{
 		case direction_forward:
-			move(0, 50, 0, 0);
+			p = 50;
 			break;
 		case direction_up:
-			move(0, 0, 0, 50);
+			t = 50
 			break;
 		case direction_right:
-			move(50, 0, 0, 0);
+			r = 50;
 			break;
 		case direction_backward:
-			move(0, -50, 0, 0);
+			p = -50;
 			break;
 		case direction_down:
-			move(0, 0, 0, -50);
+			t = -50;
 			break;
 		case direction_left:
-			move(-50, 0, 0, 0);
+			r = -50;
 			break;
 	}
+	move(r,p,0,t);
+	unsigned long startMillis = millis();
+	while(millis() - startMillis < 1000)
+	{
+		move(r,p,0,t);
+		delay(100);
+	}
+	hover(1);
 
 }
 
@@ -2778,14 +2789,39 @@ void CoDroneClass::go(int direction)
  */
 void CoDroneClass::go(int direction, float duration)
 {
-	go(direction);
+	int r,p,t;
+	r = p = t = 0;
+	
+	switch(direction)
+	{
+		case direction_forward:
+			p = 50;
+			break;
+		case direction_up:
+			t = 50
+			break;
+		case direction_right:
+			r = 50;
+			break;
+		case direction_backward:
+			p = -50;
+			break;
+		case direction_down:
+			t = -50;
+			break;
+		case direction_left:
+			r = -50;
+			break;
+	}
+	move(r,p,0,t);
 	unsigned long startMillis = millis();
 	while(millis() - startMillis < duration*1000)
 	{
-		go(direction);
+		move(r,p,0,t);
 		delay(100);
 	}
-	hover(1);
+	if(duration != 0)
+		hover(1);
 }
 
 
@@ -2833,7 +2869,8 @@ void CoDroneClass::go(int direction, float duration, int power)
 		move(r,p,0,t);
 		delay(100);
 	}
-	hover(1);
+	if(duration != 0)
+		hover(1);
 }
 
 
@@ -2848,15 +2885,20 @@ void CoDroneClass::go(int direction, float duration, int power)
  */
 void CoDroneClass::turn(int direction)
 {
-	switch(direction)
+	int y = 0;
+	if (direction == direction_right)
+		y = 50;
+	else if (direction_left)
+		y = -50;
+	move(0,0,y,0);
+	unsigned long startMillis = millis();
+	while(millis() - startMillis < 1000)
 	{
-		case direction_right:
-			move(0, 0, 50, 0);
-			break;
-		case direction_left:
-			move(0, 0, -50, 0);
-			break;
+		move(0,0,y,0);
+		delay(100);
 	}
+	hover(1);
+
 }
 
 /*
@@ -2872,13 +2914,20 @@ void CoDroneClass::turn(int direction)
  */
 void CoDroneClass::turn(int direction, float duration)
 {
+	int y = 0;
+	if (direction == direction_right)
+		y = 50;
+	else if (direction_left)
+		y = -50;
+	move(0,0,y,0);
 	unsigned long startMillis = millis();
 	while(millis() - startMillis < duration*1000)
 	{
-		turn(direction);
+		move(0,0,y,0);
 		delay(100);
 	}
-	hover(1);
+	if(duration != 0)
+		hover(1);
 
 }
 
@@ -2907,7 +2956,8 @@ void CoDroneClass::turn(int direction, float duration, int power)
 		move(0,0,y,0);
 		delay(100);
 	}
-	hover(1);
+	if(duration != 0)
+		hover(1);
 }
 
 
