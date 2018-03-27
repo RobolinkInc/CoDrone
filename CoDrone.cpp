@@ -3152,7 +3152,7 @@ acceldata CoDroneClass::getAceelerometer()
  */
 optdata CoDroneClass::getOptFlowPosition()
 {
-	receiveoptSuccess = 0;
+	receiveOptSuccess = 0;
 	sendCheckFlag = 1;
 	Send_Command(cType_Request, Req_ImageFlow);
 	long oldTime = millis();
