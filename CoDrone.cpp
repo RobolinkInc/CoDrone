@@ -2547,6 +2547,51 @@ int CoDroneClass::getThrottle(){
 	return throttle;
 }
 
+void CoDroneClass::trim(int _roll, int _pitch, int _yaw, int _throttle)
+{	
+	byte _packet[10];
+	byte _crc[2];
+
+ 	/*
+  		header + data
+  		header :
+  		data type = trimflight(_packet[0])
+  		data length = 8 (_packet[1])
+  	*/
+
+	//header
+	_packet[0] = dType_TrimFlight;
+	_packet[1] = 8;
+
+    //seperate data to high part and low part
+	_packet[2] 	= _roll & 0xff;
+	_packet[3] 	= (_roll >> 8) & 0xff;
+
+	_packet[4] 	= _pitch & 0xff;
+	_packet[5] 	= (_pitch >> 8) & 0xff;
+	
+	_packet[6]	= _yaw & 0xff;
+	_packet[7] 	= (_yaw >> 8) & 0xff;
+	
+	_packet[8]  = _throttle & 0xff;
+	_packet[9]  = (_throttle >> 8) & 0xff;
+
+	unsigned short crcCal = CRC16_Make(_packet, _packet[1]+2);
+	_crc[0] = (crcCal >> 8) & 0xff;
+	_crc[1] = crcCal & 0xff;
+
+	//send packet arr, length, and crc
+	sendCheckFlag = 1;
+	Send_Processing(_packet,_packet[1],_crc);
+	Send_Check(_packet,_packet[1],_crc);
+
+}
+
+void CoDroneClass::resetTrim()
+{
+	trim(0,0,0,0);
+}
+
 //------------flight command--------------------------
 
 /*
@@ -2678,7 +2723,8 @@ void CoDroneClass::move(float duration, int _roll, int _pitch, int _yaw, int _th
 		move(_roll, _pitch, _yaw, _throttle);
 		delay(100);
 	}
-	hover(1);	
+	if(duration != 0)
+		hover(1);	
 }
 
 
@@ -2695,27 +2741,38 @@ void CoDroneClass::move(float duration, int _roll, int _pitch, int _yaw, int _th
  */
 void CoDroneClass::go(int direction)
 {
+	int r,p,t;
+	r = p = t = 0;
+	
 	switch(direction)
 	{
 		case direction_forward:
-			move(0, 50, 0, 0);
+			p = 50;
 			break;
 		case direction_up:
-			move(0, 0, 0, 50);
+			t = 50;
 			break;
 		case direction_right:
-			move(50, 0, 0, 0);
+			r = 50;
 			break;
 		case direction_backward:
-			move(0, -50, 0, 0);
+			p = -50;
 			break;
 		case direction_down:
-			move(0, 0, 0, -50);
+			t = -50;
 			break;
 		case direction_left:
-			move(-50, 0, 0, 0);
+			r = -50;
 			break;
 	}
+	move(r,p,0,t);
+	unsigned long startMillis = millis();
+	while(millis() - startMillis < 1000)
+	{
+		move(r,p,0,t);
+		delay(100);
+	}
+	hover(1);
 
 }
 
@@ -2733,14 +2790,39 @@ void CoDroneClass::go(int direction)
  */
 void CoDroneClass::go(int direction, float duration)
 {
-	go(direction);
+	int r,p,t;
+	r = p = t = 0;
+	
+	switch(direction)
+	{
+		case direction_forward:
+			p = 50;
+			break;
+		case direction_up:
+			t = 50;
+			break;
+		case direction_right:
+			r = 50;
+			break;
+		case direction_backward:
+			p = -50;
+			break;
+		case direction_down:
+			t = -50;
+			break;
+		case direction_left:
+			r = -50;
+			break;
+	}
+	move(r,p,0,t);
 	unsigned long startMillis = millis();
 	while(millis() - startMillis < duration*1000)
 	{
-		go(direction);
+		move(r,p,0,t);
 		delay(100);
 	}
-	hover(1);
+	if(duration != 0)
+		hover(1);
 }
 
 
@@ -2788,7 +2870,8 @@ void CoDroneClass::go(int direction, float duration, int power)
 		move(r,p,0,t);
 		delay(100);
 	}
-	hover(1);
+	if(duration != 0)
+		hover(1);
 }
 
 
@@ -2803,15 +2886,20 @@ void CoDroneClass::go(int direction, float duration, int power)
  */
 void CoDroneClass::turn(int direction)
 {
-	switch(direction)
+	int y = 0;
+	if (direction == direction_right)
+		y = 50;
+	else if (direction_left)
+		y = -50;
+	move(0,0,y,0);
+	unsigned long startMillis = millis();
+	while(millis() - startMillis < 1000)
 	{
-		case direction_right:
-			move(0, 0, 50, 0);
-			break;
-		case direction_left:
-			move(0, 0, -50, 0);
-			break;
+		move(0,0,y,0);
+		delay(100);
 	}
+	hover(1);
+
 }
 
 /*
@@ -2827,13 +2915,20 @@ void CoDroneClass::turn(int direction)
  */
 void CoDroneClass::turn(int direction, float duration)
 {
+	int y = 0;
+	if (direction == direction_right)
+		y = 50;
+	else if (direction_left)
+		y = -50;
+	move(0,0,y,0);
 	unsigned long startMillis = millis();
 	while(millis() - startMillis < duration*1000)
 	{
-		turn(direction);
+		move(0,0,y,0);
 		delay(100);
 	}
-	hover(1);
+	if(duration != 0)
+		hover(1);
 
 }
 
@@ -2862,7 +2957,8 @@ void CoDroneClass::turn(int direction, float duration, int power)
 		move(0,0,y,0);
 		delay(100);
 	}
-	hover(1);
+	if(duration != 0)
+		hover(1);
 }
 
 
@@ -2882,7 +2978,7 @@ void CoDroneClass::hover(float duration)
 	move(0,0,0,0);
 	delay(50);
 	unsigned long startMillis = millis();
-	while(millis() - startMillis < duration*1000)`
+	while(millis() - startMillis < duration*1000)
 	{
 		move(0,0,0,0);
 		delay(100);
@@ -2903,8 +2999,8 @@ void CoDroneClass::hover(float duration)
  */
 void CoDroneClass::turnDegree(int direction, int degree)
 {
-	angledata angle = getAngles();
-	direction = (direction == right ? 1 : -1);
+	angledata angle = getGyroAngles();
+	direction = (direction == RIGHT ? 1 : -1);
 
 	int speed = direction * 30;
 	int dest = 360 + yawDegree + degree * direction;
@@ -2913,7 +3009,7 @@ void CoDroneClass::turnDegree(int direction, int degree)
 
 	while(true)
 	{
-		angle = getAngles();
+		angle = getGyroAngles();
 		if(min>max){
 			if(min<yawDegree || max>yawDegree)
 				break;
@@ -2957,7 +3053,7 @@ void CoDroneClass::takeOff()
 void CoDroneClass::land()
 {
 	FlightEvent(Landing);
-	setroll(0);
+	setRoll(0);
 	setPitch(0);
 	setYaw(0);
 	setThrottle(0);
@@ -2975,7 +3071,7 @@ void CoDroneClass::land()
 void CoDroneClass::emergencyStop()
 {
 	FlightEvent(Stop);
-	setroll(0);
+	setRoll(0);
 	setPitch(0);
 	setYaw(0);
 	setThrottle(0);
@@ -3089,8 +3185,8 @@ gyrodata CoDroneClass::getAngulerSpeed()
 }
 
 /*
- *	function	:	getAngulerAngles()
- *	description : 	getAngulerAngles() is function for get angle value.
+ *	function	:	getGyroAngles()
+ *	description : 	getGyroAngles() is function for get angle value.
  *					this function is sending message to drone and wait for 0 ~ 1 second to get data
  *					this value is save at global variable in header file also
  *					Structure angledata  is made of roll, pitch, and yaw
@@ -3122,7 +3218,7 @@ angledata CoDroneClass::getGyroAngles()
  *	description : 	getAceelerometer() is function for get Aceelerometer value from gyro sensor.
  *					this function is sending message to drone and wait for 0 ~ 1 second to get data
  *					this value is save at global variable in header file also
- *					Structure gyrodata  is made of x, y, and z
+ *					Structure acceldata  is made of x, y, and z
  *	param 		:	none
  *	return 	 	:	
  *					- result 	: acceldata
@@ -3145,14 +3241,14 @@ acceldata CoDroneClass::getAceelerometer()
  *	description : 	getOptFlowPosition() is function for get x,y position value from optical flow sensor.
  *					this function is sending message to drone and wait for 0 ~ 1 second to get data
  *					this value is save at global variable in header file also
- *					Structure gyrodata  is made of x, and y
+ *					Structure optdata  is made of x, and y
  *	param 		:	none
  *	return 	 	:	
  *					- result 	: optdata
  */
 optdata CoDroneClass::getOptFlowPosition()
 {
-	receiveoptSuccess = 0;
+	receiveOptSuccess = 0;
 	sendCheckFlag = 1;
 	Send_Command(cType_Request, Req_ImageFlow);
 	long oldTime = millis();
@@ -3193,7 +3289,7 @@ int CoDroneClass::getState()
 {
 	receiveStateSuccess = 0;
 	sendCheckFlag = 1;
-	Send_Command(cType_Requestm Req_State);
+	Send_Command(cType_Request, Req_State);
 	long oldTime = millis();
 	while(receiveStateSuccess == 0)
 	{
@@ -3327,7 +3423,7 @@ void CoDroneClass::goToHeight(int set)
  *	param 		:	none
  *	return 	 	:	none
  */
-bool CoDroneClass::isUpsideDown()
+boolean CoDroneClass::isUpsideDown()
 {
 	if(getState() == fMode_Flip)
 		return true;
@@ -3342,7 +3438,7 @@ bool CoDroneClass::isUpsideDown()
  *	param 		:	none
  *	return 	 	:	none
  */
-bool CoDroneClass::isFlying()
+boolean CoDroneClass::isFlying()
 {
 	if(getState() == fMode_Flight)
 		return true;
@@ -3357,7 +3453,7 @@ bool CoDroneClass::isFlying()
  *	param 		:	none
  *	return 	 	:	none
  */
-bool CoDroneClass::isReadyToFly()
+boolean CoDroneClass::isReadyToFly()
 {
 	if(getState() == fMode_Ready)
 		return true;
@@ -3477,7 +3573,7 @@ void CoDroneClass::setArmDefaultRGB(byte r, byte g, byte b)
 	armblue = b;
 
   	//header
-	_packet[0] = dType_LedDefaultModeColor;
+	_packet[0] = dType_LedDefaultColor;
 	_packet[1] = 5;
 
  	//data
@@ -3516,7 +3612,7 @@ void CoDroneClass::setEyeDefaultRGB(byte r, byte g, byte b)
 	armblue = b;
 
   	//header
-	_packet[0] = dType_LedDefaultModeColor;
+	_packet[0] = dType_LedDefaultColor;
 	_packet[1] = 5;
 
  	//data
@@ -3547,8 +3643,8 @@ void CoDroneClass::setEyeDefaultRGB(byte r, byte g, byte b)
  */
 void CoDroneClass::setAllDefaultRGB(byte r, byte g, byte b)
 {
-	setArmDefaultRGB();
-	setEyeDefaultRGB();
+	setArmDefaultRGB(r,g,b);
+	setEyeDefaultRGB(r,g,b);
 }
 
 
@@ -3562,7 +3658,7 @@ void CoDroneClass::setAllDefaultRGB(byte r, byte g, byte b)
 void CoDroneClass::resetDefaultLED()
 {
 	setAllDefaultRGB(255,0,0);
-	setAllDefaultMode(LED_Hold);
+	setAllDefaultMode(LED_HOLD);
 }
 
 
@@ -3738,8 +3834,8 @@ void CoDroneClass::setEyeDefaultMode(byte mode)
  */
 void CoDroneClass::setAllDefaultMode(byte mode)
 {
-	setArmDefualtMode(mode);
-	setEyeDefualtMode(mode);
+	setArmDefaultMode(mode);
+	setEyeDefaultMode(mode);
 }
 
 
@@ -3847,9 +3943,9 @@ void CoDroneClass::square()
 void CoDroneClass::triangle()
 {
 	move(1.5, 0,50,0,0);
-  	turnDegree(left,120);
+  	turnDegree(LEFT,120);
   	move(1.5, 0,50,0,0);
-  	turnDegree(left,120);
+  	turnDegree(LEFT,120);
   	move(1.5, 0,50,0,0);
 }
 
@@ -3865,9 +3961,9 @@ void CoDroneClass::triangle()
  */
 void CoDroneClass::hop()
 {
-	move(30, 0, 50, 1)
+	move(30, 0, 50, 1);
 	delay(1000);
-    move(30, 0, -50, 1)
+    move(30, 0, -50, 1);
     delay(1000);
     hover(1);
 }
