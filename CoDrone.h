@@ -202,7 +202,7 @@ enum Sequence
 	Seq_triangle,
 	Seq_hop,
 	Seq_EndOfType,
-}
+};
 enum Angle
 {
 	ANGLE_30 = 30,
@@ -220,7 +220,7 @@ enum Angle
 	ANGLE_300 = 300,
 	ANGLE_315 = 315, 
 	ANGLE_330 = 330
-}
+};
 //
 typedef struct gyrodata
 {
@@ -929,8 +929,14 @@ public:
 	int getBatteryVoltage();
 	trimdata getTrim();
 	// not finalized!!
-	//int getState();
+	int getState();
+	optdata getOptFlowPosition();
 	void goToHeight(int set);
+
+	boolean isUpsideDown();
+	boolean isFlying();
+	boolean isReadyToFly();
+	
 
 /////////////////////////////////////////////////////////////////////////
 
@@ -938,18 +944,18 @@ public:
 	void setArmRGB(byte r, byte g, byte b);
 	void setEyeRGB(byte r, byte g, byte b);
 	void setAllRGB(byte r, byte g, byte b);
-	void setArmDefaultRGB(byte r, byte g, byte b);//not yet
-	void setEyeDefaultRGB(byte r, byte g, byte b);//not yet
-	void setAllDefaultRGB(byte r, byte g, byte b);//not yet
+	void setArmDefaultRGB(byte r, byte g, byte b);
+	void setEyeDefaultRGB(byte r, byte g, byte b);
+	void setAllDefaultRGB(byte r, byte g, byte b);
 
 	void resetDefaultLED();
 
 	void setArmMode(byte mode);
 	void setEyeMode(byte mode);
 	void setAllMode(byte mode);
-	void setArmDefaultMode(byte mode);//not yet
-	void setEyeDefaultMode(byte mode);//not yet
-	void setAllDefaultMode(byte mode);//not yet
+	void setArmDefaultMode(byte mode);
+	void setEyeDefaultMode(byte mode);
+	void setAllDefaultMode(byte mode);
 
 
 	//sequence
@@ -1012,7 +1018,7 @@ public:
 	byte receiveTrimSuccess = 0;
 	byte receiveStateSuccess = 0;
 	byte receiveBatterySuccess = 0;
-	byte receiveOpt	Success = 0;
+	byte receiveOptSuccess = 0;
 
 	
 	byte energy = 8;	

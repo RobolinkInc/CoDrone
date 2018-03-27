@@ -2750,7 +2750,7 @@ void CoDroneClass::go(int direction)
 			p = 50;
 			break;
 		case direction_up:
-			t = 50
+			t = 50;
 			break;
 		case direction_right:
 			r = 50;
@@ -2799,7 +2799,7 @@ void CoDroneClass::go(int direction, float duration)
 			p = 50;
 			break;
 		case direction_up:
-			t = 50
+			t = 50;
 			break;
 		case direction_right:
 			r = 50;
@@ -2978,7 +2978,7 @@ void CoDroneClass::hover(float duration)
 	move(0,0,0,0);
 	delay(50);
 	unsigned long startMillis = millis();
-	while(millis() - startMillis < duration*1000)`
+	while(millis() - startMillis < duration*1000)
 	{
 		move(0,0,0,0);
 		delay(100);
@@ -3000,7 +3000,7 @@ void CoDroneClass::hover(float duration)
 void CoDroneClass::turnDegree(int direction, int degree)
 {
 	angledata angle = getGyroAngles();
-	direction = (direction == right ? 1 : -1);
+	direction = (direction == RIGHT ? 1 : -1);
 
 	int speed = direction * 30;
 	int dest = 360 + yawDegree + degree * direction;
@@ -3053,7 +3053,7 @@ void CoDroneClass::takeOff()
 void CoDroneClass::land()
 {
 	FlightEvent(Landing);
-	setroll(0);
+	setRoll(0);
 	setPitch(0);
 	setYaw(0);
 	setThrottle(0);
@@ -3071,7 +3071,7 @@ void CoDroneClass::land()
 void CoDroneClass::emergencyStop()
 {
 	FlightEvent(Stop);
-	setroll(0);
+	setRoll(0);
 	setPitch(0);
 	setYaw(0);
 	setThrottle(0);
@@ -3218,7 +3218,7 @@ angledata CoDroneClass::getGyroAngles()
  *	description : 	getAceelerometer() is function for get Aceelerometer value from gyro sensor.
  *					this function is sending message to drone and wait for 0 ~ 1 second to get data
  *					this value is save at global variable in header file also
- *					Structure gyrodata  is made of x, y, and z
+ *					Structure acceldata  is made of x, y, and z
  *	param 		:	none
  *	return 	 	:	
  *					- result 	: acceldata
@@ -3241,7 +3241,7 @@ acceldata CoDroneClass::getAceelerometer()
  *	description : 	getOptFlowPosition() is function for get x,y position value from optical flow sensor.
  *					this function is sending message to drone and wait for 0 ~ 1 second to get data
  *					this value is save at global variable in header file also
- *					Structure gyrodata  is made of x, and y
+ *					Structure optdata  is made of x, and y
  *	param 		:	none
  *	return 	 	:	
  *					- result 	: optdata
@@ -3289,7 +3289,7 @@ int CoDroneClass::getState()
 {
 	receiveStateSuccess = 0;
 	sendCheckFlag = 1;
-	Send_Command(cType_Requestm Req_State);
+	Send_Command(cType_Request, Req_State);
 	long oldTime = millis();
 	while(receiveStateSuccess == 0)
 	{
@@ -3423,7 +3423,7 @@ void CoDroneClass::goToHeight(int set)
  *	param 		:	none
  *	return 	 	:	none
  */
-bool CoDroneClass::isUpsideDown()
+boolean CoDroneClass::isUpsideDown()
 {
 	if(getState() == fMode_Flip)
 		return true;
@@ -3438,7 +3438,7 @@ bool CoDroneClass::isUpsideDown()
  *	param 		:	none
  *	return 	 	:	none
  */
-bool CoDroneClass::isFlying()
+boolean CoDroneClass::isFlying()
 {
 	if(getState() == fMode_Flight)
 		return true;
@@ -3453,7 +3453,7 @@ bool CoDroneClass::isFlying()
  *	param 		:	none
  *	return 	 	:	none
  */
-bool CoDroneClass::isReadyToFly()
+boolean CoDroneClass::isReadyToFly()
 {
 	if(getState() == fMode_Ready)
 		return true;
@@ -3573,7 +3573,7 @@ void CoDroneClass::setArmDefaultRGB(byte r, byte g, byte b)
 	armblue = b;
 
   	//header
-	_packet[0] = dType_LedDefaultModeColor;
+	_packet[0] = dType_LedDefaultColor;
 	_packet[1] = 5;
 
  	//data
@@ -3612,7 +3612,7 @@ void CoDroneClass::setEyeDefaultRGB(byte r, byte g, byte b)
 	armblue = b;
 
   	//header
-	_packet[0] = dType_LedDefaultModeColor;
+	_packet[0] = dType_LedDefaultColor;
 	_packet[1] = 5;
 
  	//data
@@ -3643,8 +3643,8 @@ void CoDroneClass::setEyeDefaultRGB(byte r, byte g, byte b)
  */
 void CoDroneClass::setAllDefaultRGB(byte r, byte g, byte b)
 {
-	setArmDefaultRGB();
-	setEyeDefaultRGB();
+	setArmDefaultRGB(r,g,b);
+	setEyeDefaultRGB(r,g,b);
 }
 
 
@@ -3658,7 +3658,7 @@ void CoDroneClass::setAllDefaultRGB(byte r, byte g, byte b)
 void CoDroneClass::resetDefaultLED()
 {
 	setAllDefaultRGB(255,0,0);
-	setAllDefaultMode(LED_Hold);
+	setAllDefaultMode(LED_HOLD);
 }
 
 
@@ -3834,8 +3834,8 @@ void CoDroneClass::setEyeDefaultMode(byte mode)
  */
 void CoDroneClass::setAllDefaultMode(byte mode)
 {
-	setArmDefualtMode(mode);
-	setEyeDefualtMode(mode);
+	setArmDefaultMode(mode);
+	setEyeDefaultMode(mode);
 }
 
 
@@ -3943,9 +3943,9 @@ void CoDroneClass::square()
 void CoDroneClass::triangle()
 {
 	move(1.5, 0,50,0,0);
-  	turnDegree(left,120);
+  	turnDegree(LEFT,120);
   	move(1.5, 0,50,0,0);
-  	turnDegree(left,120);
+  	turnDegree(LEFT,120);
   	move(1.5, 0,50,0,0);
 }
 
@@ -3961,9 +3961,9 @@ void CoDroneClass::triangle()
  */
 void CoDroneClass::hop()
 {
-	move(30, 0, 50, 1)
+	move(30, 0, 50, 1);
 	delay(1000);
-    move(30, 0, -50, 1)
+    move(30, 0, -50, 1);
     delay(1000);
     hover(1);
 }
