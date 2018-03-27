@@ -2547,6 +2547,51 @@ int CoDroneClass::getThrottle(){
 	return throttle;
 }
 
+void CoDroneClass::trim(int _roll, int _pitch, int _yaw, int _throttle)
+{	
+	byte _packet[10];
+	byte _crc[2];
+
+ 	/*
+  		header + data
+  		header :
+  		data type = trimflight(_packet[0])
+  		data length = 8 (_packet[1])
+  	*/
+
+	//header
+	_packet[0] = dType_TrimFlight;
+	_packet[1] = 8;
+
+    //seperate data to high part and low part
+	_packet[2] 	= _roll & 0xff;
+	_packet[3] 	= (_roll >> 8) & 0xff;
+
+	_packet[4] 	= _pitch & 0xff;
+	_packet[5] 	= (_pitch >> 8) & 0xff;
+	
+	_packet[6]	= _yaw & 0xff;
+	_packet[7] 	= (_yaw >> 8) & 0xff;
+	
+	_packet[8]  = _throttle & 0xff;
+	_packet[9]  = (_throttle >> 8) & 0xff;
+
+	unsigned short crcCal = CRC16_Make(_packet, _packet[1]+2);
+	_crc[0] = (crcCal >> 8) & 0xff;
+	_crc[1] = crcCal & 0xff;
+
+	//send packet arr, length, and crc
+	sendCheckFlag = 1;
+	Send_Processing(_packet,_packet[1],_crc);
+	Send_Check(_packet,_packet[1],_crc);
+
+}
+
+void CoDroneClass::resetTrim()
+{
+	trim(0,0,0,0);
+}
+
 //------------flight command--------------------------
 
 /*

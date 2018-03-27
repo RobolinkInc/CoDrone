@@ -890,6 +890,9 @@ public:
 	void setThrottle(int _throttle);
 	int getThrottle();
 
+	void trim(int _roll, int _pitch, int _yaw, int _throttle);
+	void resetTrim();
+
 	//flight command
 	void go(int direction);
 	void go(int direction, float duration);
