@@ -2723,7 +2723,8 @@ void CoDroneClass::move(float duration, int _roll, int _pitch, int _yaw, int _th
 		move(_roll, _pitch, _yaw, _throttle);
 		delay(100);
 	}
-	hover(1);	
+	if(duration != 0)
+		hover(1);	
 }
 
 
