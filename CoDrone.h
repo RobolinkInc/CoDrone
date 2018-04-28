@@ -913,7 +913,7 @@ public:
 	void turnDegree(int direction, int degree);
 
 	//FlightEvnet
-	void takeOff();
+	void takeoff();
 	void land();
 	void emergencyStop();
 /////////////////////////////////////////////////////////////////////////
@@ -1121,7 +1121,9 @@ public:
 	int sensorRange[6];		
 	
 	long PreviousMillis;
-	long batterytime = -5000;		
+	long batterytime = -5000;	
+
+	long buzzerTime;	
 /////////////////////////////////////////////////////////////////////////
 
 	int prevControl[4];

@@ -1068,14 +1068,21 @@ void CoDroneClass::AutoConnect(byte mode)
 	{				
 		if (mode == NearbyDrone)	
 		{
+
 			Send_Discover(DiscoverStart);  
 			PreviousMillis = millis();
 
 			LED_DDRC(0xff);
-			
+			buzzerTime = millis();
 			while(!pairing)
 			{  		
-
+			  if(millis() > buzzerTime+4000)
+			  {
+			  	buzzerTime = millis();
+			  	CoDrone.Buzz(550, 16);
+				delay(100);
+				CoDrone.Buzz(550, 8);
+			  }
 	  		 if((discoverFlag == 3) && (connectFlag == 0)) //Address find
 	  		 {	  		
 
@@ -1129,7 +1136,13 @@ void CoDroneClass::AutoConnect(byte mode)
 			
 			while(!pairing)
 			{  		
-
+			  if(millis() > buzzerTime+4000)
+			  {
+			  	buzzerTime = millis();
+			  	CoDrone.Buzz(550, 16);
+				delay(100);
+				CoDrone.Buzz(550, 8);
+			  }
   				if ((discoverFlag == 3) && (connectFlag == 0))	//Address find
   		 		{  	
   		 			LED_Standard();
@@ -1171,6 +1184,9 @@ void CoDroneClass::AutoConnect(byte mode)
 	  		delay(50);
 		} 
 	}
+	CoDrone.Buzz(700, 16);
+  CoDrone.Buzz(900, 16);
+  CoDrone.Buzz(1050, 8);
 }
 
 void CoDroneClass::AutoConnect(byte mode, byte address[])
@@ -1193,7 +1209,14 @@ void CoDroneClass::AutoConnect(byte mode, byte address[])
 			LED_DDRC(0xff);
 
 		  	while(!pairing)
-		  	{  			  		 	  		   		 
+		  	{  	  		
+			  if(millis() > buzzerTime+4000)
+			  {
+			  	buzzerTime = millis();
+			  	CoDrone.Buzz(550, 16);
+				delay(100);
+				CoDrone.Buzz(550, 8);
+			  }		  		 	  		   		 
 		  		 if((discoverFlag == 3) && (connectFlag == 0))	//Address find
 		  		 {  		  		 	
 		  		 	LED_Standard();
@@ -1220,15 +1243,15 @@ void CoDroneClass::AutoConnect(byte mode, byte address[])
 		  		 {	  	
 			  		if (TimeCheck(400))	//time out & LED
 		    		{
-		      		if (displayLED++ == 4) 
-		      		{
-		      			displayLED = 0;	 
-		      			delay(50);     
-		      			Send_Discover(DiscoverStart);
-		      		}
-		      		LED_Move_Radar(displayLED);
-		      
-		      		PreviousMillis = millis();   		     
+			      		if (displayLED++ == 4) 
+			      		{
+			      			displayLED = 0;	 
+			      			delay(50);     
+			      			Send_Discover(DiscoverStart);
+			      		}
+			      		LED_Move_Radar(displayLED);
+			      
+			      		PreviousMillis = millis();   		     
 					}
 		  		}
 		  		Receive();  			
@@ -1236,6 +1259,9 @@ void CoDroneClass::AutoConnect(byte mode, byte address[])
 	  		delay(50);  	
 	  	}
 	}
+	CoDrone.Buzz(700, 16);
+  CoDrone.Buzz(900, 16);
+  CoDrone.Buzz(1050, 8);
 }
 
 
@@ -3036,7 +3062,7 @@ void CoDroneClass::turnDegree(int direction, int degree)
  *	return 	 	:	none
  */
 
-void CoDroneClass::takeOff()
+void CoDroneClass::takeoff()
 {
 	FlightEvent(TakeOff);
 	delay(3000);
