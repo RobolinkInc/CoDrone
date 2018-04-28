@@ -16,9 +16,11 @@
 /*******************************************************************/
 PATCH NOTES
 /*******************************************************************/
-1.5.1
+1.5.2
 ---------------------------------------------------------------------
-bug fix
+- fix syntex takeOff() function to takeoff()
+
+- add buzzer sound when try to pair and after pairing 
 
 From 1.5.0
 added Function:
@@ -31,3 +33,5 @@ added Function:
 - Request battery info in new function only request once int 3 seconds 
 
 - If you request more than once in 3 seconds, It will request at first time and use that data for 3 second
+
+
