@@ -4031,6 +4031,125 @@ void CoDroneClass::spiral()
   setRoll(0);
   setYaw(0);
 }
+
+void CoDroneClass::testreconnect()
+{
+	//byte droneAddress[6] = {250, 252, 11, 215, 147, 24};
+	CoDrone.Buzz(1050, 8);
+	delay(100);
+	Send_LinkState();
+	delay(100);
+	CoDrone.Buzz(1050, 8);		
+	delay(100);
+	// if (linkState  == 4)
+	// {
+ //  		CoDrone.Buzz(1100, 8);
+ //  		delay(100);
+	// }
+	switch(receiveLikMode)
+	{
+		case 1:
+		CoDrone.Buzz(1000, 4);
+		break;
+
+		case 2:
+		CoDrone.Buzz(1050, 8);
+		break;
+
+		case 3:
+		CoDrone.Buzz(1100, 12);
+		break;
+
+		case 4:
+		CoDrone.Buzz(1150, 16);
+		break;
+
+		case 5:
+		CoDrone.Buzz(1200, 20);
+		break;
+	}
+}
+
+void CoDroneClass::pair(byte address[])
+{		
+	// Connected check
+	LinkStateCheck();		
+	if (linkState  == linkMode_Connected)
+	{
+		pairing = true;
+		LED_Connect();
+	}
+    
+  // AutoConnect start
+	else     
+	{		 	
+	 	Send_Discover(DiscoverStart);  
+	 	PreviousMillis = millis();
+		LED_DDRC(0xff);
+
+	  	while(!pairing)
+	  	{  	  		
+		  if(millis() > buzzerTime+4000)
+		  {
+		  	buzzerTime = millis();
+		  	CoDrone.Buzz(550, 16);
+			delay(100);
+			CoDrone.Buzz(550, 8);
+		  }		  		 	  		   		 
+	  		 if((discoverFlag == 3) && (connectFlag == 0))	//Address find
+	  		 {  		  		 	
+	  		 	LED_Standard();
+	  		  	PreviousMillis = millis();	
+	  		  	while(!TimeCheck(1000))			
+	  			{  
+	  		  	   Receive();  
+	  		  	}
+	  		 	delay(50);
+	  		 	discoverFlag = 0;
+	  		 	Send_ConnectAddressInputDrone(address);  	  		//  Connect Start 			 	
+	  		 }
+	  		 else
+	  		 {	  	
+		  		if (TimeCheck(400))	//time out & LED
+	    		{
+		      		if (displayLED++ == 4) 
+		      		{
+		      			displayLED = 0;	 
+		      			delay(50);     
+		      			Send_Discover(DiscoverStart);
+		      		}
+		      		LED_Move_Radar(displayLED);
+		      
+		      		PreviousMillis = millis();   		     
+				}
+	  		}
+	  		Receive();  			
+	  	}
+  		delay(50);  	
+  	}
+	
+	CoDrone.Buzz(700, 16);
+  CoDrone.Buzz(900, 16);
+  CoDrone.Buzz(1050, 8);
+}
+void CoDroneClass::printAddress(byte mode)
+{	
+	CoDrone.AutoConnect(NearbyDrone);
+	delay(1000);
+	Send_LinkModeBroadcast(LinkBroadcast_Mute);    
+	delay(100);
+
+	DRONE_SERIAL.println("");
+	DRONE_SERIAL.println("Connected Drone's Address");
+	DRONE_SERIAL.print("{");
+	for(char i = 0; i < 5; i++)
+	{
+		DRONE_SERIAL.print(devAddressConnected[i],DEC);
+		DRONE_SERIAL.print(", ");
+	}
+	DRONE_SERIAL.print(devAddressConnected[5],DEC);
+	DRONE_SERIAL.println("}");
+}
 ////////////////////////////////////////////////////
 
 CoDroneClass CoDrone;                         

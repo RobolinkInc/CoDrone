@@ -970,6 +970,10 @@ public:
 
 /////////////////////////////////////////////////////////////////////////
 
+	void testreconnect();
+	void printAddress(byte mode);
+	void pair(byte address[]);
+
 	int TrimAll_Roll;
 	int TrimAll_Pitch;
 	int TrimAll_Yaw;
@@ -1113,7 +1117,7 @@ public:
 
 /////////////////////////////////////////////////////////////////////////
 	
-	byte linkState = 0;;
+	byte linkState = 0;
 	int rssi = 0;
 	byte battery = 0;		
   	unsigned long	irMassageReceive;	
