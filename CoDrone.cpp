@@ -4132,7 +4132,7 @@ void CoDroneClass::pair(byte address[])
   CoDrone.Buzz(900, 16);
   CoDrone.Buzz(1050, 8);
 }
-void CoDroneClass::readAddress(byte mode)
+void CoDroneClass::printAddress(byte mode)
 {	
 	CoDrone.AutoConnect(NearbyDrone);
 	delay(1000);
