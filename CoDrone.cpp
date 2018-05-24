@@ -94,7 +94,8 @@ void CoDroneClass::begin(long baud)
 		for (int i = 0; i <= 5; i++)
 		{
 			devAddressConnected[i] = EEPROMs.read(EEP_AddressFirst+i);
-		}		
+		}
+		isConnected = true;		
 	}		
 	delay(500);
 
@@ -4149,6 +4150,133 @@ void CoDroneClass::printAddress(byte mode)
 	}
 	DRONE_SERIAL.print(devAddressConnected[5],DEC);
 	DRONE_SERIAL.println("}");
+}
+
+void CoDroneClass::connect()
+{
+	LinkStateCheck();		
+	if (linkState  == linkMode_Connected)
+	{
+		pairing = true;
+		LED_Connect();
+	}
+	else
+	{
+		Send_Discover(DiscoverStart);  
+		PreviousMillis = millis();
+
+		LED_DDRC(0xff);
+		buzzerTime = millis();
+		unsigned long tryconnect = millis();
+		if(millis() > buzzerTime+4000)
+		{
+			buzzerTime = millis();
+			CoDrone.Buzz(550, 16);
+			delay(100);
+			CoDrone.Buzz(550, 8);
+		}
+		if(isConnected)   
+		{
+			Send_Discover(DiscoverStart);  
+			PreviousMillis = millis();
+			LED_DDRC(0xff);
+			
+			while(!pairing)
+			{  
+  				if ((discoverFlag == 3) && (connectFlag == 0))	//Address find
+  		 		{  	
+  		 			LED_Standard();
+  		 			PreviousMillis =millis();
+  		 			while(!TimeCheck(1000))
+  		 			{
+  		 				Receive();
+  		 			}
+					delay(50);
+					discoverFlag = 0;
+					if(tryconnect+30000 > millis())
+					{
+						Send_ConnectConnectedDrone();
+					}
+					else
+					{
+						Send_ConnectNearbyDrone();
+					}
+  		 		}
+  		 		else
+  		 		{	  	
+	  				if (TimeCheck(400))  //time out & LED
+	  				{
+	  					if (displayLED++ == 4) 
+	  					{
+	  						displayLED = 0;	 
+	  						delay(50);     
+	  						Send_Discover(DiscoverStart);
+	  					}
+	  					LED_Move_Radar(displayLED);
+						PreviousMillis = millis();   		     
+	  				}
+	  			}
+	  			Receive();  		
+	  		}
+	  		delay(50);
+		}
+		else
+		{
+			Send_Discover(DiscoverStart);  
+			PreviousMillis = millis();
+
+			LED_DDRC(0xff);
+			buzzerTime = millis();
+			while(!pairing)
+			{  		
+			  	if(millis() > buzzerTime+4000)
+			 	{
+			  		buzzerTime = millis();
+			  		CoDrone.Buzz(550, 16);
+					delay(100);
+					CoDrone.Buzz(550, 8);
+			 	}
+	  		 	if((discoverFlag == 3) && (connectFlag == 0)) //Address find
+	  		 	{	  		
+
+	  		 		LED_Standard();
+
+	  		 		PreviousMillis = millis();
+	  		 		while(!TimeCheck(1000))			
+	  				{  
+	  		  	   		Receive();  
+	  		  		}
+
+	  		  		delay(50);
+	  		 		discoverFlag = 0;
+	  		 		Send_ConnectNearbyDrone();  	  		 				//  Connect Start
+	  		 	}
+	  		 	else
+	  		 	{	  	
+		  			if (TimeCheck(400))		//time out & LED
+		  			{
+		  				if (displayLED++ == 4) 
+		  				{
+		  					displayLED = 0;	 
+		  					delay(50);     
+		  					Send_Discover(DiscoverStart);
+		  				}
+		  				LED_Move_Radar(displayLED);
+		  				PreviousMillis = millis();   		     
+		  			}
+		  		}	  		 
+		  		Receive();  
+		  	}
+		  	delay(50);  	 	  	
+		}
+	}
+  CoDrone.Buzz(700, 16);
+  CoDrone.Buzz(900, 16);
+  CoDrone.Buzz(1050, 8);
+}
+void CoDroneClass::Send_reCalibration()
+{
+	Send_Command(0x53, 0);
 }
 ////////////////////////////////////////////////////
 
