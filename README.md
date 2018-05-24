@@ -16,8 +16,12 @@
 /*******************************************************************/
 PATCH NOTES
 /*******************************************************************/
-1.5.4
+1.5.5
 ---------------------------------------------------------------------
+move lesson folder into Example file
+
+from 1.5.4
+
 Added function:
 
 - pair(); If you open new box smart inventor board has no address save so pair function try to connect with drone which is the nearest recommand to use this function first time with only one drone want to connect. after that pair() will use saved address to connect.
