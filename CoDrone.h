@@ -104,6 +104,7 @@ typedef uint8_t u8;
 #define	NearbyDrone    			1
 #define	ConnectedDrone  		2
 #define AddressInputDrone 		3
+#define	Nearest					1
 
 //eeprom address
 #define	EEP_AddressCheck   		10
@@ -973,6 +974,8 @@ public:
 	void testreconnect();
 	void readAddress(byte mode);
 	void pair(byte address[]);
+	void pair();
+	void pair(int mode);
 
 	int TrimAll_Roll;
 	int TrimAll_Pitch;
@@ -1142,6 +1145,10 @@ public:
 	byte armmode = ArmHold;
 	byte eyemode = EyeHold;
 /////////////////////////////////////////////////////////////////////////
+
+	boolean isConnected = false;
+	void connect();
+	void Send_reCalibration();
 
 private:
 	long PreviousBuzz;	
