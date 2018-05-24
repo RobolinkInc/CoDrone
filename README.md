@@ -16,22 +16,10 @@
 /*******************************************************************/
 PATCH NOTES
 /*******************************************************************/
-1.5.2
+1.5.4
 ---------------------------------------------------------------------
-- fix syntex takeOff() function to takeoff()
+Added function:
 
-- add buzzer sound when try to pair and after pairing 
+- pair(); If you open new box smart inventor board has no address save so pair function try to connect with drone which is the nearest recommand to use this function first time with only one drone want to connect. after that pair() will use saved address to connect.
 
-From 1.5.0
-added Function:
--go(), move(), turn(), request----() etc..
-
-- we keep old functions but add new functions for younger kid and user
-
-- New library is more close to natural language
-
-- Request battery info in new function only request once int 3 seconds 
-
-- If you request more than once in 3 seconds, It will request at first time and use that data for 3 second
-
-
+- pair(Nearest) : If you want to connect with another drone use this to save other drone's address to smart inventor board
