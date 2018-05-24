@@ -972,7 +972,7 @@ public:
 /////////////////////////////////////////////////////////////////////////
 
 	void testreconnect();
-	void readAddress(byte mode);
+	void printAddress(byte mode);
 	void pair(byte address[]);
 	void pair();
 	void pair(int mode);
