@@ -18,9 +18,10 @@ PATCH NOTES
 /*******************************************************************/
 1.5.5
 ---------------------------------------------------------------------
-move lesson folder into Example file
+Change lesson names
 
 from 1.5.4
+move lesson folder into Example file
 
 Added function:
 
