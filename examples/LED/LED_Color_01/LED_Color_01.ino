@@ -10,6 +10,7 @@
 
 byte modeTime = 7;                        // How long each pattern takes
 int delayTime = 1000;                     // How long to wait before changing light patterns
+// To keep the LED commands from overwriting each other, it's reccomended to add a delay of over 50.
 
 void setup()
 {
