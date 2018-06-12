@@ -2,6 +2,7 @@
 - Serial Print RangeSensor
 Smartboard has to be connected with computer to see serial monitor
 request drone's height information and print in serial monitor
+Note that this causes a ~1 second delay; make sure the drone will not endanger anything during the yield.
 ***************************************************************************************/
 
 #include <CoDrone.h> 
