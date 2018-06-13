@@ -33,7 +33,10 @@ void Control()
 	// YAW = __ (turn left or right) THROTTLE = __ (height) ROLL = __(tilt left or right) PITCH = __(tilt front or back)
 	// To use joysticks, simply do YAW = Joysticks["LX"] (on the left, x-axis.), ROLL = Joysticks["RX"] (right, x-axis), etc.
 	// REMEMBER: ADD A ";" AFTER ALL LINES THAT RUN CODE (that means variables (Roll, Pitch, etc), but not logic (if, for, etc)
-
+	
+	// Flight Events: To run flight events (stop, land), you can run this:
+	// Check int Events[] to see what options are available.
+	// CoDrone.FlightEvent(Events["Land"0);
 
 
 
