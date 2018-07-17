@@ -1,5 +1,5 @@
 /*
-  EEPROMs.h - EEPROMs library (renamed)
+  EEPROM.h - EEPROM library
   Copyright (c) 2006 David A. Mellis.  All right reserved.
 
   This library is free software; you can redistribute it and/or
@@ -17,19 +17,19 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef EEPROMs_h
-#define EEPROMs_h
+#ifndef EEPROM_h
+#define EEPROM_h
 
 #include <inttypes.h>
 
-class EEPROMsClass
+class EEPROMClass
 {
   public:
     uint8_t read(int);
     void write(int, uint8_t);
 };
 
-extern EEPROMsClass EEPROMs;
+extern EEPROMClass EEPROM;
 
 #endif
 
