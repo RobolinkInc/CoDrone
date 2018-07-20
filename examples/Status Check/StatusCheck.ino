@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------
 StatusCheck
 Objective   : how to program something belong to status
-syntex      : is"something"()
+syntax      : is"something"()
 			  lowBatteryCheck()
 			  *something can be : Flying, ReadytoFly, UpsideDown
 description : Status check using if statement to trigger action

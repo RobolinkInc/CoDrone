@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------
 ChangeDefaultLEDColor
 Objective   : How to use ChangeDefaultLEDColor (arm , eye)
-syntex      : setDefaultArmLED("red","green","blue")  * using rgb value for choose color
+syntax      : setDefaultArmLED("red","green","blue")  * using rgb value for choose color
   			  setDefaultEyeLED("red","green","blue")  * every rgb value is 0~255
   			  setDefaultAllLED("red","green","blue")
 description : ChangeDefaultLEDColor is use three different function

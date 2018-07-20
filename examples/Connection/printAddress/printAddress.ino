@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------
 Print Address
 Objective   : print drone address that connected now 
-syntex      : 
+syntax      : 
 description : This example are using "pair(Nearest)" to connect with
               the strongest signal drone and print out address with
               decimal number.

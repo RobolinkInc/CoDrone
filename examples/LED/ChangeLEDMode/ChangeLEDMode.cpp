@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------
 ChangeLEDMode
 Objective   : How to use ChangeDefaultLEDMode (arm , eye)
-syntex      : setArmMode("mode")  * eye mode : LED_NONE, LED_FLICKER, LED_MIX, LED_FLICKERDOUBLE, LED_DIMMING
+syntax      : setArmMode("mode")  * eye mode : LED_NONE, LED_FLICKER, LED_MIX, LED_FLICKERDOUBLE, LED_DIMMING
   			  setEyeMode("mode")  * arm mode: eye mode + LED_FLOW, LED_FLOWREVERSE
   			  setAllMode("mode")
 description : ChangeDefaultLEDColor is use three different function

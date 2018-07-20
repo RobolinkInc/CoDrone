@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------
 Battle Controller
 Objective   : How to code Controller program with shooting IR shooting play
-syntex      : 
+syntax      : 
 description : This extend version flight Controller example.
               if you select team you can see with arm and eye LED color changed
               add Battle shooting key is includeed programatically

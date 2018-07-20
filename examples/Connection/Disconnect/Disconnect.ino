@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------
 Disconnect
 Objective   : How to disconnect with drone and joystick
-syntex      : disconnect()
+syntax      : disconnect()
 description : This example is showing how to disconnect drone and joystick with coding 
 -------------------------------------------------------------------*/
 

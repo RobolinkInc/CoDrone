@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------
 Go
 Objective	  : How to Use go() in three different ways
-syntex		  : go("Direction") 	* duration 1 sec, 50% of power.
+syntax		  : go("Direction") 	* duration 1 sec, 50% of power.
 			        go("direction", "duration") *50% of power.
 			        go("direction", "duration", "power")
 description : Go function is for control the drone with more nature language.

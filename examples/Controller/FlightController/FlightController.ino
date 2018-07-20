@@ -1,7 +1,7 @@
  /*------------------------------------------------------------------
 Flight Controller
 Objective   : How to code default program 
-syntex      : 
+syntax      : 
 description : This flight Controller example. also known as Defualt program for CoDrone.
               Include how to use bottom IR sensor and assign buttons' action
 -------------------------------------------------------------------*/
@@ -12,9 +12,9 @@ void setup()
   CoDrone.begin(115200);  
 
   //connect with drone controller have adress
-  CoDrone.pair();
+//  CoDrone.pair(); 
   //connect with the nearest drone
-  //CoDrone.pair(Nearest);
+  CoDrone.pair(Nearest);
 
   CoDrone.DroneModeChange(Flight);    // Changes the drone so that it is now in flight mode
 }

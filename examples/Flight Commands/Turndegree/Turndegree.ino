@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------
 Turn
 Objective   : How to Use turnDegree()
-syntex      : turnDegree("direction", "angle")
+syntax      : turnDegree("direction", "angle")
 description : TurnDegree is for make drone turn with specific angle
 			  Angle can be ANGLE_30, ANGLE_45, ANGLE_60, ANGLE_90,
 			  ANGLE_ 120, ANGLE_135, ANGLE_150, ANGLE_180. you actually

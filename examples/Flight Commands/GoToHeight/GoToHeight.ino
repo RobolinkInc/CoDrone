@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------
 Go
 Objective   : How to Use goToHeight function
-syntex      : goToHeight("height")
+syntax      : goToHeight("height")
 description : goToHeight example is using goToHeight() for fly certain height
               You can set 100 ~ 2000 boundary 
               Distance is checked from IR distance sensor next to Optical flow sensor(bottom )

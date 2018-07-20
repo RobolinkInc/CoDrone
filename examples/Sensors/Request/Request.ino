@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------
 Request
 Objective   : How to request sensor data
-syntex      : get"something"()
+syntax      : get"something"()
               *something can be : State, BatteryVoltage, BatteryPercentage,
                                   DroneTemp, Pressure, Height, Trim, GyroAngles,
                                   Accelerometer, OptFlowPosition, AnglearSpeed

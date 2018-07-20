@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------
 Hover
 Objective	  : How to Use hover()
-syntex		  : hover("duration")
+syntax		  : hover("duration")
 description : hover function is simple function make drone hover
 			        as same as move("duration",0,0,0,0) it make drone hover
 			        for duration time. You can put this function between

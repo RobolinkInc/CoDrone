@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------
 Pair
 Objective   : Pairing with drone in three different way
-syntex      : pair()
+syntax      : pair()
               pair(Nearest)
               pair("address array"); *address array is 6 digits of number
 description : This example is showing pair 3 different ways

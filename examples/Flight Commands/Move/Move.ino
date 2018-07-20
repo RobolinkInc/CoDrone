@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------
 move
 Objective   : How to Use go() in three different ways
-syntex      : move() *use saved roll, pitch, yaw, throttle (setter function) and infinity movement
+syntax      : move() *use saved roll, pitch, yaw, throttle (setter function) and infinity movement
               move("duration")   *use saved roll, pitch, yaw, throttle (setter function)
               move("duration", "roll", "pitch", "yaw", "throttle") 
 description : move function is for control the drone with duration, roll

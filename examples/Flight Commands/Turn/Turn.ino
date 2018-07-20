@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------
 Turn
 Objective   : How to Use turn() in three different ways
-syntex      : turn("direction") *duration will be 1 sec and power will be 50%
+syntax      : turn("direction") *duration will be 1 sec and power will be 50%
               turn("direction", "duration")   *power will be 50%
               turn("direction", "duration", "power")
 description : turn function is for make drone turn(yawing) using natural language

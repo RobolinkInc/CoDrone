@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------
 resetDefaultLED
 Objective   : How to use resetDefaultLED()
-syntex      : resetDefaultLED()	
+syntax      : resetDefaultLED()	
 description : Reset to default LED color
 -------------------------------------------------------------------*/
 #include <CoDrone.h> // The codrone library that holds all the background files for this

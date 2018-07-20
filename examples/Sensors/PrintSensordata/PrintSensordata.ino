@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------
 PrintSensorData
 Objective   : print sensor data after grab from request function
-syntex      : 
+syntax      : 
 description : BLE board has call Multiplaxer to talk with arduino and drone
               or arduino and pc. we need to change using Send_LinkModeBroadcast()
               Active mode will be talking with Drone and mute mode will be talking
