@@ -1,6 +1,6 @@
 #include "CoDrone.h"
 #include "Arduino.h"
-#include <EEPROMs.h>
+#include <EEPROM.h>
 
 //-------------------------------------------------------------------------------------------------------//
 //------------------------------------------ Command ----------------------------------------------------//
@@ -30,7 +30,8 @@ void CoDroneClass::Send_Command(int sendCommand, int sendOption)
 }
 
 void CoDroneClass::Send_Processing(byte _data[], byte _length, byte _crc[])
-{			
+{
+	delay(50);			
 	sendingData = true;		//data sending start
 	
 	byte _packet[30];
@@ -199,66 +200,6 @@ void CoDroneClass::emergencyStop()
 	setThrottle(0);
 }
 
-//------------getter and setter-----------------------
-
-/*
- *	description :	all these function for getter and setter  
- *				 	set value to variable or return the variable value
- *	
- *	getter function
- *	praram 		: 	none
- *	return 		:	
- *					- roll 		: int
- *					- pitch 	: int
- *					- yaw 		: int
- *					- throttle 	: int 
- *
- *	setter fuction
- *	param 		:
- *					- roll 		: int
- *					- pitch 	: int
- *					- yaw 		: int
- *					- throttle 	: int 
- *	return 		:	 none
- */
-
-void CoDroneClass::setRoll(int _roll)
-{
-	roll = _roll;
-}
-
-int CoDroneClass::getRoll()
-{
-	return roll;
-}
-
-void CoDroneClass::setPitch(int _pitch)
-{
-	pitch = _pitch;
-}
-int CoDroneClass::getPitch()
-{
-	return pitch;
-}
-
-void CoDroneClass::setYaw(int _yaw)
-{
-	yaw = _yaw;
-}
-
-int CoDroneClass::getYaw(){
-	return yaw;
-}
-
-void CoDroneClass::setThrottle(int _throttle){
-	throttle = _throttle;
-}
-
-int CoDroneClass::getThrottle(){
-	return throttle;
-}
-//-------------------------------------------------------------------------------------------------------//
-
 //-------------------------------------------------------------------------------------------------------//
 //-------------------------------------------- Trim -----------------------------------------------------//
 //-------------------------------------------------------------------------------------------------------//
@@ -364,6 +305,7 @@ void CoDroneClass::Control()
  */
 
 void CoDroneClass::move(){
+	// delay(50);
 	byte _packet[10];
 	byte _crc[2];
 	/*
@@ -412,7 +354,7 @@ void CoDroneClass::move(float duration)
 	{
 		move();
 		//gap for command sending
-		delay(100);
+		delay(50);
 	}
 	hover(1);
 }
@@ -432,6 +374,7 @@ void CoDroneClass::move(float duration)
  */
 void CoDroneClass::move(int _roll, int _pitch, int _yaw, int _throttle)
 {
+	delay(50);
 	byte _packet[10];
 	byte _crc[2];
 
@@ -479,7 +422,7 @@ void CoDroneClass::move(float duration, int _roll, int _pitch, int _yaw, int _th
 	while(millis() - startMillis < duration*1000)
 	{
 		move(_roll, _pitch, _yaw, _throttle);
-		delay(100);
+		delay(50);
 	}
 	if(duration != 0)
 		hover(1);	
@@ -528,7 +471,7 @@ void CoDroneClass::go(int direction)
 	while(millis() - startMillis < 1000)
 	{
 		move(r,p,0,t);
-		delay(100);
+		delay(50);
 	}
 	hover(1);
 
@@ -577,7 +520,7 @@ void CoDroneClass::go(int direction, float duration)
 	while(millis() - startMillis < duration*1000)
 	{
 		move(r,p,0,t);
-		delay(100);
+		delay(50);
 	}
 	if(duration != 0)
 		hover(1);
@@ -626,7 +569,7 @@ void CoDroneClass::go(int direction, float duration, int power)
 	while(millis() - startMillis < duration*1000)
 	{
 		move(r,p,0,t);
-		delay(100);
+		delay(50);
 	}
 	if(duration != 0)
 		hover(1);
@@ -683,7 +626,7 @@ void CoDroneClass::turn(int direction, float duration)
 	while(millis() - startMillis < duration*1000)
 	{
 		move(0,0,y,0);
-		delay(100);
+		delay(50);
 	}
 	if(duration != 0)
 		hover(1);
@@ -713,7 +656,7 @@ void CoDroneClass::turn(int direction, float duration, int power)
 	while(millis() - startMillis < duration*1000)
 	{
 		move(0,0,y,0);
-		delay(100);
+		delay(50);
 	}
 	if(duration != 0)
 		hover(1);
@@ -739,7 +682,7 @@ void CoDroneClass::hover(float duration)
 	while(millis() - startMillis < duration*1000)
 	{
 		move(0,0,0,0);
-		delay(100);
+		delay(50);
 	}
 }
 //-------------------------------------------------------------------------------------------------------//
@@ -834,11 +777,11 @@ void CoDroneClass::calibrate()
 
 	Send_Processing(_packet,_packet[1],_crc);
 	Send_Check(_packet,_packet[1],_crc);
-	delay(100);
+	delay(50);
 	CoDrone.Buzz(523,2);
 	CoDrone.Buzz(659,2);
 	CoDrone.Buzz(783,2);
-	CoDrone.Buzz(1046,2);
+	CoDrone.Buzz(1055,2);
 }
 
 /*

@@ -6,7 +6,7 @@
 
 #include "CoDrone.h"
 #include "Arduino.h"
-#include <EEPROMs.h>
+#include <EEPROM.h>
 
 CoDroneClass CoDrone;
 
