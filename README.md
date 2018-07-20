@@ -8,6 +8,10 @@
 //Collection includes:
 //CoDrone.h
 //CoDrone.cpp
+//CoDrone_led.cpp
+//CoDrone_request.cpp
+//CoDrone_send.cpp
+//CoDrone_util.cpp
 //EEPROM.h
 //EEPROM.cpp
 //And various examples for each library
@@ -16,10 +20,16 @@
 /*******************************************************************/
 PATCH NOTES
 /*******************************************************************/
-1.5.4
+2.0.0
 ---------------------------------------------------------------------
-Added function:
+New Function and new example released!
 
-- pair(); If you open new box smart inventor board has no address save so pair function try to connect with drone which is the nearest recommand to use this function first time with only one drone want to connect. after that pair() will use saved address to connect.
+Re-structure library file structure
+easy to find actual function in cpp file
 
-- pair(Nearest) : If you want to connect with another drone use this to save other drone's address to smart inventor board
+add calibrate() : work with drone firmware 50.18 and up
+add new example 
+old example move to legacy example.
+
+add Basecamp example and add URL to actual basecamp lesson
+*some of lesson code are doing debuging
