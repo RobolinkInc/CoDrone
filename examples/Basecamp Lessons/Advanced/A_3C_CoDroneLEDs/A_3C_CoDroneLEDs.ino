@@ -11,7 +11,7 @@ int StartFlag;
 void setup() {
   CoDrone.begin(115200);
   CoDrone.pair();               // Pair with one the last drone this remote paired with
-  CoDrone.setArmMode(LED_DIMMING) // Change Arm LED mode to hold LED.
+  CoDrone.setArmMode(LED_DIMMING); // Change Arm LED mode to hold LED.
   CoDrone.takeoff();          
 }
 
@@ -25,12 +25,12 @@ void loop() {
 
   if (StartFlag == 1) {
     if (millis() - StartTime < 1000) { 
-      CoDrone.setEyeLED(255,255,255)  // Change eye LED color to RGB 255, 255, 255(white) 
+      CoDrone.setEyeRGB(255,255,255);  // Change eye LED color to RGB 255, 255, 255(white) 
       CoDrone.setThrottle(50);
       CoDrone.move();
     }
     else if ( millis() - StartTime < 3000) {
-      CoDrone.setEyeLED(0,0,255)  // Change eye LED color to RGB 0, 0, 255(blue) 
+      CoDrone.setEyeRGB(0,0,255);  // Change eye LED color to RGB 0, 0, 255(blue) 
       CoDrone.setThrottle(0);
       CoDrone.setPitch(50);
       CoDrone.move(); 
@@ -41,11 +41,3 @@ void loop() {
     }
   }
 }
-
-
-
-
-
-
-
-⁄
