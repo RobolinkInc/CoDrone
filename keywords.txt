@@ -95,6 +95,7 @@ NearbyDrone	LITERAL1
 ConnectedDrone	LITERAL1
 AddressInputDrone	LITERAL1
 Nearest	LITERAL1
+pair LITERAL1
 
 
 PAIRING	LITERAL1
