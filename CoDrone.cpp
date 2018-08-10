@@ -27,7 +27,7 @@ void CoDroneClass::begin(long	baud)
 	if (EEPROM.read(EEP_AddressCheck))		// Connected Drone Address Read
 	{
 		for	(int i = 0;	i	<= 5;	i++)	devAddressConnected[i] = EEPROM.read(EEP_AddressFirst+i);
-		isConnected = true;	
+		isConnectedBefore = true;	
 	}	
 	#if	!defined(__AVR_ATmega328PB__)
 		Send_LinkModeBroadcast(LinkModeActive);			//Link Active	Mode
@@ -61,9 +61,9 @@ void CoDroneClass::Send_Discover(byte	action)
 void CoDroneClass::AutoConnect()								// NearbyDrone or ConnectedDrone
 {
 	pinMode(10, INPUT_PULLUP);    								//DipSw3
-  if (!digitalRead(10))	 isConnected = false;		//DipSw3 down бщ
+  if (!digitalRead(10))	 isConnectedBefore = false;		//DipSw3 down бщ
   
-  if(isConnected)	AutoConnect(ConnectedDrone);  
+  if(isConnectedBefore)	AutoConnect(ConnectedDrone);  
   else AutoConnect(NearbyDrone);  
 }
 void CoDroneClass::AutoConnect(byte	mode)
@@ -79,7 +79,7 @@ void CoDroneClass::AutoConnect(byte	mode,	byte address[])
 void CoDroneClass::pair()
 {
 	byte _temp[0];
-	if(isConnected)
+	if(isConnectedBefore)
 		ConnectionProcess(ConnectedDrone, _temp);
 	else
 		ConnectionProcess(NearbyDrone, _temp);
