@@ -705,12 +705,12 @@ void CoDroneClass::GoToHeight(int _range)
 		{
 			if((_dir > 0) && (value < _range))
 			{
-				THROTTLE = 70;
+				THROTTLE = 30;
 				CoDrone.Control();
 			}	
 			else if((_dir < 0) && (value > _range))
 			{
-				THROTTLE = -20;
+				THROTTLE = -30;
 				CoDrone.Control();
 			}
 			
@@ -834,10 +834,10 @@ void CoDroneClass::flySequence(int shape)
  */
 void CoDroneClass::sway()
 {
-	move(2, 50, 0, 0, 0);
-  	move(2, -50, 0, 0, 0);
-  	move(2, 50, 0, 0, 0);
-  	move(2, -50, 0, 0, 0);
+	move(1, 50, 0, 0, 0);
+  	move(1, -50, 0, 0, 0);
+  	move(1, 50, 0, 0, 0);
+  	move(1, -50, 0, 0, 0);
 }
 
 
@@ -850,10 +850,10 @@ void CoDroneClass::sway()
  */
 void CoDroneClass::zigzag()
 {
-	move(2, 50, 50, 0, 0);
-  	move(2, -50, 50, 0, 0);
-  	move(2, 50, 50, 0, 0);
-  	move(2, -50, 50, 0, 0);
+	move(1, 50, 50, 0, 0);
+  	move(1, -50, 50, 0, 0);
+  	move(1, 50, 50, 0, 0);
+  	move(1, -50, 50, 0, 0);
 }
 
 
@@ -867,10 +867,10 @@ void CoDroneClass::zigzag()
  */
 void CoDroneClass::square()
 {
-	move(2, 50, 0, 0, 0);
-  	move(2, 0, 50, 0, 0);
-  	move(2, -50, 0, 0, 0);
-  	move(2, 0, -50, 0, 0);
+	move(2, 30, 0, 0, 0);
+  	move(2, 0, 30, 0, 0);
+  	move(2, -30, 0, 0, 0);
+  	move(2, 0, -30, 0, 0);
 
 }
 
@@ -886,11 +886,12 @@ void CoDroneClass::square()
  */
 void CoDroneClass::triangle()
 {
-	move(1.5, 0,50,0,0);
+	turnDegree(RIGHT,30)
+	move(2, 0,30,0,0);
   	turnDegree(LEFT,120);
-  	move(1.5, 0,50,0,0);
+  	move(2, 0,30,0,0);
   	turnDegree(LEFT,120);
-  	move(1.5, 0,50,0,0);
+  	move(2, 0,30,0,0);
 }
 
 
@@ -924,7 +925,15 @@ void CoDroneClass::hop()
  */
 void CoDroneClass::circle()
 {
-	move(10,20,0,-20,0);
+	CoDrone.move(40, 0, 0, 0);
+	delay(200);
+	CoDrone.move(40, 0, -60, 0);
+	delay(2500);
+	CoDrone.move(40, 0, -50, 0);
+	delay(1000);
+	CoDrone.move(30, 0, 0, 0);
+	delay(100);
+	CoDrone.hover(1);
 }
 
 
@@ -939,11 +948,11 @@ void CoDroneClass::circle()
  */
 void CoDroneClass::spiral()
 {
-	for(int i = 0 ;i<100 ;i++){
-    	setRoll((int)(i/8));
+	for(int i = 0 ;i<5 ;i++){
+    	setRoll(10+i*2);
     	setYaw(-50);
     	move();
-    	delay(100);
+    	delay(1000);
   	}
   hover(1);
   setRoll(0);
