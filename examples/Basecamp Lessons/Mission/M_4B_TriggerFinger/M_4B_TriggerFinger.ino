@@ -12,14 +12,18 @@ and maneuvers as you'd like.
 
 #include <CoDrone.h>
 
-int flightStep;                      // The step you are at in the flight sequence
-boolean initTakeoff = true;          // A boolean you set to determine whether you just took off
+ 
+unsigned long StartTime;     
+int Step;                 // The step you are at in the flight sequence
+          
 
 void setup() {  
   CoDrone.begin(115200);  
-  CoDrone.AutoConnect(NearbyDrone);
+  CoDrone.pair();
 
   CoDrone.takeoff();
+
+  Step = 0;  //Initialize step to zero
 
 }
 
@@ -30,15 +34,15 @@ void loop() {
   // Your killswitch using the far left bottom sensor
   if (bt1) {    
     CoDrone.emergencyStop();
-    flightStep = 0;  
+    Step = 0;  
   }  
 
   // By covering the far right bottom sensor,  you trigger the steps by adding 1 to the 'Step' variable
   if (!bt1 && bt8) {    
-    flightStep = flightStep + 1;    
+    Step = Step + 1;    
         
-    if (flightStep >= 3) {          // Set the flightStep back to 0, so you can start over
-      flightStep = 0;    
+    if (Step > 3) {          // Set the flightStep back to 0, so you can start over
+        Step = 0;    
     }
 
     CoDrone.Buzz(3000, 7);          // Trigger a buzz sound for activating the next step
@@ -46,37 +50,24 @@ void loop() {
   }  
 
   // In the first step, the drone will throttle up at 50% power
-  if ( flightStep == 1) {    
+  if (Step == 1) {    
     CoDrone.setPitch(0);
-    CoDrone.setThrottle(50);
-
-    // Now that you've taken off, so anything outside of your steps will be caught by
-    // the last else-if statement to have the drone land
-    initTakeoff = false;            
-    
+    CoDrone.setThrottle(50);           
     CoDrone.move();
   }  
 
   // In the second step, the drone will pitch forward at 70% power
-  else if (flightStep == 2) {    
+  else if (Step == 2) {    
     CoDrone.setThrottle(0);
     CoDrone.setPitch(70);
-    
-    // This one isn't actually necessary, but it's just setting the initTakeoff to false
-    // for consistency's sake.
-    initTakeoff = false;
-    
     CoDrone.move();
   }  
 
-  // In the last step, the drone will land if it wasn't your initial take off. If you just
-  // had a simple "else" without the last else-if check on "initTakeoff," the drone would 
-  // immediatley land after having just taken off!
-  else if(initTakeoff == false) {
+  //In the third step, the drone will land and reset to zero
+  else if(Step == 3) {
     CoDrone.land();
-
-    // Set this back to true, so that the next time you take off, it will hover until your first step
-    initTakeoff = true;             
+    Step = 0;
+           
   }
   
 }

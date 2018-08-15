@@ -19,20 +19,12 @@
 /*******************************************************************/
 PATCH NOTES
 /*******************************************************************/
-2.0.1
+2.0.2
 ---------------------------------------------------------------------
--Exmaple file name edit
+- Add Newfunction names to keyword file that can highlight function
+<br>
+- Change GoToHeight -> goToHeight
+<br>
+- scaleChange() : same function as AnalogScaleChange()
 
----------------------------------------------------------------------
-from 2.0.0 update
-New Function and new example released!<br>
-<br>
-Re-structure library file structure<br>
-easy to find actual function in cpp file<br>
-<br>
-add calibrate() : work with drone firmware 50.18 and up<br>
-add new example <br>
-old example move to legacy example.<br>
-<br>
-add Basecamp example and add URL to actual basecamp lesson<br>
-*some of lesson code are doing debuging<br>
+

@@ -73,8 +73,10 @@ void loop() {
     }
 
     // At the end of it all, land
-    else { 
+    else if (FLAG == 1){ 
       CoDrone.land();
+      FLAG = 0;
+
     }
 
   }

@@ -872,7 +872,7 @@ public:
 
 //------------------------------------------------------------------------------------//
 
-	void GoToHeight(int _range);
+	void goToHeight(int _range);
 
 
 //------------------------------------------------------------------------------------//
@@ -1037,7 +1037,7 @@ public:
 	byte displayMode = 1;	//smar inventor : default 1
 
 	boolean pairing = false;
-	boolean	isConnected = false;
+	boolean	isConnectedBefore = false;
 	
 	byte timeOutRetry = 0;
 	byte sendCheckCount = 0;
