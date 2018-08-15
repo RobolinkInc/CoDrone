@@ -22,9 +22,7 @@ PATCH NOTES
 2.0.2
 ---------------------------------------------------------------------
 - Add Newfunction names to keyword file that can highlight function
-<br>
 - Change GoToHeight -> goToHeight
-<br>
 - scaleChange() : same function as AnalogScaleChange()
 
 
