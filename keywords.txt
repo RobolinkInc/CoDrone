@@ -36,6 +36,7 @@ BattleHitPoints	KEYWORD2
 CrashedCheck	KEYWORD2
 CrashCustom	KEYWORD2
 AnalogScaleChange	KEYWORD2
+scaleChange	KEYWORD2
 Buzz	KEYWORD2
 
 
