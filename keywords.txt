@@ -16,11 +16,12 @@ optdata	KEYWORD1
 # Methods and Functions (KEYWORD2)
 #######################################
 
-
+pair    KEYWORD2
 begin	KEYWORD2
 print	KEYWORD2
 write	KEYWORD2
-a
+disconnect    KEYWORD2
+calibrate     KEYWORD2
 Control	KEYWORD2
 
 LedColor	KEYWORD2
@@ -36,6 +37,56 @@ CrashedCheck	KEYWORD2
 CrashCustom	KEYWORD2
 AnalogScaleChange	KEYWORD2
 Buzz	KEYWORD2
+
+
+takeoff KEYWORD2
+land    KEYWORD2
+emergencyStop    KEYWORD2
+goToHeight       KEYWORD2
+rotate180        KEYWORD2
+flySequence      KEYWORD2  
+turnDegree		 KEYWORD2          
+hover    KEYWORD2
+go       KEYWORD2
+turn     KEYWORD2
+
+getThrottle KEYWORD2
+setPitch    KEYWORD2
+getYaw      KEYWORD2
+getPitch    KEYWORD2
+setRoll     KEYWORD2
+move        KEYWORD2
+setThrottle KEYWORD2
+setYaw      KEYWORD2
+getRoll     KEYWORD2
+
+setEyeDefaultRGB    KEYWORD2
+setEyeRGB           KEYWORD2
+setArmRGB           KEYWORD2
+setEyeMode          KEYWORD2
+setAllRGB           KEYWORD2
+setArmDefaultRGB    KEYWORD2
+resetDefaultLED     KEYWORD2
+setArmMode          KEYWORD2
+setArmDefaultMode	KEYWORD2
+setEyeDefaultMode   KEYWORD2
+
+onLowBattery        KEYWORD2
+isFlying            KEYWORD2    
+isReadyToFly        KEYWORD2
+isUpsideDown        KEYWORD2
+   
+getState    		KEYWORD2
+getOptFlowPosition  KEYWORD2
+getBatteryVoltage   KEYWORD2
+getDroneTemp        KEYWORD2
+getPressure         KEYWORD2
+getTrim				KEYWORD2
+getHeight			KEYWORD2
+getAccelerometer	KEYWORD2
+getGyroAngles       KEYWORD2
+getAngularSpeed		KEYWORD2
+getBatteryPercentage    KEYWORD2
 
 Request_DroneState	KEYWORD2
 Request_DroneAttitude	KEYWORD2
@@ -95,6 +146,7 @@ NearbyDrone	LITERAL1
 ConnectedDrone	LITERAL1
 AddressInputDrone	LITERAL1
 Nearest	LITERAL1
+
 
 
 PAIRING	LITERAL1
