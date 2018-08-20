@@ -885,7 +885,7 @@ void CoDroneClass::square()
  */
 void CoDroneClass::triangle()
 {
-	turnDegree(RIGHT,30)
+	turnDegree(RIGHT,30);
 	move(2, 0,30,0,0);
   	turnDegree(LEFT,120);
   	move(2, 0,30,0,0);
