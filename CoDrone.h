@@ -859,6 +859,7 @@ public:
 	void ButtonPressHoldWait(int button);
 	void ButtonPressHoldWait(int button1, int button2);
 	int AnalogScaleChange(int analogValue);
+	int scaleChange(int analogValue);
 
 //------------------------------------------------------------------------------------//
 
