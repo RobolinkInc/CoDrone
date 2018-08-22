@@ -133,71 +133,184 @@ void CoDroneClass::LedColorDefault(byte sendMode, byte sendColor[], byte sendInt
 }
 
 //-------------------------------------------------------------------------------------------------------//
+/*
+ *	function	:	
+ *	description : 	
+ *	param 		:
+ *	return 	 	:	none
+ */
 void CoDroneClass::setEyeLED(byte Color, byte Mode){
 	LedColorProcess(dType_LedMode, Mode, Color, 0, 0, 100);
 }
+/*
+ *	function	:	
+ *	description : 	
+ *	param 		:
+ *	return 	 	:	none
+ */
 void CoDroneClass::setEyeLED(byte Color, byte Mode, byte Interval){
 	LedColorProcess(dType_LedMode, Mode, Color, 0, 0, Interval);
 }
+/*
+ *	function	:	
+ *	description : 	
+ *	param 		:
+ *	return 	 	:	none
+ */
 void CoDroneClass::setEyeLED(byte R, byte G, byte B, byte Mode){
 	LedColorProcess(dType_LedModeColor, Mode, R, G, B, 100);
 }
+/*
+ *	function	:	
+ *	description : 	
+ *	param 		:
+ *	return 	 	:	none
+ */
 void CoDroneClass::setEyeLED(byte R, byte G, byte B, byte Mode, byte Interval){
 	LedColorProcess(dType_LedModeColor, Mode, R, G, B, Interval);
 }
 
-
+/*
+ *	function	:	
+ *	description : 	
+ *	param 		:
+ *	return 	 	:	none
+ */
 void CoDroneClass::setArmLED(byte Color, byte Mode){
 	LedColorProcess(dType_LedMode, Mode+0x30, Color, 0, 0, 100);
 }
+/*
+ *	function	:	
+ *	description : 	
+ *	param 		:
+ *	return 	 	:	none
+ */
 void CoDroneClass::setArmLED(byte Color, byte Mode, byte Interval){
 	LedColorProcess(dType_LedMode, Mode+0x30, Color, 0, 0, Interval);
 }
+/*
+ *	function	:	
+ *	description : 	
+ *	param 		:
+ *	return 	 	:	none
+ */
 void CoDroneClass::setArmLED(byte R, byte G, byte B, byte Mode){
 	LedColorProcess(dType_LedModeColor, Mode+0x30, R, G, B, 100);
 }
+/*
+ *	function	:	
+ *	description : 	
+ *	param 		:
+ *	return 	 	:	none
+ */
 void CoDroneClass::setArmLED(byte R, byte G, byte B, byte Mode, byte Interval){
 	LedColorProcess(dType_LedModeColor, Mode+0x30, R, G, B, Interval);
 }
 
-
+/*
+ *	function	:	
+ *	description : 	
+ *	param 		:
+ *	return 	 	:	none
+ */
 void CoDroneClass::setAllLED(byte Color, byte Mode){
 	LedColor2Process(dType_LedMode2, Mode, Color, 0, 0, 100, Mode+0x30, Color, 0, 0, 100);
 }
+/*
+ *	function	:	
+ *	description : 	
+ *	param 		:
+ *	return 	 	:	none
+ */
 void CoDroneClass::setAllLED(byte Color, byte Mode, byte Interval){
 	LedColor2Process(dType_LedMode2, Mode, Color, 0, 0, Interval, Mode+0x30, Color, 0, 0, Interval);
 }
-
+/*
+ *	function	:	
+ *	description : 	
+ *	param 		:
+ *	return 	 	:	none
+ */
 void CoDroneClass::setAllLED(byte R, byte G, byte B, byte Mode){
 	LedColor2Process(dType_LedModeColor2, Mode, R, G, B, 100, Mode+0x30, R, G, B, 100);
 }
+/*
+ *	function	:	
+ *	description : 	
+ *	param 		:
+ *	return 	 	:	none
+ */
 void CoDroneClass::setAllLED(byte R, byte G, byte B, byte Mode, byte Interval){
 	LedColor2Process(dType_LedModeColor2, Mode, R, G, B, Interval, Mode+0x30, R, G, B, Interval);
 }
 
+// not support yet
 // void CoDroneClass::setEyeDefaultLED(byte Color, byte Mode)
 // void CoDroneClass::setEyeDefaultLED(byte Color, byte Mode, byte Interval)
+
+/*
+ *	function	:	
+ *	description : 	
+ *	param 		:
+ *	return 	 	:	none
+ */
 void CoDroneClass::setEyeDefaultLED(byte R, byte G, byte B, byte Mode){
 	LedColorProcess(dType_LedDefaultColor, Mode, R, G, B, 100);
 }
+/*
+ *	function	:	
+ *	description : 	
+ *	param 		:
+ *	return 	 	:	none
+ */
 void CoDroneClass::setEyeDefaultLED(byte R, byte G, byte B, byte Mode, byte Interval){
 	LedColorProcess(dType_LedDefaultColor, Mode, R, G, B, Interval);
 }
 
+// not support yet
 // void CoDroneClass::setArmDefaultLED(byte Color, byte Mode)
 // void CoDroneClass::setArmDefaultLED(byte Color, byte Mode, byte Interval)
+
+/*
+ *	function	:	
+ *	description : 	
+ *	param 		:
+ *	return 	 	:	none
+ */
 void CoDroneClass::setArmDefaultLED(byte R, byte G, byte B, byte Mode){
 	LedColorProcess(dType_LedDefaultColor, Mode+0x30, R, G, B, 100);
 }
+/*
+ *	function	:	
+ *	description : 	
+ *	param 		:
+ *	return 	 	:	none
+ */
 void CoDroneClass::setArmDefaultLED(byte R, byte G, byte B, byte Mode, byte Interval){
 	LedColorProcess(dType_LedDefaultColor, Mode+0x30, R, G, B, Interval);
 }
 
+
+// not support
 // void CoDroneClass::setAllDefaultLED(byte Color, byte Mode)
 // void CoDroneClass::setAllDefaultLED(byte Color, byte Mode, byte Interval)
+
+/*
+ *	function	:	
+ *	description : 	
+ *	param 		:
+ *	return 	 	:	none
+ */
 void CoDroneClass::setAllDefaultLED(byte R, byte G, byte B, byte Mode){
 	LedColor2Process(dType_LedDefaultColor2, Mode, R, G, B, 100, Mode+0x30, R, G, B, 100);
 }
+
+/*
+ *	function	:	
+ *	description : 	
+ *	param 		:
+ *	return 	 	:	none
+ */
 void CoDroneClass::setAllDefaultLED(byte R, byte G, byte B, byte Mode, byte Interval){
 	LedColor2Process(dType_LedDefaultColor2, Mode, R, G, B, Interval, Mode+0x30, R, G, B, Interval);
 }
