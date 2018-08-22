@@ -163,7 +163,7 @@ int CoDroneClass::AnalogScaleChange(int analogValue)
 	if ((ScaleChange > -1 * analogOffset) && (ScaleChange < analogOffset)) ScaleChange = 0;
 	return ScaleChange;
 }
-int CoDroneClass::scaleChange()(int analogValue)
+int CoDroneClass::scaleChange(int analogValue)
 {
 	int ScaleChange = map(analogValue, 0, 1023, -100, 100);
 	if ((ScaleChange > -1 * analogOffset) && (ScaleChange < analogOffset)) ScaleChange = 0;
