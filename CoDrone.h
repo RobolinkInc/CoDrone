@@ -825,6 +825,7 @@ public:
 //------------------------------------------------------------------------------------//
 
 	void LedColorProcess(byte _dType, byte sendMode, byte r, byte g, byte b, byte sendInterval);
+	void LedColor2Process(byte _dType, byte sendMode1, byte r1, byte g1, byte b1, byte sendInterval1, byte sendMode2, byte r2, byte g2, byte b2, byte sendInterval2);
 	void LedColor(byte sendMode, byte sendColor, byte sendInterval);
 	void LedColor(byte sendMode, byte r, byte g, byte b, byte sendInterval);
 	void LedColor(byte sendMode, byte sendColor[], byte sendInterval);
@@ -945,15 +946,36 @@ public:
 	void setArmDefaultRGB(byte r, byte g, byte b);
 	void setEyeDefaultRGB(byte r, byte g, byte b);
 	void setAllDefaultRGB(byte r, byte g, byte b);
-
-	void resetDefaultLED();
-
 	void setArmMode(byte mode);
 	void setEyeMode(byte mode);
 	void setAllMode(byte mode);
 	void setArmDefaultMode(byte mode);
 	void setEyeDefaultMode(byte mode);
 	void setAllDefaultMode(byte mode);
+
+
+	void resetDefaultLED();
+
+	void setEyeLED(byte Color,byte Mode);
+	void setEyeLED(byte Color, byte Mode, byte Interval);
+	void setEyeLED(byte R, byte G, byte B, byte Mode);
+	void setEyeLED(byte R, byte G, byte B, byte Mode, byte Interval);
+	void setArmLED(byte Color, byte Mode);
+	void setArmLED(byte Color, byte Mode, byte Interval);
+	void setArmLED(byte R, byte G, byte B, byte Mode);
+	void setArmLED(byte R, byte G, byte B, byte Mode, byte Interval);
+	void setAllLED(byte Color, byte Mode);
+	void setAllLED(byte Color, byte Mode, byte Interval);
+	void setAllLED(byte R, byte G, byte B, byte Mode);
+	void setAllLED(byte R, byte G, byte B, byte Mode, byte Interval);
+	void setEyeDefaultLED(byte R, byte G, byte B, byte Mode);
+	void setEyeDefaultLED(byte R, byte G, byte B, byte Mode, byte Interval);
+	void setArmDefaultLED(byte R, byte G, byte B, byte Mode);
+	void setArmDefaultLED(byte R, byte G, byte B, byte Mode, byte Interval);
+	void setAllDefaultLED(byte R, byte G, byte B, byte Mode);
+	void setAllDefaultLED(byte R, byte G, byte B, byte Mode, byte Interval);
+
+	
 
 
 	//sequence
