@@ -19,10 +19,7 @@
 /*******************************************************************/
 PATCH NOTES
 /*******************************************************************/
-2.0.2
+2.0.4
 ---------------------------------------------------------------------
-- Add Newfunction names to keyword file that can highlight function
-- Change GoToHeight -> goToHeight
-- scaleChange() : same function as AnalogScaleChange()
-
+- fix syntax error
 
