@@ -828,7 +828,6 @@ public:
 	void LedColor(byte sendMode, byte sendColor, byte sendInterval);
 	void LedColor(byte sendMode, byte r, byte g, byte b, byte sendInterval);
 	void LedColor(byte sendMode, byte sendColor[], byte sendInterval);
-	void LedColor(byte sendMode, byte sendColor[], byte sendInterval, byte sendMode2, byte sendColor2[], byte sendInterval2);
 	void LedColorDefault(byte sendMode, byte r, byte g, byte b, byte sendInterval);
 	void LedColorDefault(byte sendMode, byte sendColor[], byte sendInterval);
 	void LedColorDefault(byte sendMode, byte sendColor[], byte sendInterval, byte sendMode2, byte sendColor2[], byte sendInterval2);
