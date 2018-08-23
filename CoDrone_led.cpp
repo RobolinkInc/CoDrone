@@ -133,113 +133,152 @@ void CoDroneClass::LedColorDefault(byte sendMode, byte sendColor[], byte sendInt
 }
 
 //-------------------------------------------------------------------------------------------------------//
-/*
- *	function	:	
- *	description : 	
- *	param 		:
- *	return 	 	:	none
+
+/* Parameter descriptions for all functions:
+ *
+ *  Color: The name of the desired color 
+
+    enum Colors
+    {
+    AliceBlue, AntiqueWhite, Aqua,
+    Aquamarine, Azure, Beige,
+    Bisque, Black, BlanchedAlmond,
+    Blue, BlueViolet, Brown,
+    BurlyWood, CadetBlue, Chartreuse,
+    Chocolate, Coral, CornflowerBlue,
+    Cornsilk, Crimson, Cyan,
+    DarkBlue, DarkCyan, DarkGoldenRod,
+    DarkGray, DarkGreen, DarkKhaki,
+    DarkMagenta, DarkOliveGreen, DarkOrange,
+    DarkOrchid, DarkRed, DarkSalmon,
+    DarkSeaGreen, DarkSlateBlue, DarkSlateGray,
+    DarkTurquoise, DarkViolet, DeepPink,
+    DeepSkyBlue, DimGray, DodgerBlue,
+    FireBrick, FloralWhite, ForestGreen,
+    Fuchsia, Gainsboro, GhostWhite,
+    Gold, GoldenRod, Gray,
+    Green, GreenYellow, HoneyDew,
+    HotPink, IndianRed, Indigo,
+    Ivory, Khaki, Lavender,
+    LavenderBlush, LawnGreen, LemonChiffon,
+    LightBlue, LightCoral, LightCyan,
+    LightGoldenRodYellow, LightGray, LightGreen,
+    LightPink, LightSalmon, LightSeaGreen,
+    LightSkyBlue, LightSlateGray, LightSteelBlue,
+    LightYellow, Lime, LimeGreen,
+    Linen, Magenta, Maroon,
+    MediumAquaMarine, MediumBlue, MediumOrchid,
+    MediumPurple, MediumSeaGreen, MediumSlateBlue,
+    MediumSpringGreen, MediumTurquoise, MediumVioletRed,
+    MidnightBlue, MintCream, MistyRose,
+    Moccasin, NavajoWhite, Navy,
+    OldLace, Olive, OliveDrab,
+    Orange, OrangeRed, Orchid,
+    PaleGoldenRod, PaleGreen, PaleTurquoise,
+    PaleVioletRed, PapayaWhip, PeachPuff,
+    Peru, Pink, Plum,
+    PowderBlue, Purple, RebeccaPurple,
+    Red, RosyBrown, RoyalBlue,
+    SaddleBrown, Salmon, SandyBrown,
+    SeaGreen, SeaShell, Sienna,
+    Silver, SkyBlue, SlateBlue,
+    SlateGray, Snow, SpringGreen,
+    SteelBlue, Tan, Teal,
+    Thistle, Tomato, Turquoise,
+    Violet, Wheat, White,
+    WhiteSmoke, Yellow, YellowGreen,
+    EndOfColor
+    };
+
+
+ *	Mode: mode refers to the pattern of the LEDs
+
+ 	SOLID  - LED remains on
+ 	STROBE - LED cycles through all of the colors in Colors
+ 	BLINK  - LED flashes on and off
+ 	DOUBLE_BLINK  - LED turns on twice and then turns off for that interval
+ 	DIMMING - LED fades in and out
+ 	PULSE   - LED on one arm turns on and off then cycles to the next arm
+ 	PULSE_REVERSE - same as PULSE but in the opposite direction		
+ 
+ 
+ *  R, G, B: The red, green, and blue values for the desired color
+       R: 0 ~ 255
+       G: 0 ~ 255         
+       B: 0 ~ 255          
+            
+ *  Interval: When used with SOLID, interval is the brightness. When
+              When used with other modes, interval is flashes per second.
+              Value can be 0 ~ 255
+              Default value is 100
+ *
+ *
+ */
+
+ 
+ /*
+  * function    : setEyeLed 
+  * description : Sets the color, mode, and interval for the eyes
+  * param       : Color, Mode, R, G, B, Interval
+  * return      : none
+
  */
 void CoDroneClass::setEyeLED(byte Color, byte Mode){
 	LedColorProcess(dType_LedMode, Mode, Color, 0, 0, 100);
 }
-/*
- *	function	:	
- *	description : 	
- *	param 		:
- *	return 	 	:	none
- */
+
 void CoDroneClass::setEyeLED(byte Color, byte Mode, byte Interval){
 	LedColorProcess(dType_LedMode, Mode, Color, 0, 0, Interval);
 }
-/*
- *	function	:	
- *	description : 	
- *	param 		:
- *	return 	 	:	none
- */
+
 void CoDroneClass::setEyeLED(byte R, byte G, byte B, byte Mode){
 	LedColorProcess(dType_LedModeColor, Mode, R, G, B, 100);
 }
-/*
- *	function	:	
- *	description : 	
- *	param 		:
- *	return 	 	:	none
- */
+
 void CoDroneClass::setEyeLED(byte R, byte G, byte B, byte Mode, byte Interval){
 	LedColorProcess(dType_LedModeColor, Mode, R, G, B, Interval);
 }
 
 /*
- *	function	:	
- *	description : 	
- *	param 		:
- *	return 	 	:	none
+ *	function	: setArmLED	
+ *	description : Sets the color, mode, and interval for the eyes
+ *	param 		: Color, Mode, R, G, B, Interval
+ *	return 	 	: none
  */
 void CoDroneClass::setArmLED(byte Color, byte Mode){
 	LedColorProcess(dType_LedMode, Mode+0x30, Color, 0, 0, 100);
 }
-/*
- *	function	:	
- *	description : 	
- *	param 		:
- *	return 	 	:	none
- */
+
 void CoDroneClass::setArmLED(byte Color, byte Mode, byte Interval){
 	LedColorProcess(dType_LedMode, Mode+0x30, Color, 0, 0, Interval);
 }
-/*
- *	function	:	
- *	description : 	
- *	param 		:
- *	return 	 	:	none
- */
+
 void CoDroneClass::setArmLED(byte R, byte G, byte B, byte Mode){
 	LedColorProcess(dType_LedModeColor, Mode+0x30, R, G, B, 100);
 }
-/*
- *	function	:	
- *	description : 	
- *	param 		:
- *	return 	 	:	none
- */
+
 void CoDroneClass::setArmLED(byte R, byte G, byte B, byte Mode, byte Interval){
 	LedColorProcess(dType_LedModeColor, Mode+0x30, R, G, B, Interval);
 }
 
 /*
- *	function	:	
- *	description : 	
- *	param 		:
- *	return 	 	:	none
+ *	function	: setAllLED	
+ *	description : Sets color, mode, and interval for both the eyes and arms
+ *	param 		: Color, Mode, R, G, B, Interval
+ *	return 	 	: none
  */
 void CoDroneClass::setAllLED(byte Color, byte Mode){
 	LedColor2Process(dType_LedMode2, Mode, Color, 0, 0, 100, Mode+0x30, Color, 0, 0, 100);
 }
-/*
- *	function	:	
- *	description : 	
- *	param 		:
- *	return 	 	:	none
- */
+
 void CoDroneClass::setAllLED(byte Color, byte Mode, byte Interval){
 	LedColor2Process(dType_LedMode2, Mode, Color, 0, 0, Interval, Mode+0x30, Color, 0, 0, Interval);
 }
-/*
- *	function	:	
- *	description : 	
- *	param 		:
- *	return 	 	:	none
- */
+
 void CoDroneClass::setAllLED(byte R, byte G, byte B, byte Mode){
 	LedColor2Process(dType_LedModeColor2, Mode, R, G, B, 100, Mode+0x30, R, G, B, 100);
 }
-/*
- *	function	:	
- *	description : 	
- *	param 		:
- *	return 	 	:	none
- */
+
 void CoDroneClass::setAllLED(byte R, byte G, byte B, byte Mode, byte Interval){
 	LedColor2Process(dType_LedModeColor2, Mode, R, G, B, Interval, Mode+0x30, R, G, B, Interval);
 }
@@ -249,20 +288,17 @@ void CoDroneClass::setAllLED(byte R, byte G, byte B, byte Mode, byte Interval){
 // void CoDroneClass::setEyeDefaultLED(byte Color, byte Mode, byte Interval)
 
 /*
- *	function	:	
- *	description : 	
- *	param 		:
- *	return 	 	:	none
+ *	function	: setEyeDefaultLED
+ *	description : Sets the default color, mode, and interval for the eyes for
+ *                when CoDrone is powered on. Settings will remain even after
+ *                battery is removed
+ *	param 		: R, G, B, Mode, Interval
+ *	return 	 	: none
  */
 void CoDroneClass::setEyeDefaultLED(byte R, byte G, byte B, byte Mode){
 	LedColorProcess(dType_LedDefaultColor, Mode, R, G, B, 100);
 }
-/*
- *	function	:	
- *	description : 	
- *	param 		:
- *	return 	 	:	none
- */
+
 void CoDroneClass::setEyeDefaultLED(byte R, byte G, byte B, byte Mode, byte Interval){
 	LedColorProcess(dType_LedDefaultColor, Mode, R, G, B, Interval);
 }
@@ -272,20 +308,17 @@ void CoDroneClass::setEyeDefaultLED(byte R, byte G, byte B, byte Mode, byte Inte
 // void CoDroneClass::setArmDefaultLED(byte Color, byte Mode, byte Interval)
 
 /*
- *	function	:	
- *	description : 	
- *	param 		:
- *	return 	 	:	none
+ *	function	: setArmDefaultLED
+ *	description : Sets the default color, mode, and interval for the arms for
+ *                when CoDrone is powered on. Settings will remain even after
+ *                battery is removed
+ *	param 		: R, G, B, Mode, Interval
+ *	return 	 	: none
  */
 void CoDroneClass::setArmDefaultLED(byte R, byte G, byte B, byte Mode){
 	LedColorProcess(dType_LedDefaultColor, Mode+0x30, R, G, B, 100);
 }
-/*
- *	function	:	
- *	description : 	
- *	param 		:
- *	return 	 	:	none
- */
+
 void CoDroneClass::setArmDefaultLED(byte R, byte G, byte B, byte Mode, byte Interval){
 	LedColorProcess(dType_LedDefaultColor, Mode+0x30, R, G, B, Interval);
 }
@@ -296,212 +329,20 @@ void CoDroneClass::setArmDefaultLED(byte R, byte G, byte B, byte Mode, byte Inte
 // void CoDroneClass::setAllDefaultLED(byte Color, byte Mode, byte Interval)
 
 /*
- *	function	:	
- *	description : 	
- *	param 		:
- *	return 	 	:	none
+ *	function	: setAllDefaultLED  
+ *	description : Sets the default color, mode, and interval for both eyes
+ *				  and arms for when CoDrone is powered on. Settings will 
+ *				  remain even after battery is removed               
+ *	param 		: R, G, B, Mode, Interval
+ *	return 	 	: none
  */
 void CoDroneClass::setAllDefaultLED(byte R, byte G, byte B, byte Mode){
 	LedColor2Process(dType_LedDefaultColor2, Mode, R, G, B, 100, Mode+0x30, R, G, B, 100);
 }
 
-/*
- *	function	:	
- *	description : 	
- *	param 		:
- *	return 	 	:	none
- */
 void CoDroneClass::setAllDefaultLED(byte R, byte G, byte B, byte Mode, byte Interval){
 	LedColor2Process(dType_LedDefaultColor2, Mode, R, G, B, Interval, Mode+0x30, R, G, B, Interval);
 }
-
-
-/*
- *	function	:	setArmRGB(r, g, b)
- *	description : 	setArmRGB(r, g, b) is function for change color for arm LED
- *	param 		:
- *					- r : int (0 ~ 255)
- *					- g : int (0 ~ 255)
- *					- b : int (0 ~ 255)
- *	return 	 	:	none
- */
-void CoDroneClass::setArmRGB(byte r, byte g, byte b)
-{
-	byte _packet[9];
-	byte _crc[2];
-
-	armred = r;
-	armgreen = g;
-	armblue = b;
-
-  	//header
-	_packet[0] = dType_LedModeColor;
-	_packet[1] = 5;
-
- 	//data
-	_packet[2] = armmode;
-	_packet[3] = r;
-	_packet[4] = g;  
-	_packet[5] = b;  
-	_packet[6] = 100;
-
-	unsigned short crcCal = CRC16_Make(_packet, _packet[1]+2);
-	_crc[0] = (crcCal >> 8) & 0xff;
-	_crc[1] = crcCal & 0xff;
-
-	Send_Processing(_packet,_packet[1],_crc);
-	delay(250);
-}
-
-
-/*
- *	function	:	setEyeRGB(r, g, b)
- *	description : 	setEyeRGB(r, g, b) is function for change color for eye LED
- *	param 		:
- *					- r : int (0 ~ 255)
- *					- g : int (0 ~ 255)
- *					- b : int (0 ~ 255)
- *	return 	 	:	none
- */
-void CoDroneClass::setEyeRGB(byte r, byte g, byte b)
-{
-	byte _packet[9];
-	byte _crc[2];
-	
-	eyered = r;
-	eyegreen = g;
-	eyeblue = b;
-
-  	//header
-	_packet[0] = dType_LedModeColor;
-	_packet[1] = 5;
-
- 	//data
-	_packet[2] = eyemode;
-	_packet[3] = r;
-	_packet[4] = g;  
-	_packet[5] = b;  
-	_packet[6] = 100;
-
-	unsigned short crcCal = CRC16_Make(_packet, _packet[1]+2);
-	_crc[0] = (crcCal >> 8) & 0xff;
-	_crc[1] = crcCal & 0xff;
-
-	Send_Processing(_packet,_packet[1],_crc);
-	delay(250);
-
-}
-
-/*
- *	function	:	setAllRGB(r, g, b)
- *	description : 	setAllRGB(r, g, b) is function for change color for both arm and eye LED
- *	param 		:
- *					- r : int (0 ~ 255)
- *					- g : int (0 ~ 255)
- *					- b : int (0 ~ 255)
- *	return 	 	:	none
- */
-void CoDroneClass::setAllRGB(byte r, byte g, byte b)
-{
-	setArmRGB(r,g,b);
-	setEyeRGB(r,g,b);
-}
-
-
-/*
- *	function	:	setAllRGB(r, g, b)
- *	description : 	setAllRGB(r, g, b) is function for change color for both arm and eye LED
- *					It will remain after turn off and turn on again
- *	param 		:
- *					- r : int (0 ~ 255)
- *					- g : int (0 ~ 255)
- *					- b : int (0 ~ 255)
- *	return 	 	:	none
- */
-void CoDroneClass::setArmDefaultRGB(byte r, byte g, byte b)
-{
-	byte _packet[9];
-	byte _crc[2];
-
-	armred = r;
-	armgreen = g;
-	armblue = b;
-
-  	//header
-	_packet[0] = dType_LedDefaultColor;
-	_packet[1] = 5;
-
- 	//data
-	_packet[2] = armmode;
-	_packet[3] = r;
-	_packet[4] = g;  
-	_packet[5] = b;  
-	_packet[6] = 100;
-
-	unsigned short crcCal = CRC16_Make(_packet, _packet[1]+2);
-	_crc[0] = (crcCal >> 8) & 0xff;
-	_crc[1] = crcCal & 0xff;
-
-	Send_Processing(_packet,_packet[1],_crc);
-	delay(250);
-}
-
-
-/*
- *	function	:	setAllRGB(r, g, b)
- *	description : 	setAllRGB(r, g, b) is function for change color for both arm and eye LED
- *					It will remain after turn off and turn on again
- *	param 		:
- *					- r : int (0 ~ 255)
- *					- g : int (0 ~ 255)
- *					- b : int (0 ~ 255)
- *	return 	 	:	none
- */
-void CoDroneClass::setEyeDefaultRGB(byte r, byte g, byte b)
-{
-	byte _packet[9];
-	byte _crc[2];
-
-	armred = r;
-	armgreen = g;
-	armblue = b;
-
-  	//header
-	_packet[0] = dType_LedDefaultColor;
-	_packet[1] = 5;
-
- 	//data
-	_packet[2] = eyemode;
-	_packet[3] = r;
-	_packet[4] = g;  
-	_packet[5] = b;  
-	_packet[6] = 100;
-
-	unsigned short crcCal = CRC16_Make(_packet, _packet[1]+2);
-	_crc[0] = (crcCal >> 8) & 0xff;
-	_crc[1] = crcCal & 0xff;
-
-	Send_Processing(_packet,_packet[1],_crc);
-	delay(250);
-}
-
-
-/*
- *	function	:	setAllRGB(r, g, b)
- *	description : 	setAllRGB(r, g, b) is function for change color for both arm and eye LED
- *					It will remain after turn off and turn on again
- *	param 		:
- *					- r : int (0 ~ 255)
- *					- g : int (0 ~ 255)
- *					- b : int (0 ~ 255)
- *	return 	 	:	none
- */
-void CoDroneClass::setAllDefaultRGB(byte r, byte g, byte b)
-{
-	setArmDefaultRGB(r,g,b);
-	setEyeDefaultRGB(r,g,b);
-}
-
 
 /*
  *	function	:	resetDefaultLED()
@@ -517,181 +358,6 @@ void CoDroneClass::resetDefaultLED()
 }
 
 
-/*
- *	function	:	setArmMode(mode)
- *	description : 	setArmMode(mode) is function for change mode for arm LED
- *					Option is LED_None, LED_Hold, LED_Mix, LED_Flicker, 
- *					LED_FlickerDouble, LED_Dimming, LED_Flow,LED_FlowReverse
- *	param 		:
- *					- r : mode
- *	return 	 	:	none
- */
-void CoDroneClass::setArmMode(byte mode)
-{
-	byte _packet[9];
-	byte _crc[2];
-
-	armmode = mode+0x30;
-
-  	//header
-	_packet[0] = dType_LedModeColor;
-	_packet[1] = 5;
-
- 	//data
-	_packet[2] = armmode;
-	_packet[3] = armred;
-	_packet[4] = armgreen;  
-	_packet[5] = armblue;  
-	_packet[6] = 100;
-
-	unsigned short crcCal = CRC16_Make(_packet, _packet[1]+2);
-	_crc[0] = (crcCal >> 8) & 0xff;
-	_crc[1] = crcCal & 0xff;
-
-	Send_Processing(_packet,_packet[1],_crc);
-	delay(250);
-}
-/*
- *	function	:	setEyeMode(mode)
- *	description : 	setEyeMode(mode) is function for change mode for eye LED
- *					Option is LED_None, LED_Hold, LED_Mix, LED_Flicker, 
- *					LED_FlickerDouble, LED_Dimming
- *	param 		:
- *					- r : mode
- *	return 	 	:	none
- */
-void CoDroneClass::setEyeMode(byte mode)
-{
-	byte _packet[9];
-	byte _crc[2];
-
-	eyemode = mode;
-
-  	//header
-	_packet[0] = dType_LedModeColor;
-	_packet[1] = 5;
-
- 	//data
-	_packet[2] = eyemode;
-	_packet[3] = eyered;
-	_packet[4] = eyegreen;  
-	_packet[5] = eyeblue;    
-	_packet[6] = 100;
-
-	unsigned short crcCal = CRC16_Make(_packet, _packet[1]+2);
-	_crc[0] = (crcCal >> 8) & 0xff;
-	_crc[1] = crcCal & 0xff;
-
-	Send_Processing(_packet,_packet[1],_crc);
-	delay(250);
-}
-
-/*
- *	function	:	setAllMode(mode)
- *	description : 	setAllMode(mode) is function for change mode for arm and eye LED
- *					Option is LED_None, LED_Hold, LED_Mix, LED_Flicker, 
- *					LED_FlickerDouble, LED_Dimming, LED_Flow,LED_FlowReverse
- *	param 		:
- *					- r : mode
- *	return 	 	:	none
- */
-void CoDroneClass::setAllMode(byte mode)
-{
-	setArmMode(mode);
-	setEyeMode(mode);
-}
-
-
-/*
- *	function	:	setArmDefaultMode(mode)
- *	description : 	setArmDefaultMode(mode) is function for change mode for arm LED
- *					Option is LED_None, LED_Hold, LED_Mix, LED_Flicker, 
- *					LED_FlickerDouble, LED_Dimming, LED_Flow,LED_FlowReverse
- *					It will remain after turn off and turn on again
- *	param 		:
- *					- r : mode
- *	return 	 	:	none
- */
-void CoDroneClass::setArmDefaultMode(byte mode)
-{
-	byte _packet[9];
-	byte _crc[2];
-
-	armmode = mode+0x30;
-
-  	//header
-	_packet[0] = dType_LedDefaultColor;
-	_packet[1] = 5;
-
- 	//data
-	_packet[2] = armmode;
-	_packet[3] = armred;
-	_packet[4] = armgreen;  
-	_packet[5] = armblue;  
-	_packet[6] = 100;
-
-	unsigned short crcCal = CRC16_Make(_packet, _packet[1]+2);
-	_crc[0] = (crcCal >> 8) & 0xff;
-	_crc[1] = crcCal & 0xff;
-
-	Send_Processing(_packet,_packet[1],_crc);
-	delay(250);
-}
-
-
-/*
- *	function	:	setEyeDefaultMode(mode)
- *	description : 	setEyeDefaultMode(mode) is function for change mode for arm LED
- *					Option is LED_None, LED_Hold, LED_Mix, LED_Flicker, 
- *					LED_FlickerDouble, LED_Dimming
- *					It will remain after turn off and turn on again
- *	param 		:
- *					- r : mode
- *	return 	 	:	none
- */
-void CoDroneClass::setEyeDefaultMode(byte mode)
-{
-	byte _packet[9];
-	byte _crc[2];
-
-	eyemode = mode;
-
-  	//header
-	_packet[0] = dType_LedDefaultColor;
-	_packet[1] = 5;
-
- 	//data
-	_packet[2] = eyemode;
-	_packet[3] = eyered;
-	_packet[4] = eyegreen;  
-	_packet[5] = eyeblue;    
-	_packet[6] = 100;
-
-	unsigned short crcCal = CRC16_Make(_packet, _packet[1]+2);
-	_crc[0] = (crcCal >> 8) & 0xff;
-	_crc[1] = crcCal & 0xff;
-
-	Send_Processing(_packet,_packet[1],_crc);
-	delay(250);
-
-}
-
-
-/*
- *	function	:	setAllDefaultMode(mode)
- *	description : 	setAllDefaultMode(mode) is function for change mode for arm and eye LED
- *					Option is LED_None, LED_Hold, LED_Mix, LED_Flicker, 
- *					LED_FlickerDouble, LED_Dimming, LED_Flow,LED_FlowReverse
- *					It will remain after turn off and turn on again
- *	param 		:
- *					- r : mode
- *	return 	 	:	none
- */
-void CoDroneClass::setAllDefaultMode(byte mode)
-{
-	setArmDefaultMode(mode);
-	setEyeDefaultMode(mode);
-}
 
 
 
