@@ -353,8 +353,7 @@ void CoDroneClass::setAllDefaultLED(byte R, byte G, byte B, byte Mode, byte Inte
  */
 void CoDroneClass::resetDefaultLED()
 {
-	setAllDefaultRGB(255,0,0);
-	setAllDefaultMode(LED_HOLD);
+	LedColor2Process(dType_LedDefaultColor2, SOLID, 255, 0, 0, 100, SOLID+0x30, 255, 0, 0, 100);	
 }
 
 
