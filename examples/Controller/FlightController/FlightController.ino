@@ -41,11 +41,6 @@ void loop()
   {
      CoDrone.land();
   }
-  //if cover except buttom left/right side IR do calibration(reset a drone)
-  if (bt2 && bt3 && bt4 && bt6 && bt7)
-  {
-    CoDrone.calibrate();    
-  }
   
   // PAIRING is set to true in AutoConnect if they connect together
   if (PAIRING == true)  // Check to see that we are paired before trying to fly               
