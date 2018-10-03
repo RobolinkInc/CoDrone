@@ -19,32 +19,9 @@
 /*******************************************************************/
 PATCH NOTES
 /*******************************************************************/
-2.1.0
+2.1.1
 ---------------------------------------------------------------------
-Update New LED function<br>
-new function can change color and mode at the same time<br>
-Change arm and eye color at the same time(setAll function) has no delay to change both<br>
-Check Document for more detail : docs.robolink.com
 
-syntax
-
-	void setEyeLED(byte Color,byte Mode);
-	void setEyeLED(byte Color, byte Mode, byte Interval);
-	void setEyeLED(byte R, byte G, byte B, byte Mode);
-	void setEyeLED(byte R, byte G, byte B, byte Mode, byte Interval);
-	void setArmLED(byte Color, byte Mode);
-	void setArmLED(byte Color, byte Mode, byte Interval);
-	void setArmLED(byte R, byte G, byte B, byte Mode);
-	void setArmLED(byte R, byte G, byte B, byte Mode, byte Interval);
-	void setAllLED(byte Color, byte Mode);
-	void setAllLED(byte Color, byte Mode, byte Interval);
-	void setAllLED(byte R, byte G, byte B, byte Mode);
-	void setAllLED(byte R, byte G, byte B, byte Mode, byte Interval);
-	void setEyeDefaultLED(byte R, byte G, byte B, byte Mode);
-	void setEyeDefaultLED(byte R, byte G, byte B, byte Mode, byte Interval);
-	void setArmDefaultLED(byte R, byte G, byte B, byte Mode);
-	void setArmDefaultLED(byte R, byte G, byte B, byte Mode, byte Interval);
-	void setAllDefaultLED(byte R, byte G, byte B, byte Mode);
-	void setAllDefaultLED(byte R, byte G, byte B, byte Mode, byte Interval);
+Delete calibration part in flight controller
 
 
