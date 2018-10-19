@@ -12,7 +12,6 @@ void setup()
   CoDrone.DisplayRSSI();            //Show RSSI power using smartboard LEDs
 }
 
-
-
-
-
+void loop()
+{
+}
