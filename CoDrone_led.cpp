@@ -356,7 +356,80 @@ void CoDroneClass::resetDefaultLED()
 	LedColor2Process(dType_LedDefaultColor2, SOLID, 255, 0, 0, 100, SOLID+0x30, 255, 0, 0, 100);	
 }
 
+//------------------------------------------------------------------------------------------------
 
+void CoDroneClass::eyeColor(byte Color, byte brightness){
+	LedColorProcess(dType_LedMode, LED_SOLID, Color, 0, 0, brightness);
+}
+
+void CoDroneClass::eyeColor(byte R, byte G, byte B, byte brightness){
+	LedColorProcess(dType_LedModeColor, LED_SOLID, R, G, B, brightness);
+}
+
+void CoDroneClass::armColor(byte Color, byte brightness){
+	LedColorProcess(dType_LedMode, LED_SOLID+0x30, Color, 0, 0, brightness);
+}
+
+void CoDroneClass::armColor(byte R, byte G, byte B, byte brightness){
+	LedColorProcess(dType_LedModeColor, LED_SOLID+0x30, R, G, B, brightness);
+}
+
+//------------------------------------------------------------------------------------------------
+
+void CoDroneClass::eyeDefaultColor(byte R, byte G, byte B, byte Interval){
+	LedColorProcess(dType_LedDefaultColor, LED_SOLID, R, G, B, Interval);
+}
+
+void CoDroneClass::armDefaultColor(byte R, byte G, byte B, byte Interval){
+	LedColorProcess(dType_LedDefaultColor, LED_SOLID+0x30, R, G, B, Interval);
+}
+
+//------------------------------------------------------------------------------------------------
+
+void CoDroneClass::eyePattern(byte Color, byte pattern, byte brightness){
+	LedColorProcess(dType_LedMode, pattern, Color, 0, 0, brightness);
+}
+
+void CoDroneClass::eyePattern(byte R, byte G, byte B, byte pattern, byte brightness){
+	LedColorProcess(dType_LedModeColor, pattern, R, G, B, brightness);
+}
+
+void CoDroneClass::armPattern(byte Color, byte pattern, byte brightness){
+	LedColorProcess(dType_LedMode, pattern+0x30, Color, 0, 0, brightness);
+}
+
+void CoDroneClass::armPattern(byte R, byte G, byte B, byte pattern, byte brightness){
+	LedColorProcess(dType_LedModeColor, pattern+0x30, R, G, B, brightness);
+}
+
+//------------------------------------------------------------------------------------------------
+
+void CoDroneClass::eyeDefaultPattern(byte R, byte G, byte B, byte Mode, byte Interval){
+	LedColorProcess(dType_LedDefaultColor, Mode, R, G, B, Interval);
+}
+
+void CoDroneClass::armDefaultPattern(byte R, byte G, byte B, byte Mode, byte Interval){
+	LedColorProcess(dType_LedDefaultColor, Mode+0x30, R, G, B, Interval);
+}
+
+//------------------------------------------------------------------------------------------------
+
+void CoDroneClass::eyeStrobe(){
+	LedColorProcess(dType_LedMode, LED_STROBE, 0, 0, 0, 100);
+}
+
+void CoDroneClass::armStrobe(){
+	LedColorProcess(dType_LedModeColor, LED_STROBE+0x30, 0, 0, 0, 100);
+}
+
+//------------------------------------------------------------------------------------------------
+
+void CoDroneClass::eyeOff(){
+	LedColorProcess(dType_LedMode, LED_NONE, 0, 0, 0, 0);
+}
+
+void CoDroneClass::armOff(){
+	LedColorProcess(dType_LedModeColor, LED_NONE+0x30, 0, 0, 0, 0);
 
 
 

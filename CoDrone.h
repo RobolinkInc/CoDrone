@@ -971,6 +971,24 @@ public:
 	void setAllDefaultLED(byte R, byte G, byte B, byte Mode);
 	void setAllDefaultLED(byte R, byte G, byte B, byte Mode, byte Interval);
 
+	// new function
+	void eyeColor(byte Color, byte brightness);
+	void eyeColor(byte R, byte G, byte B, byte brightness);
+	void armColor(byte Color, byte brightness);
+	void armColor(byte R, byte G, byte B, byte brightness);
+	void eyeDefaultColor(byte R, byte G, byte B, byte Interval);
+	void armDefaultColor(byte R, byte G, byte B, byte Interval);
+	void eyePattern(byte Color, byte pattern, byte brightness);
+	void eyePattern(byte R, byte G, byte B, byte pattern, byte brightness);
+	void armPattern(byte Color, byte pattern, byte brightness);
+	void armPattern(byte R, byte G, byte B, byte pattern, byte brightness);
+	void eyeDefaultPattern(byte R, byte G, byte B, byte Mode, byte Interval);
+	void armDefaultPattern(byte R, byte G, byte B, byte Mode, byte Interval);
+	void eyeStrobe();
+	void armStrobe();
+	void eyeOff();
+	void armOff();
+
 	
 
 
