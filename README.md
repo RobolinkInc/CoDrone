@@ -19,9 +19,10 @@
 /*******************************************************************/
 PATCH NOTES
 /*******************************************************************/
-2.1.1
+2.2.0
 ---------------------------------------------------------------------
 
-Delete calibration part in flight controller
+update LED functions
+pelease come and visit docs.robolink.com and see example code 
 
 
