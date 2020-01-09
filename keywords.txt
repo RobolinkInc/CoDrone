@@ -72,6 +72,19 @@ setArmMode	KEYWORD2
 setArmDefaultMode	KEYWORD2
 setEyeDefaultMode	KEYWORD2
 
+eyeColor	KEYWORD2
+armColor	KEYWORD2
+eyeDefaultColor	KEYWORD2
+armDefaultColor	KEYWORD2
+eyePattern	KEYWORD2
+armPattern	KEYWORD2
+eyeDefaultPattern	KEYWORD2
+armDefaultPattern	KEYWORD2
+eyeStrobe	KEYWORD2
+armStrobe	KEYWORD2
+eyeOff	KEYWORD2
+armOff	KEYWORD2
+
 onLowBattery	KEYWORD2
 isFlying	KEYWORD2
 isReadyToFly	KEYWORD2
