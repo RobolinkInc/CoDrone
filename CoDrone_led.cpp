@@ -430,6 +430,6 @@ void CoDroneClass::eyeOff(){
 
 void CoDroneClass::armOff(){
 	LedColorProcess(dType_LedModeColor, LED_NONE+0x30, 0, 0, 0, 0);
-
+}
 
 
