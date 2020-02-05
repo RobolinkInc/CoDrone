@@ -19,10 +19,9 @@
 /*******************************************************************/
 PATCH NOTES
 /*******************************************************************/
-2.2.0
+2.2.1
 ---------------------------------------------------------------------
 
-update LED functions
-pelease come and visit docs.robolink.com and see example code 
 
+update LED functions please come and visit docs.robolink.com and see example code
 
